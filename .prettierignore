@@ -2,4 +2,4 @@
 .gitkeep
 dist
 coverage
-.github/**/*_TEMPLATE.md
+.github/*_TEMPLATE*
