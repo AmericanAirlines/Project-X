@@ -1,0 +1,10 @@
+import { health } from '../../api/health';
+import { testHandler } from '../testUtils/testHandler';
+
+describe('health', () => {
+  it('returns ok true', async () => {
+    const { body } = await testHandler(health).expect(200);
+
+    expect(body).toEqual({ ok: true });
+  });
+});
