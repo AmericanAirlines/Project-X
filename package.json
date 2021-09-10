@@ -21,12 +21,12 @@
     "postinstall": "patch-package"
   },
   "dependencies": {
-    "patch-package": "6.2.2"
+    "patch-package": "^6.4.7"
   },
   "devDependencies": {
     "lerna": "^4.0.0",
-    "postinstall-postinstall": "2.1.0",
-    "prettier": "^2.3.2",
+    "postinstall-postinstall": "^2.1.0",
+    "prettier": "^2.4.0",
     "pretty-quick": "^3.1.1"
   }
 }
