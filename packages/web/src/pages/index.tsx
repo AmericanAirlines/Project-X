@@ -29,3 +29,4 @@ const Home: NextPage = () => {
 };
 
 export default Home;
+export { getServerSideProps } from '../components/Chakra';
