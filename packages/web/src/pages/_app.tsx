@@ -1,12 +1,11 @@
-import type { AppProps } from 'next/app';
-import { ChakraProvider } from '@chakra-ui/react';
-import { theme } from '../theme';
+import React from 'react';
+import { AppProps } from 'next/app';
+import { Chakra } from '../components/Chakra';
 
-function MyApp({ Component, pageProps }: AppProps) {
-  return (
-    <ChakraProvider theme={theme}>
-      <Component {...pageProps} />
-    </ChakraProvider>
-  );
-}
-export default MyApp;
+const App: React.FC<AppProps> = ({ Component, pageProps }) => (
+  <Chakra cookies={pageProps.cookies}>
+    <Component {...pageProps} />
+  </Chakra>
+);
+
+export default App;

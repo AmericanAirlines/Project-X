@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, screen } from '../../testUtils/testTools';
-import { AppLayout } from '../../../components/Layout';
+import { AppLayout } from '../../../src/components/Layout';
 
 describe('AppLayout', () => {
   it('renders children', async () => {

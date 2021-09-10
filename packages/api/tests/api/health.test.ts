@@ -1,4 +1,4 @@
-import { health } from '../../api/health';
+import { health } from '../../src/api/health';
 import { testHandler } from '../testUtils/testHandler';
 
 describe('health', () => {

@@ -7,15 +7,13 @@ module.exports = {
     },
   },
   testEnvironment: 'jsdom',
-  roots: ['src'],
   testMatch: ['**/*.test.{ts,tsx}'],
   testPathIgnorePatterns: ['/node_modules/'],
-  setupFilesAfterEnv: ['./src/tests/setupTests.ts'],
+  setupFilesAfterEnv: ['./tests/setupTests.ts'],
   coverageDirectory: './coverage',
   collectCoverageFrom: [
     // To ignore an individual file add this on line one `/* istanbul ignore file */`
     './src/**/*.{ts,tsx}',
-    '!./src/tests/**',
   ],
   coverageThreshold: {
     global: {
