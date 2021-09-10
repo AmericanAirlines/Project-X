@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 import { ColorModeScript } from '@chakra-ui/react';
 import NextDocument, { Html, Head, Main, NextScript } from 'next/document';
 import { theme } from '../theme';

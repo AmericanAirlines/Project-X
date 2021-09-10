@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, screen } from '../../testUtils/testTools';
-import { MarketingLayout } from '../../../components/Layout';
+import { MarketingLayout } from '../../../src/components/Layout';
 
 describe('MarketingLayout', () => {
   it('renders children', async () => {
