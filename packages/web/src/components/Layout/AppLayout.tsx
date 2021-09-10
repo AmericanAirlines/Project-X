@@ -6,18 +6,8 @@ export const AppLayout: React.FC = ({ children }) => {
   const theme = useTheme();
 
   return (
-    <>
-      <Global
-        styles={{
-          body: {
-            background: theme.colors.gray[50],
-          },
-        }}
-      />
-
-      <VStack color="blue.800" alignItems="stretch" w="100%" maxW="1200px" marginX="auto">
-        {children}
-      </VStack>
-    </>
+    <VStack alignItems="stretch" w="100%" maxW="1200px" marginX="auto">
+      {children}
+    </VStack>
   );
 };

@@ -7,23 +7,20 @@ const Home: NextPage = () => {
     <MarketingLayout>
       <VStack alignItems="center" paddingY={32} spacing={8}>
         <Heading size="4xl" textAlign="center" lineHeight="1.4">
-          Hands On Enterprise Experience with American Airlines
+          The Web App Template of the Emerging Tech EOA Team
         </Heading>
         <Text textAlign="center" maxWidth="60ch" fontSize="2xl" lineHeight="2">
-          Come work with us on Open Source projects, get mentorship from industry professionals, and
-          work towards an interview to join us full time!
+          You&apos;ve got a production ready React.js frontend (with Dark Mode) and Express.js
+          backend. It is written in Typescript and has 100% test coverage.
+          <br />
+          Now go build something cool!
         </Text>
         <HStack spacing={8}>
-          <Button
-            size="lg"
-            backgroundColor="blue.800"
-            color="gray.50"
-            _hover={{ backgroundColor: 'blue.900' }}
-          >
-            Get Access
+          <Button size="lg" colorScheme="blue">
+            Primary
           </Button>
           <Button size="lg" colorScheme="gray">
-            Join our Discord
+            Secondary
           </Button>
         </HStack>
       </VStack>
