@@ -16,11 +16,11 @@ const Home: NextPage = () => {
           Now go build something cool!
         </Text>
         <HStack spacing={8}>
-          <Button size="lg" colorScheme="blue">
-            Primary
+          <Button as="a" size="lg" colorScheme="blue" href="https://nextjs.org/" target="_blank">
+            Next.js
           </Button>
-          <Button size="lg" colorScheme="gray">
-            Secondary
+          <Button as="a" size="lg" colorScheme="gray" href="https://chakra-ui.com/" target="_blank">
+            Chakra UI
           </Button>
         </HStack>
       </VStack>
