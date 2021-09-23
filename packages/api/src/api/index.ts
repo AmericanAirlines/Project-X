@@ -4,4 +4,4 @@ import { health } from './health';
 
 export const api = Router();
 
-api.use(health);
+api.use('/health', health);
