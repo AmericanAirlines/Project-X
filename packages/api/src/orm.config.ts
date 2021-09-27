@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 import { MongoNamingStrategy, Options } from '@mikro-orm/core';
 import { PostgreSqlDriver } from '@mikro-orm/postgresql';
 import readlineSync from 'readline-sync';
@@ -50,10 +51,10 @@ const descriptionFileName = (): string => {
 
 export default {
   type: 'postgresql' as const,
-  clientUrl: env.database,
+  clientUrl: env.databaseUrl,
   user: env.databaseUser,
-  entities: [`${__dirname}/**/*.entity.js`],
-  entitiesTs: [`${__dirname}/**/*.entity.ts`],
+  entities: [`${__dirname}/entities/*.js`],
+  entitiesTs: [`${__dirname}/entities/*.ts`],
   forceUndefined: true,
   debug: env.nodeEnv !== 'production',
   namingStrategy: MongoNamingStrategy,
