@@ -57,6 +57,10 @@ Run the migrations so that the changes are made to your database.
 
 ```zsh
 yarn mikro-orm migration:up
+
+# or you can use the script from package.json
+
+yarn migrate
 ```
 
 ## Troubleshooting and "Gotchas"

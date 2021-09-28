@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "ts-node-dev --watch .env.local --ignore-watch ../web/.next --respawn src/index.ts",
+    "dev": "ts-node-dev --watch .env.local --ignore-watch ../web/.next --files --respawn src/index.ts",
     "start": "node dist/index.js",
     "build": "tsc -p tsconfig.build.json --pretty",
     "migrate": "mikro-orm migration:up",

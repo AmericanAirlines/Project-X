@@ -10,7 +10,7 @@
     "dev": "yarn workspace @x/api dev",
     "start": "yarn workspace @x/api start",
     "build": "lerna run build --stream",
-    "migrate": "lerna run migrate",
+    "migrate": "lerna run migrate --stream",
     "typecheck": "lerna run typecheck --concurrency=1 --stream --no-bail",
     "lint": "lerna run lint --concurrency=1 --stream --no-bail",
     "lint:fix": "lerna run lint:fix --concurrency=1 --stream --no-bail",

@@ -57,7 +57,7 @@ export default {
   entitiesTs: [`${__dirname}/entities/*.ts`],
   forceUndefined: true,
   debug: env.nodeEnv !== 'production',
-  namingStrategy: MongoNamingStrategy,
+  namingStrategy: MongoNamingStrategy, // Camel case property and table names
   pool: {
     min: 2,
     max: 10,
