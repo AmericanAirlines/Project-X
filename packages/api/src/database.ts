@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 import { MikroORM } from '@mikro-orm/core';
 import { PostgreSqlDriver } from '@mikro-orm/postgresql';
 import { env } from './env';

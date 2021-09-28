@@ -11,6 +11,7 @@ module.exports = {
     // To ignore an individual file add this on line one `/* istanbul ignore file */`
     './src/**/*.ts',
     '!./src/migrations/**',
+    '!./src/@types/**',
   ],
   coverageThreshold: {
     global: {
