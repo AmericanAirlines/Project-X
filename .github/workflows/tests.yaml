@@ -46,5 +46,8 @@ jobs:
         if: steps.restore-node-modules.outputs.cache-hit != 'true'
         run: yarn install --frozen-lockfile
 
+      - name: Setup project
+        run: yarn setup
+
       - name: Run Test Coverage
         run: yarn test:coverage

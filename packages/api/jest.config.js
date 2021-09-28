@@ -1,4 +1,6 @@
+/** @type {import('ts-jest/dist/types').InitialOptionsTsJest} */
 module.exports = {
+  preset: 'ts-jest',
   testEnvironment: 'node',
   moduleFileExtensions: ['js', 'json', 'ts'],
   testMatch: ['**/*.test.ts'],
@@ -9,7 +11,7 @@ module.exports = {
     // To ignore an individual file add this on line one `/* istanbul ignore file */`
     './src/**/*.ts',
     '!./src/migrations/**',
-    '!./src/entities/**',
+    '!./src/@types/**',
   ],
   coverageThreshold: {
     global: {

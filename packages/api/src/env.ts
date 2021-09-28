@@ -7,8 +7,10 @@ config();
 export const env = setEnv({
   required: {
     nodeEnv: 'NODE_ENV',
+    port: 'PORT',
+    databaseUrl: 'DATABASE_URL',
   },
   optional: {
-    port: 'PORT',
+    databaseUser: 'DATABASE_USER',
   },
 });
