@@ -1,9 +1,12 @@
 // add tests to ensure videos are being returned properly
+import express from 'express';
 import { videos } from '../../src/api/videos';
 import { testHandler } from '../testUtils/testHandler';
 
+// Need to mock the database for testing
+
 describe('videos', () => {
-  it('returns ok true', async () => {
-    const { body } = await testHandler(videos).expect(500); // need to fix
+  it('/videos returns all videos', async () => {
+    const { body } = await testHandler(videos.get('')).expect(200); // need to fix
   });
 });
