@@ -9,6 +9,8 @@ import logger from './logger';
 const app = express();
 const port = Number(env.port ?? '') || 3000;
 const dev = env.nodeEnv === 'development';
+const CLIENT_ID = process.env.GITHUB_ID;
+const path = "/";
 
 void (async () => {
   const orm = await initDatabase();
@@ -37,3 +39,14 @@ void (async () => {
   .catch((err) => {
     logger.crit('An error happened during app start', err);
   });
+
+
+  app.get('/login/github', (req, res) => {
+    const url = `https://github.com/login/oauth/authorize?client_id=${CLIENT_ID}&redirect_uri=http://localhost:3000/api/auth/callback/github?path=${path}&scope=user:email`;
+    res.redirect(url);
+  } );
+
+  app.get('/login/github/callback', (req, res) => {
+    const url = ``;
+    res.redirect(url);
+  } );
