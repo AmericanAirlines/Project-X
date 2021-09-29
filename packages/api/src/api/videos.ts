@@ -3,6 +3,7 @@ import { Video } from '../entities/Video';
 
 export const videos = Router();
 
+// Get all videos
 videos.get('', async (req, res) => {
     try {
         const videosRepository = req.entityManager.getRepository(Video);
@@ -14,6 +15,7 @@ videos.get('', async (req, res) => {
     };
 });
 
+// Get video by id
 videos.get('/:video_id', async (req, res) => {
     const { video_id } = req.params;
 
