@@ -1,5 +1,6 @@
 import {Router} from 'express';
 import { Video } from '../entities/Video';
+import logger from '../logger';
 
 export const videos = Router();
 
@@ -9,9 +10,12 @@ videos.get('', async (req, res) => {
         const videosRepository = req.entityManager.getRepository(Video);
         const videosList = await videosRepository.findAll();
 
-        res.status(200).send(videosList);
+        res.statusCode = 200;
+        res.send(videosList);
     } catch (error) {
-        res.status(500).send('There was an issue geting all videos');
+        logger.error('There was an issue geting all videos: ', error);
+        res.statusCode = 500;
+        res.send('There was an issue geting all videos');
     };
 });
 
