@@ -1,5 +1,5 @@
 /* istanbul ignore file */
-import { Entity, Property } from '@mikro-orm/core';
+import { Entity, Property, PrimaryKey } from '@mikro-orm/core';
 import { ConstructorValues } from '../utils/types';
 import { Node } from './Node';
 
@@ -8,12 +8,23 @@ export type VideoConstructorValues = ConstructorValues<Video>;
 @Entity()
 export class Video extends Node<Video> {
     // add all fields for the video entity
-  @Property({ columnType: 'text' })
-  name: string;
+  @PrimaryKey({ columnType: 'bigserial' })
+  video_id!: number;
 
-  constructor({ name, ...extraValues }: VideoConstructorValues) {
+  @Property({ columnType: 'text' })
+  title: string;
+
+  @Property({ columnType: 'int' })
+  durationInSeconds: number;
+
+  @Property({ columnType: 'text' })
+  url: string;
+
+  constructor({ title, durationInSeconds, url, ...extraValues }: VideoConstructorValues) {
     super(extraValues);
 
-    this.name = name;
+    this.title = title;
+    this.durationInSeconds = durationInSeconds;
+    this.url = url;
   }
 }

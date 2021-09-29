@@ -4,8 +4,10 @@ export class Migration20210928102009 extends Migration {
 
   async up(): Promise<void> {
     // add correct fields
-    this.addSql('create table "user" ("id" bigserial primary key, "createdAt" timestamptz(0) not null default clock_timestamp(), "updatedAt" timestamptz(0) not null default clock_timestamp(), "name" text not null);');
+    this.addSql('create table "video" ("video_id" bigserial primary key, "title" text not null, "durationInSeconds" int not null, "url" text not null);');
   }
 
-  // add down function
+  async down(): Promise<void> {
+    this.addSql('drop table "video";');
+  }
 }
