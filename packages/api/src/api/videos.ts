@@ -1,5 +1,4 @@
 import {Router} from 'express';
-import { json } from 'stream/consumers';
 import { Video } from '../entities/Video';
 
 export const videos = Router();
@@ -17,7 +16,7 @@ videos.get('', async (req, res) => {
 
 videos.get('/:video_id', async (req, res) => {
     const { video_id } = req.params;
-    
+
     try {      
         const videosRepository = req.entityManager.getRepository(Video);
         const video = await videosRepository.findOne({ video_id: Number(video_id) });
