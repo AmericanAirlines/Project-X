@@ -14,8 +14,7 @@ videos.get('', async (req, res) => {
         res.send(videosList);
     } catch (error) {
         logger.error('There was an issue geting all videos: ', error);
-        res.statusCode = 500;
-        res.send('There was an issue geting all videos');
+        res.status(500).send('There was an issue geting all videos');
     };
 });
 
