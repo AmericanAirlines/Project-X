@@ -9,19 +9,25 @@ export type UserConstructorValues = ConstructorValues<User>;
 export class User extends Node<User> {
   @Property({ columnType: 'text' })
   name: string;
-  //pronouns: string;
-  //location: string;
-  //hireable: boolean;
-  //purpose: string;
-  //schoolName:string;
-  //major: string;
-  //graduationDate: Date
+
+  pronouns: string;
+  location?: string;
+  hireable?: boolean;
+  purpose: string;
+  schoolName:string;
+  major: string;
+  graduationDate?: Date;
 
 
-  constructor({ name, ...extraValues }: UserConstructorValues) {
+  constructor({ name, pronouns, purpose, schoolName, major, ...extraValues }: UserConstructorValues) {
     super(extraValues);
 
     this.name = name;
+   
+    this.pronouns = pronouns;
+    this.purpose = purpose;
+    this.schoolName = schoolName;
+    this.major = major;
     //add other fields to constructor
   }
 }
