@@ -10,8 +10,7 @@ videos.get('', async (req, res) => {
         const videosRepository = req.entityManager.getRepository(Video);
         const videosList = await videosRepository.findAll();
 
-        res.statusCode = 200;
-        res.send(videosList);
+        res.status(200).send(videosList);
     } catch (error) {
         logger.error('There was an issue geting all videos: ', error);
         res.status(500).send('There was an issue geting all videos');
