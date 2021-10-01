@@ -3,16 +3,18 @@ import { User } from '../entities/User';
 
 export const users = Router();
 
-users.get('', (_req, res) => {
-    res.send({
-      ok: true,
-    });
+
+
+users.get('', async (_req, res) => {
+
+
+    res.send({});
   });
 
-users.get('/:userId', (req, res) => {
+users.get('/:userId', async (req, res) => {
 
   const userRepository = req.entityManager.getRepository(User);
-  const selectedUser = userRepository.findOne({ id : req.params.userId });
+  const selectedUser = await userRepository.findOne({ id : req.params.userId }); 
 
   res.send({
     selectedUser
