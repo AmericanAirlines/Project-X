@@ -32,4 +32,4 @@ const createTestApp: CreateTestApp = (
 };
 
 export const testHandler = (handler: TestRequestHandler) =>
-  supertest(createTestApp(handler)).get('/');
+  supertest(createTestApp(handler));

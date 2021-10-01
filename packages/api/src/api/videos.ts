@@ -18,15 +18,16 @@ videos.get('', async (req, res) => {
 });
 
 // Get video by id
-videos.get('/:video_id', async (req, res) => {
-    const { video_id } = req.params;
+videos.get('/:videoId', async (req, res) => {
+    const { videoId } = req.params;
 
     try {      
         const videosRepository = req.entityManager.getRepository(Video);
-        const video = await videosRepository.findOne({ video_id: Number(video_id) });
+        const video = await videosRepository.findOne({ id: videoId });
 
         res.status(200).send(video);
     } catch (error) {
-        res.status(500).send('There was an issue geting the video with an id of ' + video_id);
+        logger.error('There was an issue geting video "' + videoId + '":', error);
+        res.status(500).send('"' + videoId + '" is not a valid id');
     };
 });

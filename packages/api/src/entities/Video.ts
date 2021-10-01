@@ -7,9 +7,6 @@ export type VideoConstructorValues = ConstructorValues<Video>;
 
 @Entity()
 export class Video extends Node<Video> {
-    // add all fields for the video entity
-  @PrimaryKey({ columnType: 'bigserial' })
-  video_id!: number;
 
   @Property({ columnType: 'text' })
   title: string;
