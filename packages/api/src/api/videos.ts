@@ -7,10 +7,12 @@ export const videos = Router();
 // Get all videos
 videos.get('', async (req, res) => {
     try {
-        const videosRepository = req.entityManager.getRepository(Video);
-        const videosList = await videosRepository.findAll();
+        // Find All videos
+        const videosList = await req.entityManager.getRepository(Video).findAll();
 
+        // Return the list
         res.status(200).send(videosList);
+
     } catch (error) {
         logger.error('There was an issue geting all videos: ', error);
         res.status(500).send('There was an issue geting all videos');
@@ -23,25 +25,25 @@ videos.get('/:videoId', async (req, res) => {
 
     try {   
         // Check if videoId is in the expected format
-        if (isNaN(+videoId)) {
-            throw new TypeError();
+        if (isNaN(Number(videoId))) {
+            res.status(400).send(`"${videoId}" is not a valid id, it must be a number.`);
+            return;
         }  
 
-        // Find desired Video
-        const videosRepository = req.entityManager.getRepository(Video);
-        const video = await videosRepository.findOne({ id: videoId });
-        res.status(200).send(video);
-        
-    } catch (error) {
-        // Check for error type
-        if (error instanceof TypeError) {
-            logger.error('videoId "' + videoId + '" is not in the expected format.', error);
-            // Return Unprocessable Enitity Status Code
-            res.status(422).send('"' + videoId + '" is not a valid id');
-        } else {
-            logger.error('There was an issue geting video "' + videoId + '":', error);
-            res.status(500).send('There was an issue geting video "' + videoId + '"');
+        // Find desired Video       
+        const video = await req.entityManager.findOne( Video, { id: videoId });
+
+        // Check if video exists
+        if (!video) {
+            res.sendStatus(404);
+            return;
         }
         
+        // Return the video
+        res.status(200).send(video);
+
+    } catch (error) {
+            logger.error(`There was an issue geting video "${videoId}"`, error);
+            res.status(500).send(`There was an issue geting video "${videoId}"`);       
     };
 });
