@@ -50,6 +50,19 @@
 
 1.  Start developing
 
+## Setting up the Github OAuth
+  - Login to github, then at the top right click on the icon and go to settings.
+
+  - Find the developer settings, then click on OAuth Apps, and create a new OAuth app.
+
+  - Name the application, homepage 'URL' should be `http://localhost:3000` 
+  
+  - The callback `URL` should be `http://localhost:3000/api/auth/callback/github`
+
+  - Next, use the output of the app creation to replace the value of `GITHUB_ID` within your `.env.local`
+
+  - Generate a Client Secret ID from GitHub and use it to replace the value of `GITHUB_SECRET` within your `.env.local`
+
 ## Learn More
 
 To learn more about Next.js, take a look at the following resources:
