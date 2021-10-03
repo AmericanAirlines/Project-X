@@ -10,17 +10,17 @@ export class User extends Node<User> {
   @Property({ columnType: 'text' })
   name: string;
 
-  @Property({ columnType: 'text' })
-  pronouns: string;
+  @Property({ columnType: 'text', nullable: true })
+  pronouns?: string;
 
   @Property({ columnType: 'text' })
-  location?: string;
+  location: string;
 
   @Property( { columnType: 'boolean'})
-  hireable?: boolean;
+  hireable: boolean;
 
-  @Property({ columnType: 'text' })
-  purpose: string;
+  @Property({ columnType: 'text', nullable: true })
+  purpose?: string;
 
   @Property({ columnType: 'text' })
   schoolName:string;
@@ -29,19 +29,23 @@ export class User extends Node<User> {
   major: string;
 
   @Property({ columnType: 'Date' })
-  graduationDate?: Date;
+  graduationDate: Date;
 
 
-  constructor({ name, pronouns, location, hireable, purpose, schoolName, major, graduationDate, ...extraValues }: UserConstructorValues) {
+  constructor({ name, location, hireable, schoolName, major, graduationDate, ...extraValues }: UserConstructorValues) {
     super(extraValues);
 
     this.name = name;
    
-    this.pronouns = pronouns;
-    this.purpose = purpose;
+    this.location = location;
+
+    this.hireable = hireable;
+
     this.schoolName = schoolName;
+
     this.major = major;
+
     this.graduationDate = graduationDate;
-    // add other fields to constructor
+
   }
 }
