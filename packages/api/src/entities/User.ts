@@ -38,7 +38,6 @@ export class User extends Node<User> {
     this.name = name;
     this.hireable = hireable;
     this.purpose = purpose;
-    this.major = major;
 
   }
 }
