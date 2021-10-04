@@ -1,4 +1,5 @@
 # Authors
 
 - John Kahn (john.kahn@aa.com)
-- Nick Vitale (nfv180000@utdallas.edu)
+- Nick Vitale (nickvitale75028@gmail.com)
+- Thua Lee (thuatuanlee@gmail.com)

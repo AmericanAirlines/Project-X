@@ -12,5 +12,6 @@ export const env = setEnv({
   },
   optional: {
     databaseUser: 'DATABASE_USER',
+    GitId: 'GITHUB_ID',
   },
 });

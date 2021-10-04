@@ -14,7 +14,7 @@ export const MarketingLayout: React.FC = ({ children }) => {
         <Spacer />
         <Link href="/login/github" passHref>
           <Button as="a" size="sm" colorScheme="blue">
-            Login with GitHub
+            Login with Github
           </Button>
         </Link>
       </HStack>

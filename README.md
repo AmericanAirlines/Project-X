@@ -51,13 +51,17 @@
 1.  Start developing
 
 ## Setting up the Github OAuth
-  - login to github, then at the top right of your screen click your icon and go to settings.
+  - Login to github, then at the top right click on the icon and go to settings.
 
-  - now find the developer settings, then click on OAuth Apps, and create a new OAuth app.
+  - Find the developer settings, then click on OAuth Apps, and create a new OAuth app.
 
-  - you can name the application whatever you want, homepage url should be "http://localhost:3000", the description can be whatever you want, and the callback url should be "http://localhost:3000/api/auth/callback/github"
+  - Name the application, homepage 'URL' should be `http://localhost:3000` 
 
-  - once that is done you can save your client id from the website and place it in the "GITHUB_ID=######" section of the ".env.local" file. Then generate a "client secret id" from the github website and save that in the "GITHUB_SECRET=######" section of the ".env.local" file.
+  - The callback `URL` should be `http://localhost:3000/api/auth/callback/github`
+
+  - Next, use the output of the app creation to replace the value of `GITHUB_ID` within your `.env.local`
+
+  - Generate a Client Secret ID from GitHub and use it to replace the value of `GITHUB_SECRET` within your `.env.local`
     
 
 ## Learn More
