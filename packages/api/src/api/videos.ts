@@ -25,7 +25,7 @@ videos.get('/:videoId', async (req, res) => {
 
     try {   
         // Check if videoId is in the expected format
-        if (isNaN(Number(videoId))) {
+        if (Number.isNaN(videoId)) {
             res.status(400).send(`"${videoId}" is not a valid id, it must be a number.`);
             return;
         }  
