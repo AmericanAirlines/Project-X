@@ -6,5 +6,4 @@ import { users } from './users';
 export const api = Router();
 
 api.use('/health', health);
-
 api.use('/users', users);
