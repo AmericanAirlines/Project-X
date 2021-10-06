@@ -11,33 +11,7 @@ const video : Video = {
   url: 'https://test.com',
   createdAt: new Date(),
   updatedAt: new Date(),
-
-  // Is there an easier way to mock this?
-  isInitialized: function () {
-    throw new Error('Function not implemented.');
-  },
-  populated: function () {
-    throw new Error('Function not implemented.');
-  },
-  toReference: function () {
-    throw new Error('Function not implemented.');
-  },
-  toObject: function () {
-    throw new Error('Function not implemented.');
-  },
-  toJSON: function () {
-    throw new Error('Function not implemented.');
-  },
-  toPOJO: function () {
-    throw new Error('Function not implemented.');
-  },
-  assign: function () {
-    throw new Error('Function not implemented.');
-  },
-  init: function () {
-    throw new Error('Function not implemented.');
-  }
-}
+} as Video
 
 describe('VideoTableRow render', () => {
   // Test component render
