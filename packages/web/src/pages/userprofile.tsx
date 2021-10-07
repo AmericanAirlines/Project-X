@@ -3,7 +3,7 @@ import { NextPage } from 'next';
 import { Heading } from '@chakra-ui/layout';
 import { MarketingLayout } from '../components/Layout';
 
-const User: NextPage = () => {
+const UserProfile: NextPage = () => {
     // Make page stateful
     // Fetch user data using users API
     // Display fetched user data in their respective fields
@@ -19,4 +19,4 @@ const User: NextPage = () => {
     );
 };
 
-export default User;
+export default UserProfile;
