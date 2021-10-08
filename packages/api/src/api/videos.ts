@@ -8,7 +8,7 @@ export const videos = Router();
 videos.get('', async (req, res) => {
     try {
         // Find All videos
-        const videosList = await req.entityManager.getRepository(Video).findAll();
+        const videosList = await req.entityManager.find(Video, {});
 
         // Return the list
         res.status(200).send(videosList);
