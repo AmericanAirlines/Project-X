@@ -12,9 +12,9 @@ export const VideoTableRow = (video:Video) => {
   var seconds = (video.durationInSeconds % 60);
 
   // Format time values
-  const formattedHours = ('00'+ hours).slice(-2);
-  const formattedMinutes = ('00'+ minutes).slice(-2);
-  const formattedSeconds = ('00'+ seconds).slice(-2);
+  const formattedHours = hours.toString().padStart(2, '0');
+  const formattedMinutes = minutes.toString().padStart(2, '0');
+  const formattedSeconds = seconds.toString().padStart(2, '0');
 
   return (
     <Tr>
