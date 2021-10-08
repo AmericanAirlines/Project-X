@@ -8,7 +8,7 @@ export const videos = Router();
 videos.get('', async (req, res) => {
     try {
         // Find All videos
-        const videosList = await req.entityManager.getRepository(Video).findAll();
+        const videosList = await req.entityManager.find(Video, {});
 
         // Return the list
         res.status(200).send(videosList);
@@ -25,7 +25,7 @@ videos.get('/:videoId', async (req, res) => {
 
     try {   
         // Check if videoId is in the expected format
-        if (isNaN(Number(videoId))) {
+        if (Number.isNaN(videoId)) {
             res.status(400).send(`"${videoId}" is not a valid id, it must be a number.`);
             return;
         }  
