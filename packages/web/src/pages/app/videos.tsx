@@ -1,12 +1,17 @@
 import { Heading, Table, Thead, Tr, Th } from '@chakra-ui/react';
 import { NextPage } from 'next';
 import React from 'react';
-import { Video } from '../../../../api/src/entities/Video';
 import { AppLayout } from '../../components/Layout';
-import { VideoTableRow } from '../../components/VideoTableRow';
+import { VideoTableRow } from '../../components/Layout/Videos/VideoTableRow';
+
+export interface Video {
+  title: string,
+  durationInSeconds: number,
+  url: string
+}
 
 const Videos: NextPage = () => {
-  const [status, setStatus] = React.useState<Video[]>();
+  const [videos, setVideos] = React.useState<Video[]>([]);
 
   React.useEffect(() => {
     const fetchStatus = async () => {
@@ -16,7 +21,7 @@ const Videos: NextPage = () => {
       const videosList = await res.json();
 
       // Set page status
-      setStatus(videosList);
+      setVideos(videosList);
     }
 
     fetchStatus();
@@ -32,16 +37,17 @@ const Videos: NextPage = () => {
             <Th>Duration</Th>
           </Tr>
         </Thead>       
-        {status ? 
+        {videos ? 
 
           /* Check if videoList has videos */
-          ((status.length <= 0) ?
+          ((videos.length <= 0) ?
 
             /* No: display message */
             "No Videos Found" : 
             
-            /* Yes: Create Row for each Video */
-            status?.map( video => { return ( VideoTableRow(video))})) : 
+            /* Yes: Create Row for each Video */           
+            // eslint-disable-next-line react/jsx-key
+            videos.map( video => <VideoTableRow video={video} />)) : 
           ""}       
       </Table>
     </AppLayout>

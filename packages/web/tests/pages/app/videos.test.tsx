@@ -1,12 +1,15 @@
 import React from 'react';
 import { render, screen } from '../../testUtils/testTools';
+import { Video } from '../../../src/pages/app/videos';
 import Videos from '../../../src/pages/app/videos';
 import { getMock } from '../../testUtils/getMock';
 import { AppLayout } from '../../../src/components/Layout';
-import { VideoTableRow } from '../../../src/components/VideoTableRow';
+import { VideoTableRow } from '../../../src/components/Layout/Videos/VideoTableRow';
 
 jest.mock('../../../src/components/Layout/AppLayout.tsx');
 getMock(AppLayout).mockImplementation(({ children }) => <>{children}</>);
+jest.mock('../../../src/components/Layout/Videos/VideoTableRow');
+getMock(VideoTableRow).mockImplementation(({ video }) => <>{video}</>);
 
 // Mock api response for /api/videos
 
