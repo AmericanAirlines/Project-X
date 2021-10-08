@@ -31,8 +31,9 @@ users.get('/:userId', async (req, res) => {
     }
 
     // Return stripped user information
-    res.send(stripSensitiveFields(user));
-  } catch (error) {
+    res.status(200).send(stripSensitiveFields(user));
+  }
+  catch (error) {
     logger.error(`There was an issue geting video "${userId}"`, error);
     res.status(500).send(`There was an issue geting user "${userId}"`);
   }
