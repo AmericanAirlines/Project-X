@@ -26,7 +26,6 @@ const video2 : Video = {
   url: "www.test2.org"
 }
 
-//
 const loggerSpy = jest.spyOn(logger, 'error').mockImplementation();
 
 describe('/videos', () => {
