@@ -34,7 +34,7 @@ describe('/videos', () => {
     jest.clearAllMocks();
   });
 
-  it("returns all videos when videos exist", async () => {
+  it("returns all videos when videos", async () => {
     const expectedVideos = [video1, video2];
     const handler = testHandler(videos);
     handler.entityManager.find.mockResolvedValue(expectedVideos);
