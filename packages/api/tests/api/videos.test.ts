@@ -1,24 +1,25 @@
 // add tests to ensure videos are being returned properly
 import { videos } from '../../src/api/videos';
+import { Video } from '../../src/entities/Video';
 import logger from '../../src/logger';
 import { testHandler } from '../testUtils/testHandler';
 
 // Video object mocks
-interface Video {
+interface MockVideo {
   id: string;
   title: string;
   durationInSeconds: number;
   url: string;
 }
 
-const video1: Video = {
+const video1: MockVideo = {
   id: '1',
   title: 'video1',
   durationInSeconds: 102,
   url: 'www.test.org',
 };
 
-const video2: Video = {
+const video2: MockVideo = {
   id: '2',
   title: 'video2',
   durationInSeconds: 1109,
@@ -72,6 +73,7 @@ describe('/videos/:videoId', () => {
 
     // result contains only the specified video
     expect(body).toEqual(video1);
+    expect(handler.entityManager.findOne).toHaveBeenCalledWith(Video, {id: "1"});
   });
 
   it('propererly returns with a 400 when a video ID not a number', async () => {
