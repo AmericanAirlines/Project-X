@@ -75,6 +75,14 @@ describe('/videos/:videoId', () => {
     expect(body).toEqual(video1);
   });
 
+  it("propererly returns with a 400 when a video ID not a number", async () => {
+    const handler = testHandler(videos);
+    handler.entityManager.findOne.mockResolvedValue(video1);
+
+    // result responds with 404 Status
+    await handler.get('/one').expect(400);
+  });
+
   it("propererly returns with a 404 when a video is not found", async () => {
     const handler = testHandler(videos);
     handler.entityManager.findOne.mockResolvedValue(null);
