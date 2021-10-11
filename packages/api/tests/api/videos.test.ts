@@ -33,7 +33,7 @@ describe('/videos', () => {
     jest.clearAllMocks();
   });
 
-  it('returns all videos when videos', async () => {
+  it('returns all videos', async () => {
     const expectedVideos = [video1, video2];
     const handler = testHandler(videos);
     handler.entityManager.find.mockResolvedValue(expectedVideos);
@@ -64,45 +64,38 @@ describe('/videos/:videoId', () => {
   beforeEach(async () => {
     jest.clearAllMocks();
   });
-  it('/videos/:video_id returns a specific video', async () => {
+  it('returns a specific video', async () => {
     const handler = testHandler(videos);
-    handler.entityManager.findOne.mockResolvedValue(video1);
+    handler.entityManager.findOne.mockResolvedValueOnce(video1);
 
-    // result responds with 200 Status
     const { body } = await handler.get('/1').expect(200);
 
-    // result contains only the specified video
     expect(body).toEqual(video1);
     expect(handler.entityManager.findOne).toHaveBeenCalledWith(Video, { id: '1' });
   });
 
   it('propererly returns with a 400 when a video ID not a number', async () => {
     const handler = testHandler(videos);
-    handler.entityManager.findOne.mockResolvedValue(video1);
+    handler.entityManager.findOne.mockResolvedValueOnce(video1);
 
-    // result responds with 404 Status
     await handler.get('/one').expect(400);
   });
 
   it('propererly returns with a 404 when a video is not found', async () => {
     const handler = testHandler(videos);
-    handler.entityManager.findOne.mockResolvedValue(null);
+    handler.entityManager.findOne.mockResolvedValueOnce(null);
 
-    // result responds with 404 Status
     await handler.get('/1').expect(404);
   });
 
   it('propererly errors with a 500 and logs', async () => {
     const handler = testHandler(videos);
-    handler.entityManager.findOne.mockRejectedValue(new Error('Something is broken'));
+    handler.entityManager.findOne.mockRejectedValueOnce(new Error('Something is broken'));
 
-    // result responds with 500 Status
     const { text } = await handler.get('/1').expect(500);
 
-    // result contains all videos
     expect(text).toEqual('There was an issue geting video "1"');
 
-    // logger should be called
     expect(loggerSpy).toBeCalledTimes(1);
   });
 });
