@@ -1,8 +1,8 @@
-import { Heading, Table, Thead, Tr, Th, Tbody } from '@chakra-ui/react';
+import { Heading, Table, Thead, Tr, Th, Tbody, Text } from '@chakra-ui/react';
 import { NextPage } from 'next';
 import React from 'react';
 import { AppLayout } from '../../components/Layout';
-import { VideoTableRow } from '../../components/Layout/Videos';
+import { VideoTableRow } from '../../components/Videos';
 
 export interface Video {
   id: string;
@@ -30,25 +30,23 @@ const Videos: NextPage = () => {
   return (
     <AppLayout>
       <Heading>Videos</Heading>
-      <Table>
-        <Thead>
-          <Tr>
-            <Th>Title</Th>
-            <Th>Duration</Th>
-          </Tr>
-        </Thead>
-        <Tbody>
-          {videos
-            ? /* Check if videoList has videos */
-              videos.length <= 0
-              ? /* No: display message */
-                'No Videos Found'
-              : /* Yes: Create Row for each Video */
-                // eslint-disable-next-line react/jsx-key
-                videos.map((video) => <VideoTableRow key={video.id} video={video} />)
-            : ''}
-        </Tbody>
-      </Table>
+      {videos.length <= 0 ? (
+        <Text>No Videos Found</Text>
+      ) : (
+        <Table>
+          <Thead>
+            <Tr>
+              <Th>Title</Th>
+              <Th>Duration</Th>
+            </Tr>
+          </Thead>
+          <Tbody>
+            {videos.map((video) => (
+              <VideoTableRow key={video.id} video={video} />
+            ))}
+          </Tbody>
+        </Table>
+      )}
     </AppLayout>
   );
 };

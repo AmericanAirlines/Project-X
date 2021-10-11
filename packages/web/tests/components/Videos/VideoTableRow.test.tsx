@@ -1,7 +1,8 @@
 import React from 'react';
-import { render, screen } from '../../../testUtils/testTools';
-import { VideoTableRow } from '../../../../src/components/Layout/Videos/VideoTableRow';
-import { Video } from '../../../../src/pages/app/videos';
+import { render, screen } from '../../testUtils/testTools';
+import { VideoTableRow } from '../../../src/components/Videos/VideoTableRow';
+import { Video } from '../../../src/pages/app/videos';
+import { Table, Tbody } from '@chakra-ui/table';
 
 // Mock video objects
 const video1: Video = {
@@ -25,7 +26,13 @@ const video3: Video = {
 
 describe('VideoTableRow', () => {
   it('renders', async () => {
-    render(<VideoTableRow video={video1} />);
+    render(
+      <Table>
+        <Tbody>
+          <VideoTableRow video={video1} />
+        </Tbody>
+      </Table>,
+    );
 
     expect(screen.getByText('Test Video #1')).toBeVisible();
 
@@ -33,7 +40,13 @@ describe('VideoTableRow', () => {
   });
 
   it('correctly formats video duration with no duration', async () => {
-    render(<VideoTableRow video={video1} />);
+    render(
+      <Table>
+        <Tbody>
+          <VideoTableRow video={video1} />
+        </Tbody>
+      </Table>,
+    );
 
     expect(screen.getByText('Test Video #1')).toBeVisible();
 
@@ -41,7 +54,13 @@ describe('VideoTableRow', () => {
   });
 
   it('correctly formats video duration with medium duration', async () => {
-    render(<VideoTableRow video={video2} />);
+    render(
+      <Table>
+        <Tbody>
+          <VideoTableRow video={video2} />
+        </Tbody>
+      </Table>,
+    );
 
     expect(screen.getByText('Another Test Video')).toBeVisible();
 
@@ -49,7 +68,13 @@ describe('VideoTableRow', () => {
   });
 
   it('correctly formats video duration with long duration', async () => {
-    render(<VideoTableRow video={video3} />);
+    render(
+      <Table>
+        <Tbody>
+          <VideoTableRow video={video3} />
+        </Tbody>
+      </Table>,
+    );
 
     expect(screen.getByText('More Videos for Testing')).toBeVisible();
 

@@ -5,11 +5,11 @@ import Videos from '../../../src/pages/app/videos';
 import { Video } from '../../../src/pages/app/videos';
 import { getMock } from '../../testUtils/getMock';
 import { AppLayout } from '../../../src/components/Layout';
-import { VideoTableRow } from '../../../src/components/Layout/Videos';
+import { VideoTableRow } from '../../../src/components/Videos';
 
 jest.mock('../../../src/components/Layout/AppLayout.tsx');
 getMock(AppLayout).mockImplementation(({ children }) => <>{children}</>);
-jest.mock('../../../src/components/Layout/Videos/VideoTableRow.tsx');
+jest.mock('../../../src/components/Videos/VideoTableRow.tsx');
 getMock(VideoTableRow).mockImplementation(({ video }) => (
   <tr>
     <td>Video Row</td>
@@ -59,9 +59,6 @@ describe('videos page', () => {
     await act(wait);
 
     expect(screen.getByText('Videos')).toBeVisible();
-
-    expect(screen.getByText('Title')).toBeVisible();
-    expect(screen.getByText('Duration')).toBeVisible();
 
     expect(VideoTableRow).toBeCalledTimes(0);
     expect(screen.getByText('No Videos Found')).toBeVisible();
