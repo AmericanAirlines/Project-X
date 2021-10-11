@@ -71,7 +71,7 @@ describe('/videos/:videoId', () => {
     const { body } = await handler.get('/1').expect(200);
 
     expect(body).toEqual(video1);
-    expect(handler.entityManager.findOne).toHaveBeenCalledWith(Video, {id: "1"});
+    expect(handler.entityManager.findOne).toHaveBeenCalledWith(Video, { id: '1' });
   });
 
   it('propererly returns with a 400 when a video ID not a number', async () => {
