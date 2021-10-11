@@ -26,7 +26,6 @@ const video3 : Video = {
 describe('VideoTableRow', () => {
   // Test component render
   it('renders', async () => {
-    // Need to get this call working
     
     render(<VideoTableRow video={video1} />);
 
@@ -39,7 +38,6 @@ describe('VideoTableRow', () => {
 
   // Test time conversion
   it('correctly formats video duration with no duration', async () => {
-    // Need to get this call working
     
     render(<VideoTableRow video={video1} />);
 
@@ -51,7 +49,6 @@ describe('VideoTableRow', () => {
   });
 
   it('correctly formats video duration with medium duration', async () => {
-    // Need to get this call working
     
     render(<VideoTableRow video={video2} />);
 
@@ -63,7 +60,6 @@ describe('VideoTableRow', () => {
   });
 
   it('correctly formats video duration with long duration', async () => {
-    // Need to get this call working
     
     render(<VideoTableRow video={video3} />);
 
