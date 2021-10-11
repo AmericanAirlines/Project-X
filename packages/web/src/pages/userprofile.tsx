@@ -2,7 +2,7 @@ import React from 'react';
 import { NextPage } from 'next';
 import { MarketingLayout } from '../components/Layout';
 import queryString from 'query-string';
-import { UserProfileLayout, UserProfileData } from '../components/Layout/UserProfileLayout';
+import { UserProfileLayout, UserProfileData } from '../components/userprofile/UserProfileLayout';
 import { Alert, AlertIcon } from '@chakra-ui/alert';
 
 const UserProfile: NextPage = () => {
