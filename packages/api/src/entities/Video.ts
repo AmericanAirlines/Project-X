@@ -7,7 +7,6 @@ export type VideoConstructorValues = ConstructorValues<Video>;
 
 @Entity()
 export class Video extends Node<Video> {
-
   @Property({ columnType: 'text' })
   title: string;
 
