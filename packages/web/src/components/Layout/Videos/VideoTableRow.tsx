@@ -1,6 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
-import { Tr, Td, useTheme } from '@chakra-ui/react';
+import { Tr, Td, useTheme, Table, Tbody } from '@chakra-ui/react';
 
 export interface VideoTableRowProps {
   video: {
@@ -24,13 +24,18 @@ export const VideoTableRow: React.FC<VideoTableRowProps> = ({ video }) => {
   const formattedSeconds = seconds.toString().padStart(2, '0');
 
   return (
-    <Tr>
-      <Td>
-        <Link href={video.url} passHref>
-          {video.title}
-        </Link>
-      </Td>  
-      <Td>{formattedHours}:{formattedMinutes}:{formattedSeconds}</Td>
-    </Tr>
+    <Table>
+      <Tbody>
+        <Tr>
+          <Td>
+            <Link href={video.url} passHref>
+              {video.title}
+            </Link>
+          </Td>  
+          <Td>{formattedHours}:{formattedMinutes}:{formattedSeconds}</Td>
+        </Tr>
+      </Tbody>
+    </Table>
+
   );
 };
