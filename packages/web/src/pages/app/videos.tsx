@@ -5,10 +5,10 @@ import { AppLayout } from '../../components/Layout';
 import { VideoTableRow } from '../../components/Layout/Videos';
 
 export interface Video {
-  id: string,
-  title: string,
-  durationInSeconds: number,
-  url: string
+  id: string;
+  title: string;
+  durationInSeconds: number;
+  url: string;
 }
 
 const Videos: NextPage = () => {
@@ -37,17 +37,17 @@ const Videos: NextPage = () => {
             <Th>Duration</Th>
           </Tr>
         </Thead>
-        <Tbody>       
-          {videos ? 
-            /* Check if videoList has videos */
-            ((videos.length <= 0) ?
-              /* No: display message */
-              "No Videos Found" :              
-              /* Yes: Create Row for each Video */           
-              // eslint-disable-next-line react/jsx-key
-              videos.map( video => <VideoTableRow key={video.id} video={video} />)) : 
-            ""} 
-        </Tbody>      
+        <Tbody>
+          {videos
+            ? /* Check if videoList has videos */
+              videos.length <= 0
+              ? /* No: display message */
+                'No Videos Found'
+              : /* Yes: Create Row for each Video */
+                // eslint-disable-next-line react/jsx-key
+                videos.map((video) => <VideoTableRow key={video.id} video={video} />)
+            : ''}
+        </Tbody>
       </Table>
     </AppLayout>
   );

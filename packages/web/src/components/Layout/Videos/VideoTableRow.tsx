@@ -8,15 +8,15 @@ export interface VideoTableRowProps {
     durationInSeconds: number;
     url: string;
   };
-} 
+}
 
 export const VideoTableRow: React.FC<VideoTableRowProps> = ({ video }) => {
   const theme = useTheme();
 
   // Convert durationInSeconds
   var hours = Math.floor(video.durationInSeconds / 3600);
-  var minutes = Math.floor((video.durationInSeconds - (hours * 3600)) / 60);
-  var seconds = (video.durationInSeconds % 60);
+  var minutes = Math.floor((video.durationInSeconds - hours * 3600) / 60);
+  var seconds = video.durationInSeconds % 60;
 
   // Format time values
   const formattedHours = hours.toString().padStart(2, '0');
@@ -31,11 +31,12 @@ export const VideoTableRow: React.FC<VideoTableRowProps> = ({ video }) => {
             <Link href={video.url} passHref>
               {video.title}
             </Link>
-          </Td>  
-          <Td>{formattedHours}:{formattedMinutes}:{formattedSeconds}</Td>
+          </Td>
+          <Td>
+            {formattedHours}:{formattedMinutes}:{formattedSeconds}
+          </Td>
         </Tr>
       </Tbody>
     </Table>
-
   );
 };
