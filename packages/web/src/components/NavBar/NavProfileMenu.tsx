@@ -12,23 +12,23 @@ import {
 
 export const NavProfileMenu: React.FC = () => (
   <Menu>
-    <MenuButton as={Button} variant={'link'}>
+    <MenuButton className="navbarProfileButton" as={Button} variant={'link'}>
       <Avatar size={'sm'} />
     </MenuButton>
     <MenuList>
       <MenuItem>
-        <Link href="/app/profile" style={{ textDecoration: 'none' }}>
+        <Link className="navbarMenuItem" href="/app/profile">
           Edit Profile
         </Link>
       </MenuItem>
       <MenuItem>
-        <Link href="/app/contributions" style={{ textDecoration: 'none' }}>
+        <Link className="navbarMenuItem" href="/app/contributions">
           View Contributions
         </Link>
       </MenuItem>
       <MenuDivider />
       <MenuItem>
-        <Link href="/app/logout" style={{ textDecoration: 'none' }}>
+        <Link className="navbarMenuItem" href="/app/logout">
           Log Out
         </Link>
       </MenuItem>
