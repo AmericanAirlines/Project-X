@@ -8,27 +8,6 @@ export type VideoConstructorValues = ConstructorValues<Video>;
 @Entity()
 export class Video extends Node<Video> {
   @Property({ columnType: 'text' })
-<<<<<<< HEAD
-  name: string;
-
-  constructor({ name, ...extraValues }: VideoConstructorValues) {
-    super(extraValues);
-
-    this.name = name;
-  }
-}
-
-// new video entity
-/*
-
-Included fields:
-- video_id 
-- title 
-- durationInSeconds
-- url
-
-*/
-=======
   title: string;
 
   @Property({ columnType: 'int' })
@@ -45,4 +24,3 @@ Included fields:
     this.url = url;
   }
 }
->>>>>>> upstream/main
