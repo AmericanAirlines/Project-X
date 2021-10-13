@@ -13,7 +13,7 @@ import {
 export const NavProfileMenu: React.FC = () => (
   <Menu variant="navbar">
     <MenuButton as={Button}>
-      <Avatar variant="navbar" size={'sm'} />
+      <Avatar size={'sm'} />
     </MenuButton>
     <MenuList>
       <MenuItem>
