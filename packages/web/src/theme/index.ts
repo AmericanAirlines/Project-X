@@ -7,6 +7,39 @@ const config: ThemeConfig = {
 
 export const theme = extendTheme({
   config,
+  components: {
+    Link: {
+      variants: {
+        "navbar": {
+          backgroundColor: mode('gray.100', 'gray.900'),
+          px: 2,
+          py: 4,
+          rounded: 'md',
+          _hover: {
+            textDecoration: 'none',
+            backgroundColor: mode('gray.200', 'gray.700'),
+          }
+        },
+        "navbarMenuItem": {
+          _hover: {
+            textDecoration: 'none',
+          }
+        }
+      }
+    },
+    Menu: {
+      parts: ['button'],
+      variants: {
+        "navbar": {
+          backgroundColor: mode('gray.100', 'gray.900'),
+          _hover: {
+            textDecoration: 'none',
+            backgroundColor: mode('gray.200', 'gray.700'),
+          }
+        }     
+      },
+    },
+  },
   styles: {
     global: (props) => ({
       body: {
@@ -15,28 +48,6 @@ export const theme = extendTheme({
       },
       'div.navbar': {
         backgroundColor: mode('gray.100', 'gray.900')(props),
-      },
-      'a.navbar': {
-        backgroundColor: mode('gray.100', 'gray.900')(props),
-        px: 2,
-        py: 1,
-        rounded: 'md',
-      },
-      'a.navbar:hover': {
-        textDecoration: 'none',
-        backgroundColor: mode('gray.200', 'gray.700')(props),
-      },
-      'button.navbarProfileButton': {
-        cursor: 'pointer',
-        rounded: 'md',
-        px: 1,
-      },
-      'button.navbarProfileButton:hover': {
-        textDecoration: 'none',
-        backgroundColor: mode('gray.200', 'gray.700')(props),
-      },
-      'a.navbarMenuItem:hover': {
-        textDecoration: 'none',
       },
     }),
   },

@@ -11,24 +11,24 @@ import {
 } from '@chakra-ui/react';
 
 export const NavProfileMenu: React.FC = () => (
-  <Menu>
-    <MenuButton className="navbarProfileButton" as={Button} variant={'link'}>
-      <Avatar size={'sm'} />
+  <Menu variant="navbar">
+    <MenuButton as={Button}>
+      <Avatar variant="navbar" size={'sm'} />
     </MenuButton>
     <MenuList>
       <MenuItem>
-        <Link className="navbarMenuItem" href="/app/profile">
+        <Link variant="navbarMenuItem" href="/app/profile">
           Edit Profile
         </Link>
       </MenuItem>
       <MenuItem>
-        <Link className="navbarMenuItem" href="/app/contributions">
+        <Link variant="navbarMenuItem" href="/app/contributions">
           View Contributions
         </Link>
       </MenuItem>
       <MenuDivider />
       <MenuItem>
-        <Link className="navbarMenuItem" href="/app/logout">
+        <Link variant="navbarMenuItem" href="/app/logout">
           Log Out
         </Link>
       </MenuItem>
