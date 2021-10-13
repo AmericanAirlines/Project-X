@@ -5,7 +5,7 @@ import { env } from '../../src/env';
 
 const GitHubClientId = env.GitHubId;
 
-const url = 'https://github.com/login/oauth/authorize?client_id=${GitHubClientId}&redirect_uri=http://localhost:3000/api/auth/github/callback';
+const url = `https://github.com/login/oauth/authorize?client_id=${GitHubClientId}&redirect_uri=http://localhost:3000/api/auth/github/callback`;
 
 describe('/GitHub endpoints',() => {
     beforeEach(async () => {
@@ -14,10 +14,10 @@ describe('/GitHub endpoints',() => {
 
    it('Goes to GitHub link for user to Login', async () => {
 
-       const handler = testHandler(gitHub)
-        .expect('Location', url)
+        const handler = testHandler(gitHub);
+        await handler.get('/github/login')
         .expect(302)
-
+        .expect('Location', url);
    });
 
     // testHandler(yourHandler)

@@ -14,4 +14,11 @@ describe('MarketingLayout', () => {
 
     expect(screen.getByText(text)).toBeVisible();
   });
+
+  it('renders button', async () => {
+  
+    render(<MarketingLayout/>);
+
+    expect(screen.getByText('Login with GitHub')).toBeVisible();
+  });
 });

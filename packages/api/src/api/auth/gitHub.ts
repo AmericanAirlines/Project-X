@@ -11,7 +11,7 @@ gitHub.get('/github/login', (req, res) => {
   res.redirect(url);
 } );
 
-gitHub.get('/github/callback', (req, res) => {
+// gitHub.get('/github/callback', (req, res) => {
   // const url = ``;
-  res.redirect(``);
-} );
+//  res.redirect(``);
+// } );
