@@ -20,7 +20,7 @@ users.get('/:userId', async (req, res) => {
       return;
     }
 
-    const user = await req.entityManager.findOne(User, { id: req.params.userId });
+    const user = await req.entityManager.findOne(User, { id: userId });
 
     // Check if user exists
     if (!user) {
