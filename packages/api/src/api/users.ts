@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { User } from '../entities/User';
 import logger from '../logger';
+import type { PostgreSqlDriver } from '@mikro-orm/postgresql';
 
 export const users = Router();
 
@@ -16,12 +17,11 @@ users.get('/:userId', async (req, res) => {
 
   try {
     // Check if userId is in correct format
-    if (Number.isNaN(userId)) {
+    if (Number.isNaN(Number(userId))) {
       res.status(400).send(`"${userId}" is not a valid id, it must be a number.`);
       return;
     }
 
-    // Find specified user within table
     const user = await req.entityManager.findOne(User, { id: req.params.userId });
 
     // Check if user exists
@@ -38,3 +38,15 @@ users.get('/:userId', async (req, res) => {
     res.status(500).send(`There was an issue geting user "${userId}"`);
   }
 });
+
+ users.patch('/:userId', async (req, res) => {
+  // const { userId } = req.params;
+  
+  // Also need list of User object columns to update - part of url?
+  
+  // Check if user exists
+  // Set edited columns in DB to specified values
+  // Use QueryBuilder to make a Patch query to DB
+  // https://mikro-orm.io/docs/query-builder/
+
+})
