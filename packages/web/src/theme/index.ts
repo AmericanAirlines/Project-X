@@ -10,7 +10,7 @@ export const theme = extendTheme({
   components: {
     Link: {
       variants: {
-        "navbar": {
+        navbar: {
           backgroundColor: mode('gray.100', 'gray.900'),
           px: 2,
           py: 4,
@@ -18,25 +18,25 @@ export const theme = extendTheme({
           _hover: {
             textDecoration: 'none',
             backgroundColor: mode('gray.200', 'gray.700'),
-          }
+          },
         },
-        "navbarMenuItem": {
+        navbarMenuItem: {
           _hover: {
             textDecoration: 'none',
-          }
-        }
-      }
+          },
+        },
+      },
     },
     Menu: {
       parts: ['button'],
       variants: {
-        "navbar": {
+        navbar: {
           backgroundColor: mode('gray.100', 'gray.900'),
           _hover: {
             textDecoration: 'none',
             backgroundColor: mode('gray.200', 'gray.700'),
-          }
-        }     
+          },
+        },
       },
     },
   },
