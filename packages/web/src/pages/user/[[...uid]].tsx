@@ -1,23 +1,25 @@
 import React from 'react';
 import { NextPage } from 'next';
-import { MarketingLayout } from '../components/Layout';
-import queryString from 'query-string';
-import { UserProfileLayout, UserProfileData } from '../components/userprofile/UserProfileLayout';
+import { MarketingLayout } from '../../components/Layout';
+import { useRouter } from 'next/router';
+import { UserProfileLayout, UserProfileData } from '../../components/userprofile/UserProfileLayout';
 import { Alert, AlertIcon } from '@chakra-ui/alert';
 
 const UserProfile: NextPage = () => {
     const [user, setUser] = React.useState<UserProfileData>();
     const [errorMessage, setErrorMessage] = React.useState<string>();
 
+    const router = useRouter();
+    const { uid } = router.query;
+
     React.useEffect(() => {
         const fetchStatus = async () => {
 
-            const locationId = queryString.parse(location.search).id;
 
             // Assuming that you need a query parameter to see a specific user's profile page (/userprofile?id=#)
-            if(!isNaN(Number(locationId)))
+            if(!isNaN(Number(uid)))
             {
-                const userAPIQuery: string = "/api/users/" + locationId;
+                const userAPIQuery: string = "/api/users/" + uid;
                 
                 // If user id doesn't exist in database, throw the 400 error from users API
                 // Concern?: Catch block has nothing since isValidUser is by default set to false
@@ -38,7 +40,7 @@ const UserProfile: NextPage = () => {
             else
             {
                 // If no id query parameter passed
-                if(locationId == null)
+                if(uid == null)
                 {
                     setErrorMessage("Login not setup yet");
                 }
@@ -51,9 +53,9 @@ const UserProfile: NextPage = () => {
         };
 
         fetchStatus();
-    }, []);
+    }, [uid]);
 
-    // When invalid user id entered
+    // If user is not logged in, don't let user see profile
     if(user === undefined)
     {
         return (
@@ -65,7 +67,7 @@ const UserProfile: NextPage = () => {
             </MarketingLayout>
         );
     }
-    else // On valid and found user id
+    else
     {
         return (
             <MarketingLayout>
