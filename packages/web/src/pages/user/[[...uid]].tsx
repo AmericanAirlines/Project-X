@@ -2,19 +2,20 @@ import React from 'react';
 import { NextPage } from 'next';
 import { MarketingLayout } from '../../components/Layout';
 import { useRouter } from 'next/router';
-import { UserProfileLayout, UserProfileData } from '../../components/userprofile/UserProfileLayout';
+import { UserProfileLayout, UserProfileData } from '../../components/UserProfile/UserProfileLayout';
 import { Alert, AlertIcon } from '@chakra-ui/alert';
+export { getServerSideProps } from '../../components/Chakra';
 
 const UserProfile: NextPage = () => {
-    const [user, setUser] = React.useState<UserProfileData>();
-    const [errorMessage, setErrorMessage] = React.useState<string>();
-
     const router = useRouter();
     const { uid } = router.query;
+    
+    const [user, setUser] = React.useState<UserProfileData>();
+    const [errorMessage, setErrorMessage] = React.useState<string>("");
+    
 
     React.useEffect(() => {
         const fetchStatus = async () => {
-
 
             // Assuming that you need a query parameter to see a specific user's profile page (/userprofile?id=#)
             if(!isNaN(Number(uid)))
@@ -55,17 +56,19 @@ const UserProfile: NextPage = () => {
         fetchStatus();
     }, [uid]);
 
-    // If user is not logged in, don't let user see profile
     if(user === undefined)
     {
-        return (
-            <MarketingLayout>
-                <Alert status="error">
-                    <AlertIcon/>
-                    {errorMessage}
-                </Alert>
-            </MarketingLayout>
-        );
+        if(errorMessage == "")
+            return (null);
+        else
+            return (
+                <MarketingLayout>
+                    <Alert status="error">
+                        <AlertIcon/>
+                        {errorMessage}
+                    </Alert>
+                </MarketingLayout>
+            )
     }
     else
     {
@@ -75,6 +78,7 @@ const UserProfile: NextPage = () => {
             </MarketingLayout>
         );
     }
+
 };
 
 export default UserProfile;
