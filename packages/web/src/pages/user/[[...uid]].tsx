@@ -7,7 +7,7 @@ import { Alert, AlertIcon } from '@chakra-ui/alert';
 export { getServerSideProps } from '../../components/Chakra';
 
 const UserProfile: NextPage = () => {
-    const router = useRouter();
+    const router = useRouter() || { query: { text: '' } };
     const { uid } = router.query;
     
     const [user, setUser] = React.useState<UserProfileData>();
@@ -17,13 +17,11 @@ const UserProfile: NextPage = () => {
     React.useEffect(() => {
         const fetchStatus = async () => {
 
-            // Assuming that you need a query parameter to see a specific user's profile page (/userprofile?id=#)
-            if(!isNaN(Number(uid)))
+            if(!Number.isNaN(Number(uid)))
             {
                 const userAPIQuery: string = "/api/users/" + uid;
                 
-                // If user id doesn't exist in database, throw the 400 error from users API
-                // Concern?: Catch block has nothing since isValidUser is by default set to false
+                // If uid doesn't exist in database, throw the 400 error from users API
                 try
                 {
                     const res = await fetch(userAPIQuery);
@@ -37,15 +35,14 @@ const UserProfile: NextPage = () => {
                 }
 
             }
-             // If no id parameter provided, when login is implemented, should use user id from session (if logged in)
+             // If no uid parameter provided, when login is implemented, should use user id from session (if logged in)
             else
             {
-                // If no id query parameter passed
                 if(uid == null)
                 {
                     setErrorMessage("Login not setup yet");
                 }
-                else // If id parameter is a string
+                else // If uid parameter is not a number
                 {
                     setErrorMessage("id must be an integer");
                 }
