@@ -1,7 +1,6 @@
 import { Router } from 'express';
 import { User } from '../entities/User';
 import logger from '../logger';
-import type { PostgreSqlDriver } from '@mikro-orm/postgresql';
 
 export const users = Router();
 

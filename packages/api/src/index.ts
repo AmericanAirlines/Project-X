@@ -9,6 +9,7 @@ import logger from './logger';
 const app = express();
 const port = Number(env.port ?? '') || 3000;
 const dev = env.nodeEnv === 'development';
+app.use(express.json());
 
 void (async () => {
   const orm = await initDatabase();
