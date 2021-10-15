@@ -1,1 +1,1 @@
-import { UserProfileLayout } from "./UserProfileLayout";
+export { UserProfileLayout } from "./UserProfileLayout";
