@@ -9,7 +9,8 @@ export const env = setEnv({
     nodeEnv: 'NODE_ENV',
     port: 'PORT',
     databaseUrl: 'DATABASE_URL',
-    GitHubId: 'GITHUB_ID',
+    GitHubId: 'GITHUB_CLIENT_ID',
+    GitHubSecret: 'GITHUB_SECRET',
   },
   optional: {
     databaseUser: 'DATABASE_USER',

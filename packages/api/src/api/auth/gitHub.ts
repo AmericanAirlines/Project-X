@@ -1,61 +1,93 @@
 import { Router } from 'express';
-// import { session } from 'passport';
+import { env } from '../../env';
 
-const session = require('express-session');
-const Passport = require('passport');
+const passport = require('passport');
 const GitHubStrategy = require('passport-github2').Strategy;
+const session = require('express-session'); // express-session
 
-// import { env } from '../../env';
+const GitHubClientId = env.GitHubId;
+const GitHubClientSecret = env.GitHubSecret;
 
-// const GitHubClientId = env.GitHubId;
+export const github = Router();
 
-export const gitHub = Router();
+passport.serializeUser((user: any, done: any) => {
+  done(null, user.id);
+});
 
-gitHub.use(Passport.initialize());
-gitHub.use(Passport.session());
+passport.deserializeUser((id: any, done: any) => {
+  done(null, id);
+});
 
-gitHub.use(
+github.use(
+  // express-session
   session({
-    secret: 'asdasd',
+    secret: 'keyboard cat',
     resave: false,
     saveUninitialized: false,
     cookie: {
-      httpOnly: true,
+      httpOnly: false,
       secure: false,
-      maxAge: 0.1 * 60 * 60 * 1000,
+      maxAge: 24 * 60 * 60 * 1000, // 1 day long
     },
   }),
 );
 
-Passport.serializeUser((user: any, done: any) => {
-  done(null, user.id);
-});
+github.use(passport.initialize());
+github.use(passport.session());
 
-Passport.deserializeUser((id: any, done: any) => {
-  done(null, id);
-});
-
-Passport.use(
+passport.use(
   new GitHubStrategy(
     {
-      clientID: 'f3257f8055fa9f5b1e0b',
-      clientSecret: 'c4ed5c029521b6ea8453488110ee60052330dee0',
+      clientID: GitHubClientId,
+      clientSecret: GitHubClientSecret,
       callbackURL: 'http://localhost:3000/api/auth/github/callback',
     },
-    (_accessToken: any, _refreshToken: any, profile: any, done: any) => {
-      done(null, profile);
+    async (accessToken: any, refreshToken: any, profile: any, done: any) => {
+      const user = {
+        name: profile.username,
+        gitHubId: profile.id,
+      };
+
+      const res = await fetch(`http://localhost:3000/api/users/${profile.id}`);
+      if (res.status === 404) {
+        // if we dont find the user, we do this block
+        const res2 = await fetch('http://localhost:3000/api/users', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(user),
+        });
+
+        if (res2.status === 201) {
+          // user created, now we go to this block
+          done(null, profile);
+        }
+      } else {
+        // if user is already existing, we execute this
+        done(null, profile);
+      }
     },
   ),
 );
 
-// gitHub.get('/github/login', Passport.authenticate('github'));
+github.get('/github/login', passport.authenticate('github'));
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-gitHub.get('/github/login', (_req, _res) => {
-  Passport.authenticate('github');
-});
-gitHub.get('/github/callback', (_req, res) => {
-  Passport.authenticate('github', { failureRedirect: '/login' });
-  // const url = ``;
-  res.redirect(`/app`);
-});
+github.get(
+  '/github/callback',
+  passport.authenticate('github', { failureRedirect: '/github/login' }),
+  (req, res) => {
+    // Successful authentication, redirect home.
+    res.redirect('/app');
+  },
+);
+
+// gitHub.get('/github/login', (req, res) => {
+//  const url = `https://github.com/login/oauth/authorize?client_id=${GitHubClientId}&redirect_uri=http://localhost:3000/api/auth/github/callback`;
+//  res.redirect(url);
+// } );
+
+// gitHub.get('/github/callback', (req, res) => {
+//   const url = ``;
+//  res.redirect(``);
+// } );

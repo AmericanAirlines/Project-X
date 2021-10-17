@@ -10,9 +10,13 @@ export class User extends Node<User> {
   @Property({ columnType: 'text' })
   name: string;
 
-  constructor({ name, ...extraValues }: UserConstructorValues) {
+  @Property({ columnType: 'text' })
+  gitHubId: string;
+
+  constructor({ name, gitHubId, ...extraValues }: UserConstructorValues) {
     super(extraValues);
 
     this.name = name;
+    this.gitHubId = gitHubId;
   }
 }

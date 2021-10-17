@@ -1,6 +1,6 @@
 import { Router } from 'express';
-import { gitHub } from './gitHub';
+import { github } from './gitHub';
 
 export const auth = Router();
 
-auth.use(gitHub);
+auth.use(github);
