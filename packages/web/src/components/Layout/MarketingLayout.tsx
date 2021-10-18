@@ -1,6 +1,5 @@
 import React from 'react';
-import Link from 'next/link';
-import { Button, Heading, HStack, Spacer, useTheme, VStack } from '@chakra-ui/react';
+import { Button, Link, Heading, HStack, Spacer, useTheme, VStack } from '@chakra-ui/react';
 import { GiCrossFlare } from 'react-icons/gi';
 
 export const MarketingLayout: React.FC = ({ children }) => {
@@ -12,11 +11,9 @@ export const MarketingLayout: React.FC = ({ children }) => {
         <GiCrossFlare size="36px" />
         <Heading>Project X</Heading>
         <Spacer />
-        <Link href="/app" passHref>
-          <Button as="a" size="sm" colorScheme="blue">
-            Go to App
-          </Button>
-        </Link>
+        <Button as="a" href="/api/auth/github/login" size="sm" colorScheme="blue">
+          Login with GitHub
+        </Button>
       </HStack>
       {children}
     </VStack>
