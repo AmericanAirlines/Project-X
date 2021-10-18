@@ -46,9 +46,6 @@ export const theme = extendTheme({
         color: mode('blue.800', 'gray.50')(props),
         backgroundColor: mode('gray.50', 'gray.800')(props),
       },
-      'div.navbar': {
-        backgroundColor: mode('gray.100', 'gray.900')(props),
-      },
     }),
   },
 } as DeepPartial<Theme>);
