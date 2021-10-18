@@ -1,8 +1,5 @@
 import React from 'react';
-import {
-  UserProfile,
-  UserProfileProps,
-} from '../../../src/components/userprofile/UserProfile';
+import { UserProfile, UserProfileProps } from '../../../src/components/userprofile/UserProfile';
 import { render, screen } from '../../testUtils/testTools';
 
 const sampleUser: UserProfileProps = {

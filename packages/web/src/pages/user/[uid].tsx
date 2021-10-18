@@ -7,7 +7,7 @@ import { Alert, AlertIcon } from '@chakra-ui/alert';
 export { getServerSideProps } from '../../components/Chakra';
 
 export interface User {
-  name: string,
+  name: string;
   pronouns?: string;
   schoolName?: string;
 }
@@ -52,7 +52,7 @@ const UserProfilePage: NextPage = () => {
   } else {
     return (
       <MarketingLayout>
-        <UserProfile {...user}/>
+        <UserProfile {...user} />
       </MarketingLayout>
     );
   }

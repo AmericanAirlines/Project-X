@@ -2,10 +2,7 @@ import React from 'react';
 import { render, screen, act } from '../../../testUtils/testTools';
 import UserProfilePage from '../../../../src/pages/user/[uid]';
 import fetchMock from 'fetch-mock-jest';
-import {
-  UserProfile,
-  UserProfileProps,
-} from '../../../../src/components/userprofile/UserProfile';
+import { UserProfile, UserProfileProps } from '../../../../src/components/userprofile/UserProfile';
 import { getMock } from '../../../testUtils/getMock';
 
 jest.mock('../../../../src/components/userprofile/UserProfile');
