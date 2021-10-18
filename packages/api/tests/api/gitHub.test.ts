@@ -1,9 +1,9 @@
 import "jest";
 import { gitHub  } from "../../src/api/auth/gitHub";
 import { testHandler } from "../testUtils/testHandler";
-import { env } from '../../src/__mocks__/env';
+import { env } from '../../src/env';
 
-const gitHubId = process.env.GITHUB_ID_TEST;
+const gitHubId = env.githubId;
 
 const url = `https://github.com/login/oauth/authorize?client_id=${gitHubId}&redirect_uri=http://localhost:3000/api/auth/github/callback`;
 
