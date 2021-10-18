@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, screen, act } from '../../../testUtils/testTools';
-import UserProfilePage, { getServerSideProps } from '../../../../src/pages/user/[uid]';
+import UserProfilePage from '../../../../src/pages/user/[uid]';
 import fetchMock from 'fetch-mock-jest';
 import { UserProfile, UserProfileProps } from '../../../../src/components/userprofile/UserProfile';
 import { getMock } from '../../../testUtils/getMock';
