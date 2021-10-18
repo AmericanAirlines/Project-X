@@ -16,8 +16,7 @@ describe('MarketingLayout', () => {
   });
 
   it('renders button', async () => {
-  
-    render(<MarketingLayout/>);
+    render(<MarketingLayout />);
 
     expect(screen.getByText('Login with GitHub')).toBeVisible();
   });
