@@ -2,15 +2,21 @@ import React from 'react';
 import { NextPage } from 'next';
 import { MarketingLayout } from '../../components/Layout';
 import { useRouter } from 'next/router';
-import { UserProfileLayout, UserProfileData } from '../../components/UserProfile/UserProfileLayout';
+import { UserProfile } from '../../components/userprofile/UserProfile';
 import { Alert, AlertIcon } from '@chakra-ui/alert';
 export { getServerSideProps } from '../../components/Chakra';
 
-const UserProfile: NextPage = () => {
+export interface User {
+  name: string,
+  pronouns?: string;
+  schoolName?: string;
+}
+
+const UserProfilePage: NextPage = () => {
   const router = useRouter();
   const { uid } = router.query;
 
-  const [user, setUser] = React.useState<UserProfileData>();
+  const [user, setUser] = React.useState<User>();
   const [errorMessage, setErrorMessage] = React.useState<string>('');
 
   React.useEffect(() => {
@@ -29,7 +35,7 @@ const UserProfile: NextPage = () => {
       }
     };
 
-    fetchStatus();
+    fetchUser();
   }, [uid]);
 
   if (user === undefined) {
@@ -46,10 +52,10 @@ const UserProfile: NextPage = () => {
   } else {
     return (
       <MarketingLayout>
-        <UserProfileLayout {...user} />
+        <UserProfile {...user}/>
       </MarketingLayout>
     );
   }
 };
 
-export default UserProfile;
+export default UserProfilePage;

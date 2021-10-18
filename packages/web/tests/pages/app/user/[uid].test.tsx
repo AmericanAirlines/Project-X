@@ -1,15 +1,15 @@
 import React from 'react';
 import { render, screen, act } from '../../../testUtils/testTools';
-import UserProfile from '../../../../src/pages/user/[[...uid]]';
+import UserProfilePage from '../../../../src/pages/user/[uid]';
 import fetchMock from 'fetch-mock-jest';
 import {
-  UserProfileLayout,
-  UserProfileData,
-} from '../../../../src/components/UserProfile/UserProfileLayout';
+  UserProfile,
+  UserProfileProps,
+} from '../../../../src/components/userprofile/UserProfile';
 import { getMock } from '../../../testUtils/getMock';
 
 jest.mock('../../../../src/components/UserProfile/UserProfileLayout');
-getMock(UserProfileLayout).mockImplementation(({ ...UserProfileData }) => (
+getMock(UserProfile).mockImplementation(({ ...UserProfileData }) => (
   <div>{UserProfileData.name}</div>
 ));
 
@@ -23,10 +23,8 @@ jest.mock('next/router', () => ({
 
 const useRouter = jest.spyOn(require('next/router'), 'useRouter');
 
-const sampleUser: UserProfileData = {
+const sampleUser: UserProfileProps = {
   name: 'Steve Job',
-  hireable: true,
-  purpose: 'need 2 jobs',
   pronouns: 'he/him',
   schoolName: 'Apple University',
 };
@@ -40,7 +38,7 @@ describe('web /user/', () => {
 
   // Remove this test when login/session functionality is finished
   it('outputs error given no uid parameter', async () => {
-    expect(() => render(<UserProfile />)).not.toThrow();
+    expect(() => render(<UserProfilePage />)).not.toThrow();
     await act(wait);
     expect(screen.getByText('Login not setup yet'));
   });
@@ -49,7 +47,7 @@ describe('web /user/', () => {
     useRouter.mockImplementation(() => ({
       query: { uid: 'abc' },
     }));
-    expect(() => render(<UserProfile />)).not.toThrow();
+    expect(() => render(<UserProfilePage />)).not.toThrow();
 
     await act(wait);
     expect(screen.getByText('id must be an integer'));
@@ -59,7 +57,7 @@ describe('web /user/', () => {
     useRouter.mockImplementation(() => ({
       query: { uid: '0' },
     }));
-    expect(() => render(<UserProfile />)).not.toThrow();
+    expect(() => render(<UserProfilePage />)).not.toThrow();
 
     await act(wait);
     expect(screen.getByText('User could not be found'));
@@ -72,11 +70,11 @@ describe('web /user/', () => {
 
     fetchMock.get('/api/users/0', sampleUser);
 
-    expect(() => render(<UserProfile />)).not.toThrow();
+    expect(() => render(<UserProfilePage />)).not.toThrow();
 
     await act(wait);
 
-    expect(UserProfileLayout).toBeCalledTimes(1);
+    expect(UserProfile).toBeCalledTimes(1);
     expect(screen.getByText('Steve Job')).toBeVisible();
   });
 });

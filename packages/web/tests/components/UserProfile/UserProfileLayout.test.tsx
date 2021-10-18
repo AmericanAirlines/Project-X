@@ -1,21 +1,19 @@
 import React from 'react';
 import {
-  UserProfileLayout,
-  UserProfileData,
-} from '../../../src/components/UserProfile/UserProfileLayout';
+  UserProfile,
+  UserProfileProps,
+} from '../../../src/components/userprofile/UserProfile';
 import { render, screen } from '../../testUtils/testTools';
 
-const sampleUser: UserProfileData = {
+const sampleUser: UserProfileProps = {
   name: 'Steve Job',
-  hireable: true,
-  purpose: 'need 2 jobs',
   pronouns: 'he/him',
   schoolName: 'Apple University',
 };
 
 describe('Mock UserProfileLayout component', () => {
   it('renders sampleUser', () => {
-    render(<UserProfileLayout {...sampleUser} />);
+    render(<UserProfile {...sampleUser} />);
 
     expect(screen.getByText('Steve Job')).toBeVisible();
     expect(screen.getByText('he/him')).toBeVisible();
