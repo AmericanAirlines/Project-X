@@ -8,7 +8,7 @@ import {
 } from '../../../../src/components/userprofile/UserProfile';
 import { getMock } from '../../../testUtils/getMock';
 
-jest.mock('../../../../src/components/UserProfile/UserProfileLayout');
+jest.mock('../../../../src/components/userprofile/UserProfile');
 getMock(UserProfile).mockImplementation(({ ...UserProfileData }) => (
   <div>{UserProfileData.name}</div>
 ));
@@ -36,21 +36,14 @@ describe('web /user/', () => {
     jest.clearAllMocks();
   });
 
-  // Remove this test when login/session functionality is finished
-  it('outputs error given no uid parameter', async () => {
-    expect(() => render(<UserProfilePage />)).not.toThrow();
-    await act(wait);
-    expect(screen.getByText('Login not setup yet'));
-  });
-
-  it('outputs error given non-numeric uid', async () => {
+  it('outputs error given non-numeric or no uid', async () => {
     useRouter.mockImplementation(() => ({
       query: { uid: 'abc' },
     }));
     expect(() => render(<UserProfilePage />)).not.toThrow();
 
     await act(wait);
-    expect(screen.getByText('id must be an integer'));
+    expect(screen.getByText('User id malformed'));
   });
 
   it('outputs error given non-existant user id', async () => {
