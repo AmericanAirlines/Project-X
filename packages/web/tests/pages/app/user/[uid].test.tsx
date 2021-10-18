@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, screen, act } from '../../../testUtils/testTools';
-import UserProfilePage from '../../../../src/pages/user/[uid]';
+import UserProfilePage, { getServerSideProps } from '../../../../src/pages/user/[uid]';
 import fetchMock from 'fetch-mock-jest';
 import { UserProfile, UserProfileProps } from '../../../../src/components/userprofile/UserProfile';
 import { getMock } from '../../../testUtils/getMock';
@@ -66,5 +66,28 @@ describe('web /user/', () => {
 
     expect(UserProfile).toBeCalledTimes(1);
     expect(screen.getByText('Steve Job')).toBeVisible();
+  });
+});
+
+describe('getServerSideProps', () => {
+  it('returns cookies from req', async () => {
+    const mockCookie = 'mock-cookies';
+    const props = await getServerSideProps({ req: { headers: { cookie: mockCookie } } } as any);
+
+    expect(props).toEqual({
+      props: {
+        cookies: mockCookie,
+      },
+    });
+  });
+
+  it('returns empty cookies from req when the cookie header is undefined', async () => {
+    const props = await getServerSideProps({ req: { headers: { cookie: undefined } } } as any);
+
+    expect(props).toEqual({
+      props: {
+        cookies: '',
+      },
+    });
   });
 });
