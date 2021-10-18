@@ -4,7 +4,6 @@ import { MarketingLayout } from '../../components/Layout';
 import { useRouter } from 'next/router';
 import { UserProfile } from '../../components/userprofile/UserProfile';
 import { Alert, AlertIcon } from '@chakra-ui/alert';
-export { getServerSideProps } from '../../components/Chakra';
 
 export interface User {
   name: string;

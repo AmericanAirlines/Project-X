@@ -68,26 +68,3 @@ describe('web /user/', () => {
     expect(screen.getByText('Steve Job')).toBeVisible();
   });
 });
-
-describe('getServerSideProps', () => {
-  it('returns cookies from req', async () => {
-    const mockCookie = 'mock-cookies';
-    const props = await getServerSideProps({ req: { headers: { cookie: mockCookie } } } as any);
-
-    expect(props).toEqual({
-      props: {
-        cookies: mockCookie,
-      },
-    });
-  });
-
-  it('returns empty cookies from req when the cookie header is undefined', async () => {
-    const props = await getServerSideProps({ req: { headers: { cookie: undefined } } } as any);
-
-    expect(props).toEqual({
-      props: {
-        cookies: '',
-      },
-    });
-  });
-});
