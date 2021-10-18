@@ -7,7 +7,7 @@ import { Alert, AlertIcon } from '@chakra-ui/alert';
 export { getServerSideProps } from '../../components/Chakra';
 
 const UserProfile: NextPage = () => {
-  const router = useRouter() || { query: { text: '' } };
+  const router = useRouter();
   const { uid } = router.query;
 
   const [user, setUser] = React.useState<UserProfileData>();
