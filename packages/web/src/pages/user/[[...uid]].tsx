@@ -24,15 +24,8 @@ const UserProfile: NextPage = () => {
         } catch {
           setErrorMessage('User could not be found');
         }
-      }
-      // If no uid parameter provided, when login is implemented, should use user id from session (if logged in)
-      else {
-        if (uid == null) {
-          setErrorMessage('Login not setup yet');
-        } // If uid parameter is not a number
-        else {
-          setErrorMessage('id must be an integer');
-        }
+      } else {
+        setErrorMessage('User id malformed');
       }
     };
 
