@@ -7,6 +7,39 @@ const config: ThemeConfig = {
 
 export const theme = extendTheme({
   config,
+  components: {
+    Link: {
+      variants: {
+        navbar: {
+          backgroundColor: mode('gray.100', 'gray.900'),
+          px: 2,
+          py: 4,
+          rounded: 'md',
+          _hover: {
+            textDecoration: 'none',
+            backgroundColor: mode('gray.200', 'gray.700'),
+          },
+        },
+        navbarMenuItem: {
+          _hover: {
+            textDecoration: 'none',
+          },
+        },
+      },
+    },
+    Menu: {
+      parts: ['button'],
+      variants: {
+        navbar: {
+          backgroundColor: mode('gray.100', 'gray.900'),
+          _hover: {
+            textDecoration: 'none',
+            backgroundColor: mode('gray.200', 'gray.700'),
+          },
+        },
+      },
+    },
+  },
   styles: {
     global: (props) => ({
       body: {
