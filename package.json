@@ -24,7 +24,6 @@
     "patch-package": "^6.4.7"
   },
   "devDependencies": {
-    "fetch-mock-jest": "^1.5.1",
     "lerna": "^4.0.0",
     "postinstall-postinstall": "^2.1.0",
     "prettier": "^2.4.0",
