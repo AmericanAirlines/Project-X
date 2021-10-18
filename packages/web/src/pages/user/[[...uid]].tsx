@@ -14,7 +14,7 @@ const UserProfile: NextPage = () => {
   const [errorMessage, setErrorMessage] = React.useState<string>('');
 
   React.useEffect(() => {
-    const fetchStatus = async () => {
+    const fetchUser = async () => {
       if (!Number.isNaN(Number(uid))) {
         const userAPIQuery: string = '/api/users/' + uid;
 
