@@ -6,6 +6,9 @@ import { api } from './api';
 import { initDatabase } from './database';
 import logger from './logger';
 
+const session = require('express-session');
+const Passport = require('passport');
+
 const app = express();
 const port = Number(env.port ?? '') || 3000;
 const dev = env.nodeEnv === 'development';
@@ -14,10 +17,27 @@ const isAuth = (req: any, res: any, next: any) => {
   if (req.user) {
     next();
   } else {
-    console.log(req.user);
+    // console.log(req.user);
     res.redirect('/'); // 401
   }
 };
+
+app.use(
+  // express-session
+  session({
+    secret: 'keyboard cat',
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      httpOnly: false,
+      secure: false,
+      maxAge: 24 * 60 * 60 * 1000, // 1 day long
+    },
+  }),
+);
+
+app.use(Passport.initialize());
+app.use(Passport.session());
 
 void (async () => {
   const orm = await initDatabase();
@@ -36,6 +56,7 @@ void (async () => {
   const webHandler = await web({ dev });
 
   app.all('/app', isAuth, webHandler);
+  app.all('/api/', isAuth, webHandler);
   app.all('*', webHandler);
 })()
   .then(() => {

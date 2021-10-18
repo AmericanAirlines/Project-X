@@ -3,7 +3,7 @@ import { env } from '../../env';
 
 const passport = require('passport');
 const GitHubStrategy = require('passport-github2').Strategy;
-const session = require('express-session'); // express-session
+// const session = require('express-session'); // express-session
 
 const GitHubClientId = env.GitHubId;
 const GitHubClientSecret = env.GitHubSecret;
@@ -17,23 +17,6 @@ passport.serializeUser((user: any, done: any) => {
 passport.deserializeUser((id: any, done: any) => {
   done(null, id);
 });
-
-github.use(
-  // express-session
-  session({
-    secret: 'keyboard cat',
-    resave: false,
-    saveUninitialized: false,
-    cookie: {
-      httpOnly: false,
-      secure: false,
-      maxAge: 24 * 60 * 60 * 1000, // 1 day long
-    },
-  }),
-);
-
-github.use(passport.initialize());
-github.use(passport.session());
 
 passport.use(
   new GitHubStrategy(
@@ -65,6 +48,7 @@ passport.use(
         }
       } else {
         // if user is already existing, we execute this
+        // console.log('got the user');
         done(null, profile);
       }
     },
@@ -81,6 +65,18 @@ github.get(
     res.redirect('/app');
   },
 );
+
+function logout(req: any, res: any, next: any) {
+  req.logout();
+  req.session.destroy();
+  delete req.session;
+  next();
+}
+
+github.get('/github/logout', logout, (req, res) => {
+  req.logOut();
+  res.redirect('/');
+});
 
 // gitHub.get('/github/login', (req, res) => {
 //  const url = `https://github.com/login/oauth/authorize?client_id=${GitHubClientId}&redirect_uri=http://localhost:3000/api/auth/github/callback`;
