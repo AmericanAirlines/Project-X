@@ -16,11 +16,8 @@ const UserProfile: NextPage = () => {
   React.useEffect(() => {
     const fetchUser = async () => {
       if (!Number.isNaN(Number(uid))) {
-        const userAPIQuery: string = '/api/users/' + uid;
-
-        // If uid doesn't exist in database, throw the 400 error from users API
         try {
-          const res = await fetch(userAPIQuery);
+          const res = await fetch(`/api/users/${uid}`);
           const data = await res.json();
 
           setUser(data);
