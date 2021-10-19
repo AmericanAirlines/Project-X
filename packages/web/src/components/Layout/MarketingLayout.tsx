@@ -11,11 +11,11 @@ export const MarketingLayout: React.FC = ({ children }) => {
         <GiCrossFlare size="36px" />
         <Heading>Project X</Heading>
         <Spacer />
-        <Link href="/api/auth/github/login">
-          <Button as="a" size="sm" colorScheme="blue">
-            Login with GitHub
-          </Button>
-        </Link>
+        
+        <Button as="a" href= "/api/auth/github/login" size="sm" colorScheme="blue">
+          Login with GitHub
+        </Button>
+        
       </HStack>
       {children}
     </VStack>

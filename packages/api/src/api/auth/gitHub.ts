@@ -7,6 +7,7 @@ const GitHubStrategy = require('passport-github2').Strategy;
 
 const GitHubClientId = env.GitHubId;
 const GitHubClientSecret = env.GitHubSecret;
+let COOKIE = '';
 
 export const github = Router();
 
@@ -59,12 +60,29 @@ github.get('/github/login', passport.authenticate('github'));
 
 github.get(
   '/github/callback',
-  passport.authenticate('github', { failureRedirect: '/github/login' }),
+  passport.authenticate('github', {
+    failureRedirect: '/github/login',
+  }),
   (req, res) => {
     // Successful authentication, redirect home.
-    res.redirect('/app');
+    res.redirect('/github/setcookie');
   },
 );
+
+let data: any;
+function setcookie(req: any, res: any, next: any) {
+  data = {
+    user: req.session.passport.user.profile.json,
+    token: req.session.passport.user.token,
+  };
+  res.cookie(COOKIE, JSON.stringify(data));
+  console.log(data);
+  next();
+}
+
+github.get('/github/setcookie', setcookie, (_req, res) => {
+  res.redirect('/app');
+});
 
 function logout(req: any, res: any, next: any) {
   req.logout();
@@ -77,13 +95,3 @@ github.get('/github/logout', logout, (req, res) => {
   req.logOut();
   res.redirect('/');
 });
-
-// gitHub.get('/github/login', (req, res) => {
-//  const url = `https://github.com/login/oauth/authorize?client_id=${GitHubClientId}&redirect_uri=http://localhost:3000/api/auth/github/callback`;
-//  res.redirect(url);
-// } );
-
-// gitHub.get('/github/callback', (req, res) => {
-//   const url = ``;
-//  res.redirect(``);
-// } );

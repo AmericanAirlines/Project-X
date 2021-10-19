@@ -19,6 +19,7 @@
     "@mikro-orm/core": "^4.5.9",
     "@mikro-orm/postgresql": "^4.5.9",
     "@x/web": "*",
+    "cookie-parser": "^1.4.5",
     "dotenv-flow": "^3.2.0",
     "express": "^4.17.1",
     "express-session": "^1.17.2",

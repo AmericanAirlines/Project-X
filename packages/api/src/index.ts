@@ -1,11 +1,13 @@
 /* istanbul ignore file */
 import express from 'express';
 import { web } from '@x/web';
+import crypto from 'crypto';
 import { env } from './env';
 import { api } from './api';
 import { initDatabase } from './database';
 import logger from './logger';
 
+const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const Passport = require('passport');
 
@@ -15,9 +17,9 @@ const dev = env.nodeEnv === 'development';
 
 const isAuth = (req: any, res: any, next: any) => {
   if (req.user) {
+    console.log(req.user);
     next();
   } else {
-    // console.log(req.user);
     res.redirect('/'); // 401
   }
 };
@@ -39,6 +41,16 @@ app.use(
 app.use(Passport.initialize());
 app.use(Passport.session());
 
+app.use(cookieParser());
+app.use(
+  session({
+    secret: crypto.randomBytes(64).toString('hex'),
+
+    resave: true,
+    saveUninitialized: true,
+  }),
+);
+
 void (async () => {
   const orm = await initDatabase();
 
@@ -56,7 +68,7 @@ void (async () => {
   const webHandler = await web({ dev });
 
   app.all('/app', isAuth, webHandler);
-  app.all('/api/', isAuth, webHandler);
+  app.all('/app/*', isAuth, webHandler);
   app.all('*', webHandler);
 })()
   .then(() => {
