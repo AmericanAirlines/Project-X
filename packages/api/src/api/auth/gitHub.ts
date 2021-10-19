@@ -7,7 +7,7 @@ const GitHubStrategy = require('passport-github2').Strategy;
 
 const GitHubClientId = env.GitHubId;
 const GitHubClientSecret = env.GitHubSecret;
-let COOKIE = '';
+const COOKIE = '';
 
 export const github = Router();
 
