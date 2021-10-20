@@ -65,10 +65,11 @@ github.get(
   }),
   (req, res) => {
     // Successful authentication, redirect home.
-    res.redirect('/github/setcookie');
+    res.redirect('/app');
   },
 );
 
+/*
 let data: any;
 function setcookie(req: any, res: any, next: any) {
   data = {
@@ -83,6 +84,7 @@ function setcookie(req: any, res: any, next: any) {
 github.get('/github/setcookie', setcookie, (_req, res) => {
   res.redirect('/app');
 });
+*/
 
 function logout(req: any, res: any, next: any) {
   req.logout();

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import { NextPage } from 'next';
 import {
   Input,
   Button,
@@ -12,10 +12,10 @@ import {
   UnorderedList,
   ListItem,
 } from '@chakra-ui/react';
-import { GiCrossFlare } from 'react-icons/gi';
 import { RepoList } from '../../components/RepoList';
+import { AppLayout } from '../../components/Layout';
 
-const SearchBar: React.FC = ({ children }) => {
+const SearchBar: NextPage = () => {
   const theme = useTheme();
 
   const [searchInput, setSearchInput] = useState('');
@@ -40,14 +40,16 @@ const SearchBar: React.FC = ({ children }) => {
 
   // console.log(repos);
   return (
-    <VStack>
-      <Heading>Repo Search</Heading>
-      <Input placeholder="input username" value={searchInput} onChange={handleChange} />
+    <AppLayout>
+      <VStack>
+        <Heading>Repo Search</Heading>
+        <Input placeholder="input username" value={searchInput} onChange={handleChange} />
 
-      <Button onClick={handleClick}>Search</Button>
+        <Button onClick={handleClick}>Search</Button>
 
-      <RepoList repos={repos} />
-    </VStack>
+        <RepoList repos={repos} />
+      </VStack>
+    </AppLayout>
   );
 };
 export default SearchBar;
