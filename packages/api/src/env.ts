@@ -10,6 +10,7 @@ export const env = setEnv({
     port: 'PORT',
     databaseUrl: 'DATABASE_URL',
     gitHubClientId: 'GITHUB_CLIENT_ID',
+    //add discord id
   },
   optional: {
     databaseUser: 'DATABASE_USER',
