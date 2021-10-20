@@ -8,7 +8,6 @@ import Community from '../../../src/pages/app/community';
 jest.mock('../../../src/components/Layout/AppLayout.tsx');
 getMock(AppLayout).mockImplementation(({ children }) => <>{children}</>);
 
-
 describe('community page', () => {
   beforeEach(async () => {
     jest.clearAllMocks();
@@ -22,11 +21,11 @@ describe('community page', () => {
     // Check that the Community Guidelines section is displayed by default
     await waitFor(() => expect(screen.getByText('1. Be respectful.')).toBeVisible());
 
-    expect(screen.queryByText('Remeber to follow the Community Guidlines listed above.')).not.toBeVisible();
+    expect(
+      screen.queryByText('Remeber to follow the Community Guidlines listed above.'),
+    ).not.toBeVisible();
     expect(screen.queryByText('Should I change my Discord profile avatar?')).not.toBeVisible();
     expect(screen.queryByText('Join our Discord')).toBeVisible();
     //expect(screen.queryByRole('link')).toHaveAttribute('href', '/test/discord/link');
   });
-
-
 });
