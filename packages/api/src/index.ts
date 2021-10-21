@@ -56,12 +56,19 @@ passport.use(new GitHubStrategy({
   callbackURL: "http://localhost:3000/api/auth/github/callback"
 },
   async (accessToken: any, refreshToken: any, profile: any, done: any) => {
-    
-    authEm?.persist(new User({ name: profile.username, gitHubId: profile.id }));
-
-
-})
-);
+    await authEm?.persistAndFlush(new User({ name: profile.username, gitHubId: profile.id, hireable: false, purpose: "" }));
+    await authEm?.findOne(User,{gitHubId: profile.id}).then((currentUser) => {
+      if(currentUser){
+        // something
+        console.log(currentUser);
+      }else{
+        // something else
+        console.log(profile.id);
+      }
+    }
+    )
+  }
+));
 
 void (async () => {
   const orm = await initDatabase();
