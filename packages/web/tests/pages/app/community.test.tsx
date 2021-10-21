@@ -26,6 +26,10 @@ describe('community page', () => {
     ).not.toBeVisible();
     expect(screen.queryByText('Should I change my Discord profile avatar?')).not.toBeVisible();
     expect(screen.queryByText('Join our Discord')).toBeVisible();
-    //expect(screen.queryByRole('link')).toHaveAttribute('href', '/test/discord/link');
+    expect(screen.queryByText('Join our Discord')).toHaveAttribute(
+      'href',
+      'https://discord.gg/pMhrYKbVGS',
+    );
+    expect(screen.queryByText('here')).toHaveAttribute('href', '/api/auth/discord/login');
   });
 });

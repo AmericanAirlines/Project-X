@@ -6,22 +6,16 @@ import {
   AccordionPanel,
   Box,
   Button,
-  Divider,
   Heading,
   HStack,
   Link,
   Spacer,
   Text,
-  useColorModeValue,
 } from '@chakra-ui/react';
 import { NextPage } from 'next';
 import React from 'react';
 import { FaDiscord } from 'react-icons/fa';
 import { AppLayout } from '../../components/Layout';
-
-// To Do:
-// - move styling to /theme/index
-// - move discord link to env variables
 
 const Community: NextPage = () => {
   return (
@@ -61,8 +55,9 @@ const Community: NextPage = () => {
               You can do this by naviagting to your profile and clicking the &quot;Link
               Discord&quot; button or by clicking{' '}
               <Link href="/api/auth/discord/login" textColor="blue">
-                here.
+                here
               </Link>
+              .
             </Text>
             <Text pb={4}>Remeber to follow the Community Guidlines listed above.</Text>
           </AccordionPanel>
