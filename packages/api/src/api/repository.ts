@@ -9,7 +9,7 @@ repository.get('/', async (req, res) => {
     try {
       const repositoryList = await req.entityManager.find(Repository, {});
       
-      const idArray: string[] = [];
+      const repoNodeIds: string[] = [];
 
       repositoryList.forEach(repo => idArray.push(repo.nodeID));
 
