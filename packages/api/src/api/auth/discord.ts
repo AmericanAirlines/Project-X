@@ -1,15 +1,15 @@
 import { Router } from 'express';
 import { env } from '../../env';
 
-const passport = require('passport');
-// discordStrategy: passport-discord
+const { discordClientId } = env;
+export const discord = Router();
 
-// set id and secret variables from env
+discord.get('/discord/login', (req, res) => {
+  const url = `https://discord.com/api/oauth2/authorize?client_id=${discordClientId}&redirect_uri=http://localhost:3000/api/auth/discord/callback&response_type=code&scope=identify`;
+  res.redirect(url);
+});
 
-//const discord = Router();
-
-//passport serialize
-
-//passport deserialize
-
-// fetch accesstoken and profile to add discord id to
+discord.get('/discord/callback', (req, res) => {
+    // const url = ``;
+    res.redirect(`/app`);
+});
