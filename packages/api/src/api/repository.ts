@@ -11,7 +11,7 @@ repository.get('/', async (req, res) => {
       
       const repoNodeIds: string[] = [];
 
-      repositoryList.forEach(repo => idArray.push(repo.nodeID));
+      repositoryList.forEach(repo => repoNodeIds.push(repo.nodeID));
 
       const fetchRes = await fetch('https://api.github.com/graphql', {
         method: 'POST',
