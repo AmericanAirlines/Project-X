@@ -5,20 +5,12 @@ import {
   Button,
   Link,
   Heading,
-  HStack,
-  Spacer,
   useTheme,
   VStack,
-  UnorderedList,
   ListItem,
-  Table,
-  Thead,
-  Tr,
-  Th,
-  Tbody,
-  Td,
+  Box,
+  SimpleGrid,
 } from '@chakra-ui/react';
-import { RepoList } from '../../components/RepoList';
 import { AppLayout } from '../../components/Layout';
 
 const SearchBar: NextPage = () => {
@@ -57,42 +49,57 @@ const SearchBar: NextPage = () => {
         />
 
         <Button onClick={handleClick}>Search</Button>
-
-        {/*<RepoList repos={repos} />*/}
-
-        <Table size="md">
-          <Thead>
-            <Tr>
-              <Th>Repository</Th>
-              <Th>Star</Th>
-            </Tr>
-          </Thead>
-          <Tbody>
-            {repos.length !== 0 ? (
-              repos.map(
-                (item: {
-                  id: React.Key | null | undefined;
-                  name: string;
-                  html_url: string;
-                  stargazers_count: string;
-                }) => (
-                  <Tr key={item.id}>
-                    {' '}
-                    <Td>
-                      <Link href={item.html_url} isExternal>
-                        {item.name}
-                      </Link>{' '}
-                    </Td>
-                    <Td>☆{item.stargazers_count}</Td>
-                  </Tr>
-                ),
-              )
-            ) : (
-              <ListItem>No repos found</ListItem>
-            )}
-          </Tbody>
-        </Table>
       </VStack>
+
+      <SimpleGrid minChildWidth="250px" spacing="15px">
+        {repos.length !== 0 ? (
+          repos.map(
+            (item: {
+              id: React.Key | null | undefined;
+              name: string;
+              html_url: string;
+              stargazers_count: Number;
+              language: string;
+              description: string | null;
+            }) => (
+              <Box maxW="sm" borderWidth="1px" borderRadius="lg" overflow="hidden" key={item.id}>
+                {' '}
+                <Box p="6">
+                  <Box
+                    color="gray.500"
+                    fontWeight="semibold"
+                    letterSpacing="wide"
+                    fontSize="xs"
+                    textTransform="uppercase"
+                  >
+                    {item.language}
+                  </Box>
+
+                  <Box
+                    letterSpacing="wide"
+                    mt="1"
+                    fontWeight="semibold"
+                    as="h4"
+                    lineHeight="tight"
+                    isTruncated
+                    color="cyan.500"
+                  >
+                    <Link href={item.html_url} isExternal>
+                      {item.name}
+                    </Link>{' '}
+                  </Box>
+                  <Box mt="1">☆ {item.stargazers_count}</Box>
+                  <Box mt="1" color="gray" fontSize="xs">
+                    {item.description}
+                  </Box>
+                </Box>
+              </Box>
+            ),
+          )
+        ) : (
+          <ListItem>No repos found</ListItem>
+        )}
+      </SimpleGrid>
     </AppLayout>
   );
 };
