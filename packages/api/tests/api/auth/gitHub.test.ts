@@ -1,7 +1,7 @@
 import 'jest';
-import { gitHub } from '../../src/api/auth/gitHub';
-import { testHandler } from '../testUtils/testHandler';
-import { env } from '../../src/env';
+import { gitHub } from '../../../src/api/auth/gitHub';
+import { testHandler } from '../../testUtils/testHandler';
+import { env } from '../../../src/env';
 
 const url = `https://github.com/login/oauth/authorize?client_id=${env.gitHubClientId}&redirect_uri=http://localhost:3000/api/auth/github/callback`;
 

@@ -11,6 +11,7 @@ export const env = setEnv({
     databaseUrl: 'DATABASE_URL',
     gitHubClientId: 'GITHUB_CLIENT_ID',
     discordClientId: 'DISCORD_CLIENT_ID',
+    discordSecretId: 'DISCORD_SECRET_ID',
   },
   optional: {
     databaseUser: 'DATABASE_USER',

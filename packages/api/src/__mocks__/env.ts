@@ -4,5 +4,5 @@ export const env = {
   githubId: 'mock-client-id',
   githubSecretId: 'Secrete_secret',
   discordClientId: 'mock-discord-id',
-  discordClientSecret: 'discord-secret',
+  discordSecretId: 'discord-secret',
 };
