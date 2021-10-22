@@ -32,7 +32,7 @@ repository.get('/', async (req, res) => {
             }
             `,
             variables: {
-              id: idArray,
+              id: repoNodeIds,
             }
         }),
     });
