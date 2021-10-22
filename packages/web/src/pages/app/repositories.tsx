@@ -11,6 +11,12 @@ import {
   VStack,
   UnorderedList,
   ListItem,
+  Table,
+  Thead,
+  Tr,
+  Th,
+  Tbody,
+  Td,
 } from '@chakra-ui/react';
 import { RepoList } from '../../components/RepoList';
 import { AppLayout } from '../../components/Layout';
@@ -41,13 +47,51 @@ const SearchBar: NextPage = () => {
   // console.log(repos);
   return (
     <AppLayout>
-      <VStack>
+      <VStack spacing={3}>
         <Heading>Repo Search</Heading>
-        <Input placeholder="input username" value={searchInput} onChange={handleChange} />
+        <Input
+          maxW={'lg'}
+          placeholder="input username"
+          value={searchInput}
+          onChange={handleChange}
+        />
 
         <Button onClick={handleClick}>Search</Button>
 
-        <RepoList repos={repos} />
+        {/*<RepoList repos={repos} />*/}
+
+        <Table size="md">
+          <Thead>
+            <Tr>
+              <Th>Repository</Th>
+              <Th>Star</Th>
+            </Tr>
+          </Thead>
+          <Tbody>
+            {repos.length !== 0 ? (
+              repos.map(
+                (item: {
+                  id: React.Key | null | undefined;
+                  name: string;
+                  html_url: string;
+                  stargazers_count: string;
+                }) => (
+                  <Tr key={item.id}>
+                    {' '}
+                    <Td>
+                      <Link href={item.html_url} isExternal>
+                        {item.name}
+                      </Link>{' '}
+                    </Td>
+                    <Td>☆{item.stargazers_count}</Td>
+                  </Tr>
+                ),
+              )
+            ) : (
+              <ListItem>No repos found</ListItem>
+            )}
+          </Tbody>
+        </Table>
       </VStack>
     </AppLayout>
   );
