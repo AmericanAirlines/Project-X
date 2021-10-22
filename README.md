@@ -64,6 +64,18 @@
 
 - Generate a Client Secret ID from GitHub and use it to replace the value of `GITHUB_SECRET` within your `.env.local`
 
+## Setting up Discord OAuth
+
+- Go to the [Discord Develop Portal](https://discord.com/developers/applications) and log in.
+- Create a new application and name it, then go to the OAuth2 settings of the application.
+- Specify `http://localhost:3000/api/auth/discord/callback` as the redirect URL.
+- Within the OAuth2 URL Generator, select the correct redirect URL. Specify the `identify` scope, and save your changes.
+- In `.env.local`:
+
+  1. Copy the Client ID and update the `DISCORD_CLIENT_ID` value.
+
+  2. Reveal and copy the Client Secret and update the `DISCORD_SECRET` value.
+
 ## Learn More
 
 To learn more about Next.js, take a look at the following resources:

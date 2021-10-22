@@ -10,6 +10,6 @@ discord.get('/discord/login', (req, res) => {
 });
 
 discord.get('/discord/callback', (req, res) => {
-    // const url = ``;
-    res.redirect(`/app`);
+  // const url = ``;
+  res.redirect(`/app`);
 });
