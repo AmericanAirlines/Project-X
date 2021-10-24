@@ -37,12 +37,11 @@ discord.get('/discord/callback', async (req, res) => {
         },
       });
 
-      // eslint-disable-next-line @typescript-eslint/naming-convention
-      const { access_token } = res2.data as DiscordAccessTokenResponse;
+      const { access_token: accessToken } = res2.data as DiscordAccessTokenResponse;
 
       const { data: userResponse } = await axios.get('https://discord.com/api/v8/users/@me', {
         headers: {
-          Authorization: `Bearer ${access_token}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       });
 
