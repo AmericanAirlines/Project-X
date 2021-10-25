@@ -3,7 +3,6 @@ import { User } from '../../src/entities/User';
 import logger from '../../src/logger';
 import { testHandler } from '../testUtils/testHandler';
 
-
 const sampleUser: Partial<User> = {
   name: 'Bill Nye',
   pronouns: 'he/him',
@@ -31,7 +30,7 @@ describe('/users', () => {
 
     const { body } = await handler.get('/0').expect(200);
 
-    const {assign, ...retrievedUser} = sampleUser;
+    const { assign, ...retrievedUser } = sampleUser;
 
     expect(body).toEqual(retrievedUser);
     expect(handler.entityManager.findOne).toHaveBeenCalledWith(User, { id: '0' });
@@ -90,15 +89,15 @@ describe('/users/:userId', () => {
 
   it('successfully edits a user', async () => {
     const handler = testHandler(users);
-    let callIndex =0;
-    let assignTimestamp: number | undefined; 
-    let flushTimestamp: number | undefined; 
+    let callIndex = 0;
+    let assignTimestamp: number | undefined;
+    let flushTimestamp: number | undefined;
 
     const userToModify: Partial<User> = {
       name: 'Bill Nye',
       pronouns: 'he/him',
       schoolName: 'Science School',
-      assign: jest.fn( () => {
+      assign: jest.fn(() => {
         assignTimestamp = callIndex;
         callIndex += 1;
       }) as any,
@@ -111,21 +110,21 @@ describe('/users/:userId', () => {
     };
 
     handler.entityManager.findOne.mockResolvedValue(userToModify);
-    
+
     handler.entityManager.flush.mockImplementationOnce(async () => {
-      flushTimestamp=callIndex;
-      callIndex+=1;
+      flushTimestamp = callIndex;
+      callIndex += 1;
     });
 
     await handler.patch('/0').send(patchContent).expect(200);
-    
-    const {location, ...expectedPatch} = patchContent;
+
+    const { location, ...expectedPatch } = patchContent;
 
     expect(userToModify.assign).toHaveBeenCalledWith(expectedPatch);
 
     expect(handler.entityManager.flush).toHaveBeenCalled();
 
-    expect(flushTimestamp).toBeGreaterThan(assignTimestamp??Infinity);
+    expect(flushTimestamp).toBeGreaterThan(assignTimestamp ?? Infinity);
 
     expect(handler.entityManager.findOne).toHaveBeenCalledWith(User, { id: '0' });
   });

@@ -51,17 +51,17 @@ users.patch('/:userId', async (req, res) => {
       res.sendStatus(404);
       return;
     }
-    const editableFields: Array<keyof UserConstructorValues> = ['name', 'pronouns', 'schoolName']; 
+    const editableFields: Array<keyof UserConstructorValues> = ['name', 'pronouns', 'schoolName'];
 
     const sanitizedUser = Object.entries(req.body).reduce((acc, [key, value]) => {
-      if(editableFields.includes(key as keyof UserConstructorValues)){
+      if (editableFields.includes(key as keyof UserConstructorValues)) {
         return {
           ...acc,
-          [key]: value
-        }
+          [key]: value,
+        };
       }
       return acc;
-    }, {} as UserConstructorValues );
+    }, {} as UserConstructorValues);
 
     user.assign(sanitizedUser);
 
