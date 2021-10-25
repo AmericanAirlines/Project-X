@@ -10,11 +10,12 @@ repository.post('/', async (req, res) => {
 
     const repos = await fetchRes.json();
 
+    // Select one by one or by user
     for (let i = 0; i < repos.length; i += 1) {
       const currentrepo = await req.entityManager.findOne(Repository, { nodeID: repos[i].node_id });
       if (!currentrepo) {
         const newRepo = new Repository({ nodeID: repos[i].node_id });
-        await req.entityManager.persist(newRepo);
+        req.entityManager.persist(newRepo);
       }
     }
 
