@@ -13,11 +13,12 @@ repository.get('/', async (req, res) => {
 
       repositoryList.forEach(repo => repoNodeIds.push(repo.nodeID));
 
+      // Put in a utility
       const fetchRes = await fetch('https://api.github.com/graphql', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `bearer ${env.gitHubGraphQLPAT}`,
+          'Authorization': `bearer ${env.gitHubGraphQLPAT}`, // Use user's token from session instead
         },
         body: JSON.stringify({
           query: `
@@ -27,6 +28,7 @@ repository.get('/', async (req, res) => {
                   name
                   url
                   stargazerCount
+                  description
                 }
               }
             }
