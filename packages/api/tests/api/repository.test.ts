@@ -54,15 +54,16 @@ describe('Repository POST route', () => {
 
     fetchMock.get('https://api.github.com/orgs/AmericanAirlines/repos', MockRepositoryResults);
 
+    // First iteration: Repository already exists in db so no persist
+    handler.entityManager.findOne.mockResolvedValueOnce(new Repository({nodeID: MockRepositoryResults[0].node_id}));
+    // Iterations after first: Repository does not exist in db so persist
     handler.entityManager.findOne.mockResolvedValue(null);
+  
     const { body } = await handler.post('/').expect(201);
 
     expect(handler.entityManager.findOne).toHaveBeenCalledWith(Repository, {
       nodeID: MockRepositoryResults[0].node_id,
     });
-    expect(handler.entityManager.persist).toHaveBeenCalledWith(
-      new Repository({ nodeID: MockRepositoryResults[0].node_id }),
-    );
 
     expect(handler.entityManager.findOne).toHaveBeenCalledWith(Repository, {
       nodeID: MockRepositoryResults[1].node_id,
@@ -72,7 +73,7 @@ describe('Repository POST route', () => {
     );
 
     expect(handler.entityManager.findOne).toHaveBeenCalledTimes(2);
-    expect(handler.entityManager.persist).toHaveBeenCalledTimes(2);
+    expect(handler.entityManager.persist).toHaveBeenCalledTimes(1);
 
     expect(handler.entityManager.flush).toHaveBeenCalledTimes(1);
 
