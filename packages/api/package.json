@@ -19,7 +19,6 @@
     "@mikro-orm/core": "^4.5.9",
     "@mikro-orm/postgresql": "^4.5.9",
     "@x/web": "*",
-    "axios": "^0.23.0",
     "dotenv-flow": "^3.2.0",
     "express": "^4.17.1",
     "fetch-mock-jest": "^1.5.1",
