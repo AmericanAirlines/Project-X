@@ -48,18 +48,18 @@ const Community: NextPage = () => {
 
           <AccordionPanel pb={4}>
             <Text pb={4}>
-              Anyone can join the Project-X Discord server, but only user with linked Discord
+              Anyone can join the Project-X Discord server, but only users with linked Discord
               accounts will be able to actively participate.
             </Text>
             <Text pb={4}>
-              You can do this by naviagting to your profile and clicking the &quot;Link
+              You can do this by navigating to your profile and clicking the &quot;Link
               Discord&quot; button or by clicking{' '}
               <Link href="/api/auth/discord/login" textColor="blue">
                 here
               </Link>
               .
             </Text>
-            <Text pb={4}>Remeber to follow the Community Guidlines listed above.</Text>
+            <Text pb={4}>Remember to follow the Community Guidelines listed above.</Text>
           </AccordionPanel>
         </AccordionItem>
         <AccordionItem>
@@ -79,8 +79,8 @@ const Community: NextPage = () => {
               Should I change my Discord profile avatar?
             </Heading>
             <Text>
-              If your profile avatar is something offensive then you should change it immediately.
-              If you are unsure then you should probably change it.
+              Your profile avatar should be professional. As a general rule of thumb,
+              it should be something you would feel comfortable showing your friends and family.
             </Text>
           </AccordionPanel>
         </AccordionItem>
