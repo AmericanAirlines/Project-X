@@ -4,7 +4,6 @@ import logger from '../logger';
 
 export const users = Router();
 
-// const publicFields: (keyof typeof User)[] = ['pronouns', 'wat'];
 const stripSensitiveFields = (user: User): Partial<User> => ({
   name: user.name,
   pronouns: user.pronouns,
@@ -21,7 +20,7 @@ users.get('/:userId', async (req, res) => {
       return;
     }
 
-    const user = await req.entityManager.findOne(User, { id: req.params.userId });
+    const user = await req.entityManager.findOne(User, { id: userId });
 
     // Check if user exists
     if (!user) {
