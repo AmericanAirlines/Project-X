@@ -10,7 +10,7 @@ export const theme = extendTheme({
   colors: {
     discord: {
       [400]: '#7289da',
-    }
+    },
   },
   components: {
     Link: {

@@ -20,7 +20,6 @@ import { FaDiscord } from 'react-icons/fa';
 import { AppLayout } from '../../components/Layout';
 
 const Community: NextPage = () => {
-
   return (
     <AppLayout>
       <Heading>Community</Heading>
@@ -92,11 +91,7 @@ const Community: NextPage = () => {
       </Accordion>
       <HStack>
         <Spacer />
-        <Button
-          bg='discord.400'
-          textColor='white'
-          leftIcon={<FaDiscord color='white' />}
-        >
+        <Button bg="discord.400" textColor="white" leftIcon={<FaDiscord color="white" />}>
           <Link _hover={{ textDecoration: 'none' }} href="https://discord.gg">
             Join our Discord
           </Link>

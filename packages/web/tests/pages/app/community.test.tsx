@@ -28,7 +28,7 @@ describe('community page', () => {
     expect(screen.queryByText('Join our Discord')).toBeVisible();
     expect(screen.queryByText('Join our Discord')).toHaveAttribute(
       'href',
-      'https://discord.gg/pMhrYKbVGS',
+      'https://discord.gg',
     );
     expect(screen.queryByText('here')).toHaveAttribute('href', '/api/auth/discord/login');
   });
