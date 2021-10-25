@@ -7,12 +7,11 @@ export type RepositoryConstructorValues = ConstructorValues<Repository>;
 
 @Entity()
 export class Repository extends Node<Repository> {
-    @Property({ columnType: 'text' })
-    nodeID: string;
+  @Property({ columnType: 'text' })
+  nodeID: string;
 
-    constructor({ nodeID, ...extraValues }: RepositoryConstructorValues)
-    {
-        super(extraValues);
-        this.nodeID = nodeID;
-    }
-} 
+  constructor({ nodeID, ...extraValues }: RepositoryConstructorValues) {
+    super(extraValues);
+    this.nodeID = nodeID;
+  }
+}

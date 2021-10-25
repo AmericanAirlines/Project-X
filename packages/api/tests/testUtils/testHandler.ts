@@ -7,7 +7,9 @@ import { PostgreSqlDriver } from '@mikro-orm/postgresql';
 
 type TestRequestHandler = RequestHandler<ParamsDictionary, any, any, ParsedQs, Record<string, any>>;
 
-type MockEntityManager = jest.Mocked<Pick<EntityManager<PostgreSqlDriver>, 'find' | 'findOne' | 'persist' | 'flush'>>;
+type MockEntityManager = jest.Mocked<
+  Pick<EntityManager<PostgreSqlDriver>, 'find' | 'findOne' | 'persist' | 'flush'>
+>;
 
 type SuperTestWithEntityManager = SuperTest<Test> & { entityManager: MockEntityManager };
 
