@@ -10,6 +10,7 @@ import {
   ListItem,
   Box,
   SimpleGrid,
+  FormControl,
 } from '@chakra-ui/react';
 import { AppLayout } from '../../components/Layout';
 
@@ -41,6 +42,7 @@ const SearchBar: NextPage = () => {
     <AppLayout>
       <VStack spacing={3}>
         <Heading>Repo Search</Heading>
+
         <Input
           maxW={'lg'}
           placeholder="input username"
@@ -51,11 +53,11 @@ const SearchBar: NextPage = () => {
         <Button onClick={handleClick}>Search</Button>
       </VStack>
 
-      <SimpleGrid minChildWidth="250px" spacing="15px">
-        {repos.length !== 0 ? (
+      <SimpleGrid padding="4px" minChildWidth="250px" spacing="15px">
+        {repos.length != 0 ? (
           repos.map(
             (item: {
-              id: React.Key | null | undefined;
+              id: React.Key | undefined;
               name: string;
               html_url: string;
               stargazers_count: Number;
@@ -97,7 +99,7 @@ const SearchBar: NextPage = () => {
             ),
           )
         ) : (
-          <ListItem>No repos found</ListItem>
+          <Box fontSize="large">No repos found</Box>
         )}
       </SimpleGrid>
     </AppLayout>
