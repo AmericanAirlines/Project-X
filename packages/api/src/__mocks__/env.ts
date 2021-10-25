@@ -3,4 +3,5 @@ export const env = {
   port: '3000',
   githubId: 'mock-client-id',
   githubSecretId: 'Secrete_secret',
+  discordJoinURL: 'mock-discord--invite-link',
 };

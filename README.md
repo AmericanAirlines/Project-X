@@ -64,6 +64,14 @@
 
 - Generate a Client Secret ID from GitHub and use it to replace the value of `GITHUB_SECRET` within your `.env.local`
 
+## Setting up Discord Server
+
+- Go to the Discord App and create a new server.
+- Navigate to "Invite People". This can be found in the dropdown panel next to your server name in the upper-left corner.
+- In the pop-up a link is displayed. Copy the link and save it in your `.env.local` with a key of `DISCORD_JOIN_URL`. The link by default will last for 7 days.
+- To create a permanent link navigate to the "Invite People" window and click on "Edit invite link" at the bottom of the window.
+- Select "Never" for expiration and "No limit" for the number of uses.
+
 ## Learn More
 
 To learn more about Next.js, take a look at the following resources:
