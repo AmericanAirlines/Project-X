@@ -5,41 +5,35 @@ import logger from '../logger';
 export const users = Router();
 users.use(express.json());
 
-// users.post('', async (req, res) => {
-//   try {
-//     const userInformation = new User(req.body);
+const stripSensitiveFields = (user: User): Partial<User> => ({
+  name: user.name,
+  pronouns: user.pronouns,
+  schoolName: user.schoolName,
+  gitHubId: user.gitHubId,
+});
 
-//     await req.entityManager.persistAndFlush(userInformation);
-
-//     res.status(201).send();
-
-//   } catch (error) {
-//     logger.error('There was an issue geting user: ', error);
-//     res.status(500).send('Couldnt save the user');
-//   }
-// });
-
-users.get('/:gitHubId', async (req, res) => {
-  const { gitHubId } = req.params;
+users.get('/:userId', async (req, res) => {
+  const { userId } = req.params;
 
   try {
-    // Check if gitHubId is in the expected format
-    if (Number.isNaN(Number(gitHubId))) {
-      res.status(400).send(`"${gitHubId}" is not a valid id, it must be a number.`);
+    // Check if userId is in correct format
+    if (Number.isNaN(Number(userId))) {
+      res.status(400).send(`"${userId}" is not a valid id, it must be a number.`);
       return;
     }
 
-    const user = await req.entityManager.findOne(User, { gitHubId });
+    const user = await req.entityManager.findOne(User, { id: userId });
 
+    // Check if user exists
     if (!user) {
       res.sendStatus(404);
       return;
     }
 
-    res.status(200).send(user);
+    // Return stripped user information
+    res.status(200).send(stripSensitiveFields(user));
   } catch (error) {
-    logger.error(`There was an issue geting user "${gitHubId}"`, error);
-    res.status(500).send(`There was an issue geting user "${gitHubId}"`);
+    logger.error(`There was an issue getting user "${userId}"`, error);
+    res.status(500).send(`There was an issue getting user "${userId}"`);
   }
 });
-
