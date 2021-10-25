@@ -7,6 +7,11 @@ const config: ThemeConfig = {
 
 export const theme = extendTheme({
   config,
+  colors: {
+    discord: {
+      [400]: '#7289da',
+    }
+  },
   components: {
     Link: {
       variants: {
