@@ -9,6 +9,8 @@ import {
   Heading,
   HStack,
   Link,
+  ListItem,
+  OrderedList,
   Spacer,
   Text,
 } from '@chakra-ui/react';
@@ -18,6 +20,9 @@ import { FaDiscord } from 'react-icons/fa';
 import { AppLayout } from '../../components/Layout';
 
 const Community: NextPage = () => {
+  const discordPurple = '#7289da';
+  const discordWhite = '#ffffff';
+
   return (
     <AppLayout>
       <Heading>Community</Heading>
@@ -31,10 +36,12 @@ const Community: NextPage = () => {
           </AccordionButton>
 
           <AccordionPanel pb={4}>
-            <Text>1. Be respectful.</Text>
-            <Text>2. Be professional.</Text>
-            <Text>3. Do not let others use your account.</Text>
-            <Text>4. Ask questions!</Text>
+            <OrderedList>
+              <ListItem>Be respectful.</ListItem>
+              <ListItem>Be professional.</ListItem>
+              <ListItem>Do not let others use your account.</ListItem>
+              <ListItem>Ask questions!</ListItem>
+            </OrderedList>
           </AccordionPanel>
         </AccordionItem>
 
@@ -79,16 +86,22 @@ const Community: NextPage = () => {
               Should I change my Discord profile avatar?
             </Heading>
             <Text>
-              Your profile avatar should be professional. As a general rule of thumb,
-              it should be something you would feel comfortable showing your friends and family.
+              Your profile avatar should be professional. As a general rule of thumb, it should be
+              something you would feel comfortable showing your friends and family.
             </Text>
           </AccordionPanel>
         </AccordionItem>
       </Accordion>
       <HStack>
         <Spacer />
-        <Button bg="#7289da" textColor="#ffffff" leftIcon={<FaDiscord color="#ffffff" />}>
-          <Link href="https://discord.gg/pMhrYKbVGS">Join our Discord</Link>
+        <Button
+          bg={discordPurple}
+          textColor={discordWhite}
+          leftIcon={<FaDiscord color={discordWhite} />}
+        >
+          <Link _hover={{ textDecoration: 'none' }} href="https://discord.gg/pMhrYKbVGS">
+            Join our Discord
+          </Link>
         </Button>
         <Spacer />
       </HStack>
