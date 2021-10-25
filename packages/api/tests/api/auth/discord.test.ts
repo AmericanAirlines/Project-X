@@ -24,7 +24,7 @@ const url = `https://discord.com/api/oauth2/authorize?client_id=${env.discordCli
 describe('Discord', () => {
   beforeEach(async () => {
     jest.clearAllMocks();
-    fetchMock.reset();
+    fetchMock.mockReset();
   });
 
   it('/discord/login links to Discord login', async () => {
@@ -49,38 +49,40 @@ describe('Discord', () => {
   });
 
   it('/discord/callback calls discord api token endpoint', async () => {
-    const expectedPostHeader = {
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
+    const expectedPostHeaders = {
+      'Content-Type': 'application/x-www-form-urlencoded',
     };
 
-    const expectedGetHeader = {
-      headers: {
-        Authorization: `Bearer token`,
-      },
+    const expectedGetHeaders = {
+      Authorization: `Bearer token`,
     };
 
-    const expectedPostBody = new URLSearchParams({
+    const expectedPostBody = {
       client_id: `${env.discordClientId}`,
       client_secret: `${env.discordSecretId}`,
       grant_type: 'authorization_code',
-      code: 'testCode',
+      code: 'testCod',
       redirect_uri: 'http://localhost:3000/api/auth/discord/callback',
-    });
-    fetchMock.mock().postOnce('https://discord.com/api/v9/oauth2/token', { data: testDiscordUser });
-    fetchMock.mock().getOnce('https://discord.com/api/v8/users/@me', { data: testResponse });
+    };
 
-    await testHandler(discord).get('/discord/callback?code=testCode');
+    fetchMock.mock().postOnce('https://discord.com/api/v9/oauth2/token', { body: testDiscordUser });
+    fetchMock.mock().getOnce('https://discord.com/api/v8/users/@me', {}, { body: testResponse });
 
-    expect(fetchMock.called('https://discord.com/api/v9/oauth2/token')).toBeTruthy();
-    // expect(fetchMock).toBeCalledWith(
-    //   'https://discord.com/api/v9/oauth2/token',
-    //   expectedPostBody.toString(),
-    //   expectedPostHeader,
-    // );
+    await testHandler(discord).get('/discord/callback?code=testCod');
 
-    expect(fetchMock.called('https://discord.com/api/v8/users/@me')).toBeTruthy();
-    // expect(fetchMock.get).toBeCalledWith('https://discord.com/api/v8/users/@me', expectedGetHeader);
+    expect(fetchMock).toHaveFetched(
+      'https://discord.com/api/v9/oauth2/token',
+      expect.objectContaining({
+        body: expect.objectContaining(expectedPostBody),
+        headers: expect.objectContaining(expectedPostHeaders),
+      }),
+    );
+
+    expect(fetchMock).toHaveFetched(
+      'https://discord.com/api/v8/users/@me',
+      expect.objectContaining({
+        headers: expect.objectContaining(expectedGetHeaders),
+      }),
+    );
   });
 });
