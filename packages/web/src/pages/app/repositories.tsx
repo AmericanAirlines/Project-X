@@ -13,12 +13,23 @@ import {
   FormControl,
 } from '@chakra-ui/react';
 import { AppLayout } from '../../components/Layout';
+import { RepoBox } from '../../components/Repos';
+
+export interface RepoList {
+  id: React.Key | undefined;
+  name: string;
+  html_url: string;
+  stargazers_count: Number;
+  language: string;
+  description: string | null;
+}
 
 const SearchBar: NextPage = () => {
   const theme = useTheme();
 
   const [searchInput, setSearchInput] = useState('');
-  const [repos, setRepos] = useState([]);
+  //const [repos, setRepos] = useState([]);
+  const [repos, setRepos] = React.useState<RepoList[]>([]);
 
   const handleChange = (e: { target: { value: React.SetStateAction<string> } }) => {
     setSearchInput(e.target.value);
@@ -55,49 +66,9 @@ const SearchBar: NextPage = () => {
 
       <SimpleGrid padding="4px" minChildWidth="250px" spacing="15px">
         {repos.length != 0 ? (
-          repos.map(
-            (item: {
-              id: React.Key | undefined;
-              name: string;
-              html_url: string;
-              stargazers_count: Number;
-              language: string;
-              description: string | null;
-            }) => (
-              <Box maxW="sm" borderWidth="1px" borderRadius="lg" overflow="hidden" key={item.id}>
-                {' '}
-                <Box p="6">
-                  <Box
-                    color="gray.500"
-                    fontWeight="semibold"
-                    letterSpacing="wide"
-                    fontSize="xs"
-                    textTransform="uppercase"
-                  >
-                    {item.language}
-                  </Box>
-
-                  <Box
-                    letterSpacing="wide"
-                    mt="1"
-                    fontWeight="semibold"
-                    as="h4"
-                    lineHeight="tight"
-                    isTruncated
-                    color="cyan.500"
-                  >
-                    <Link href={item.html_url} isExternal>
-                      {item.name}
-                    </Link>{' '}
-                  </Box>
-                  <Box mt="1">☆ {item.stargazers_count}</Box>
-                  <Box mt="1" color="gray" fontSize="xs">
-                    {item.description}
-                  </Box>
-                </Box>
-              </Box>
-            ),
-          )
+          repos.map((repolist) => (
+              <RepoBox key={repolist.id} repolist={repolist} />
+            ))
         ) : (
           <Box fontSize="large">No repos found</Box>
         )}
