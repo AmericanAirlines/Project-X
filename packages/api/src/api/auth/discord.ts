@@ -1,5 +1,4 @@
 import { Router } from 'express';
-import axios from 'axios';
 import { URLSearchParams } from 'url';
 import { env } from '../../env';
 import logger from '../../logger';
@@ -31,29 +30,34 @@ discord.get('/discord/callback', async (req, res) => {
         redirect_uri: 'http://localhost:3000/api/auth/discord/callback',
       });
 
-      const res2 = await axios.post('https://discord.com/api/v9/oauth2/token', data.toString(), {
+      const tokenResponse = await fetch('https://discord.com/api/v9/oauth2/token', {
+        method: 'POST',
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
         },
+        body: data,
       });
 
-      // eslint-disable-next-line @typescript-eslint/naming-convention
-      const { access_token } = res2.data as DiscordAccessTokenResponse;
+      const { access_token: accessToken } = await tokenResponse.json();
 
-      const { data: userResponse } = await axios.get('https://discord.com/api/v8/users/@me', {
+      const userResponse = await fetch('https://discord.com/api/v8/users/@me', {
         headers: {
-          Authorization: `Bearer ${access_token}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       });
 
-      // To Do: Update User row with Discord ID
-      res.send(userResponse);
+      const userData = await userResponse.json();
+
+      // TODO: Update User row with Discord ID
+      res.send(userData);
     } catch (error) {
-      logger.error('There was an issue getting Discord user information ', error);
-      res.status(500).send('There was an issue getting Discord user information');
+      const userRetrievalErrorString = 'There was an issue getting Discord user information';
+      logger.error(userRetrievalErrorString, error);
+      res.status(500).send(userRetrievalErrorString);
     }
   } else {
-    logger.error('There was an issue authrozing with Discord ');
-    res.status(500).send('There was an issue authrozing with Discord');
+    const discordAuthErrorString = 'There was an issue authrozing with Discord';
+    logger.error(discordAuthErrorString);
+    res.status(500).send(discordAuthErrorString);
   }
 });

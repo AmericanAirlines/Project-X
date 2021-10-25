@@ -68,7 +68,8 @@
 
 - Go to the [Discord Develop Portal](https://discord.com/developers/applications) and log in.
 - Create a new application and name it, then go to the OAuth2 settings of the application.
-- Specify `http://localhost:3000/api/auth/discord/callback` as the redirect URL.
+- Specify `http://localhost:3000/api/auth/discord/callback` as the redirect URL for local development.
+- For production enviornments `localhost:3000` should be replaced with the correct host address and port number.
 - Within the OAuth2 URL Generator, select the correct redirect URL. Specify the `identify` scope, and save your changes.
 - In `.env.local`:
 
