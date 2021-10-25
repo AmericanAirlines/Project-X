@@ -39,7 +39,7 @@ describe('Repository POST route', () => {
 
     fetchMock.get('https://api.github.com/orgs/AmericanAirlines/repos', {});
 
-    handler.entityManager.flush.mockRejectedValue(new Error(''));
+    handler.entityManager.flush.mockRejectedValueOnce(new Error(''));
 
     const { text } = await handler.post('/').expect(500);
     expect(text).toEqual('There was an issue adding the repo(s) to the database');
