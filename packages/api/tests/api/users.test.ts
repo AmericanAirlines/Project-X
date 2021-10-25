@@ -3,21 +3,12 @@ import { User } from '../../src/entities/User';
 import logger from '../../src/logger';
 import { testHandler } from '../testUtils/testHandler';
 
-interface MockPartialUser {
-  name: string;
-  pronouns: string;
-  schoolName: string;
-}
 
-interface UpdatePartialUser {
-  name: string;
-  pronouns: string;
-}
-
-const sampleUser: MockPartialUser = {
+const sampleUser: Partial<User> = {
   name: 'Bill Nye',
   pronouns: 'he/him',
   schoolName: 'Science School',
+  assign: jest.fn(),
 };
 
 const loggerSpy = jest.spyOn(logger, 'error').mockImplementation();
@@ -40,7 +31,9 @@ describe('/users', () => {
 
     const { body } = await handler.get('/0').expect(200);
 
-    expect(body).toEqual(sampleUser);
+    const {assign, ...retrievedUser} = sampleUser;
+
+    expect(body).toEqual(retrievedUser);
     expect(handler.entityManager.findOne).toHaveBeenCalledWith(User, { id: '0' });
   });
 
@@ -78,39 +71,61 @@ describe('/users/:userId', () => {
     expect(text).toEqual('"abc" is not a valid id, it must be a number.');
   });
 
+  it('non-existant user returns 404 while editing user', async () => {
+    const handler = testHandler(users);
+    handler.entityManager.findOne.mockResolvedValueOnce(null);
+
+    await handler.patch('/1').expect(404);
+  });
+
+  it('returns 500 error while editing user', async () => {
+    const handler = testHandler(users);
+    handler.entityManager.findOne.mockRejectedValueOnce(new Error('Error has occurred'));
+
+    const { text } = await handler.patch('/0').expect(500);
+    expect(text).toEqual('There was an issue updating user "0"');
+
+    expect(loggerSpy).toBeCalledTimes(1);
+  });
+
   it('successfully edits a user', async () => {
     const handler = testHandler(users);
+    let callIndex =0;
+    let assignTimestamp: number | undefined; 
+    let flushTimestamp: number | undefined; 
 
-    const userToModify: MockPartialUser = {
+    const userToModify: Partial<User> = {
       name: 'Bill Nye',
       pronouns: 'he/him',
       schoolName: 'Science School',
+      assign: jest.fn( () => {
+        assignTimestamp = callIndex;
+        callIndex += 1;
+      }) as any,
     };
 
-    const patchContent: UpdatePartialUser = {
+    const patchContent: Partial<User> = {
       name: 'Will Bye',
       pronouns: 'she/her',
+      location: 'Dallas',
     };
 
     handler.entityManager.findOne.mockResolvedValue(userToModify);
-
-    // const {body}  = await handler.patch('/0').send({
-    //   name: 'Will Bye',
-    //   pronouns: 'she/her',
-    // });
-
-    const { body } = await handler.patch('/0').send(patchContent);
-
-    expect(body).toEqual({
-      name: 'Will Bye',
-      pronouns: 'she/her',
-      schoolName: 'Science School',
+    
+    handler.entityManager.flush.mockImplementationOnce(async () => {
+      flushTimestamp=callIndex;
+      callIndex+=1;
     });
 
-    expect(body.name).toEqual('Will Bye');
-    expect(body.pronouns).toEqual('she/her');
+    await handler.patch('/0').send(patchContent).expect(200);
+    
+    const {location, ...expectedPatch} = patchContent;
+
+    expect(userToModify.assign).toHaveBeenCalledWith(expectedPatch);
 
     expect(handler.entityManager.flush).toHaveBeenCalled();
+
+    expect(flushTimestamp).toBeGreaterThan(assignTimestamp??Infinity);
 
     expect(handler.entityManager.findOne).toHaveBeenCalledWith(User, { id: '0' });
   });

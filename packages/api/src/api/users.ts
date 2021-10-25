@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { User } from '../entities/User';
+import { User, UserConstructorValues } from '../entities/User';
 import logger from '../logger';
 
 export const users = Router();
@@ -51,42 +51,23 @@ users.patch('/:userId', async (req, res) => {
       res.sendStatus(404);
       return;
     }
+    const editableFields: Array<keyof UserConstructorValues> = ['name', 'pronouns', 'schoolName']; 
 
-    if (req.body.name !== undefined) {
-      user.name = req.body.name;
-    }
+    const sanitizedUser = Object.entries(req.body).reduce((acc, [key, value]) => {
+      if(editableFields.includes(key as keyof UserConstructorValues)){
+        return {
+          ...acc,
+          [key]: value
+        }
+      }
+      return acc;
+    }, {} as UserConstructorValues );
 
-    if (req.body.pronouns !== undefined) {
-      user.pronouns = req.body.pronouns;
-    }
-
-    if (req.body.location !== undefined) {
-      user.location = req.body.location;
-    }
-
-    if (req.body.hireable !== undefined) {
-      user.hireable = req.body.hireable;
-    }
-
-    if (req.body.purpose !== undefined) {
-      user.purpose = req.body.purpose;
-    }
-
-    if (req.body.schoolName !== undefined) {
-      user.schoolName = req.body.schoolName;
-    }
-
-    if (req.body.major !== undefined) {
-      user.major = req.body.major;
-    }
-
-    if (req.body.graduationDate !== undefined) {
-      user.graduationDate = new Date(req.body.graduationDate);
-    }
+    user.assign(sanitizedUser);
 
     await req.entityManager.flush();
 
-    res.status(200).send(user);
+    res.send(user);
   } catch (error) {
     logger.error(`There was an issue updating user "${userId}"`, error);
     res.status(500).send(`There was an issue updating user "${userId}"`);

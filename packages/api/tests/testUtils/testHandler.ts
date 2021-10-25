@@ -22,6 +22,7 @@ const createTestApp = (handler: TestRequestHandler) => {
   };
 
   const app = express();
+  app.use(express.json());
   app.use((req, _res, next) => {
     req.entityManager = entityManager as unknown as EntityManager<PostgreSqlDriver>;
     next();
