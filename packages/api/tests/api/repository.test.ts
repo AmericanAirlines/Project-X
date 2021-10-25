@@ -59,7 +59,7 @@ describe('Repository POST route', () => {
       new Repository({ nodeID: MockRepositoryResults[0].node_id }),
     );
     // Iterations after first: Repository does not exist in db so persist
-    handler.entityManager.findOne.mockResolvedValue(null);
+    handler.entityManager.findOne.mockResolvedValueOnce(null);
 
     const { body } = await handler.post('/').expect(201);
 
