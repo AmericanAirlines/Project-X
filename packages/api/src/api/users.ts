@@ -33,14 +33,10 @@ users.get('/:userId', async (req, res) => {
     res.status(200).send(stripSensitiveFields(user));
   } catch (error) {
     logger.error(`There was an issue getting user "${userId}"`, error);
-    res.status(500).send(`There was an issue geting user "${userId}"`);
+    res.status(500).send(`There was an issue getting user "${userId}"`);
   }
 });
 
-// Current assumptions:
-// Body data is in JSON format
-// Questions:
-// What fields can't be updated?
 users.patch('/:userId', async (req, res) => {
   const { userId } = req.params;
 
@@ -50,7 +46,7 @@ users.patch('/:userId', async (req, res) => {
       return;
     }
 
-    const user = await req.entityManager.findOne(User, { id: req.params.userId });
+    const user = await req.entityManager.findOne(User, { id: userId });
 
     if (!user) {
       res.sendStatus(404);
@@ -85,8 +81,6 @@ users.patch('/:userId', async (req, res) => {
       user.major = req.body.major;
     }
 
-    // Concern: The Date constructor lets you put in just the month number and will default the Date to (month)-1-2001
-    // Do we force a date format? (MM-DD-YYYY, MM/DD/YYYY, etc.)
     if (req.body.graduationDate !== undefined) {
       user.graduationDate = new Date(req.body.graduationDate);
     }
