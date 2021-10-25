@@ -5,50 +5,41 @@ import logger from '../logger';
 export const users = Router();
 users.use(express.json());
 
-users.post('', async (req, res) => {
-  try {
-    const user1 = req.body;
-    
-    const user = new User(user1);
+// users.post('', async (req, res) => {
+//   try {
+//     const userInformation = new User(req.body);
 
-    await req.entityManager.persistAndFlush(user);
+//     await req.entityManager.persistAndFlush(userInformation);
 
-    res.status(201).send();
+//     res.status(201).send();
 
-  } catch (error) {
-    logger.error('There was an issue geting all videos: ', error);
-    res.status(500).send('Couldnt save the user');
-  }
-});
+//   } catch (error) {
+//     logger.error('There was an issue geting user: ', error);
+//     res.status(500).send('Couldnt save the user');
+//   }
+// });
 
-const stripSensitiveFields = (user: User): Partial<User> => ({
-  name: user.name,
-  pronouns: user.pronouns,
-  schoolName: user.schoolName,
-});
-
-users.get('/:userId', async (req, res) => {
-  const { userId } = req.params;
+users.get('/:gitHubId', async (req, res) => {
+  const { gitHubId } = req.params;
 
   try {
-    // Check if userId is in correct format
-    if (Number.isNaN(Number(userId))) {
-      res.status(400).send(`"${userId}" is not a valid id, it must be a number.`);
+    // Check if gitHubId is in the expected format
+    if (Number.isNaN(Number(gitHubId))) {
+      res.status(400).send(`"${gitHubId}" is not a valid id, it must be a number.`);
       return;
     }
 
-    const user = await req.entityManager.findOne(User, { id: userId });
+    const user = await req.entityManager.findOne(User, { gitHubId });
 
-    // Check if user exists
     if (!user) {
       res.sendStatus(404);
       return;
     }
 
-    // Return stripped user information
-    res.status(200).send(stripSensitiveFields(user));
+    res.status(200).send(user);
   } catch (error) {
-    logger.error(`There was an issue getting user "${userId}"`, error);
-    res.status(500).send(`There was an issue getting user "${userId}"`);
+    logger.error(`There was an issue geting user "${gitHubId}"`, error);
+    res.status(500).send(`There was an issue geting user "${gitHubId}"`);
   }
 });
+

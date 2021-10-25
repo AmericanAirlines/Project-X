@@ -9,6 +9,7 @@ import { initDatabase } from './database';
 import logger from './logger';
 import { User } from './entities/User';
 
+
 const app = express();
 const port = Number(env.port ?? '') || 3000;
 const dev = env.nodeEnv === 'development';
@@ -16,10 +17,10 @@ const session = require('express-session'); // express-session
 const passport = require('passport');
 const GitHubStrategy = require('passport-github2');
 
-const gitHubClientId = env.GitHubClientId;
-const gitHubClientSecret = env.GitHubSecret;
+const gitHubClientId = env.gitHubClientId;
+const gitHubClientSecret = env.gitHubSecret;
 
-const isAuth = (req: any, res: any, next: any) => {
+const authRequired = (req: any, res: any, next: any) => {
   if (req.user) {
     next();
   } else {
@@ -42,7 +43,7 @@ void (async () => {
       cookie: {
         httpOnly: true,
         secure: false,
-        maxAge: 0.1 * 60 * 60 * 1000,
+        maxAge: 24 * 60 * 60 * 1000,
       },
     }),
   );
@@ -56,17 +57,18 @@ passport.use(new GitHubStrategy({
   callbackURL: "http://localhost:3000/api/auth/github/callback"
 },
   async (accessToken: any, refreshToken: any, profile: any, done: any) => {
-    await authEm?.persistAndFlush(new User({ name: profile.username, gitHubId: profile.id, hireable: false, purpose: "" }));
-    await authEm?.findOne(User,{gitHubId: profile.id}).then((currentUser) => {
-      if(currentUser){
-        // something
-        console.log(currentUser);
-      }else{
-        // something else
-        console.log(profile.id);
-      }
-    }
-    )
+    
+   const currentUser = await authEm?.findOne(User, {name: profile.username, gitHubId: profile.id});
+  if(!currentUser){
+    logger.info("Creating new user.");
+    const newUser = new User({name: profile.username, gitHubId: profile.id, hireable: false, purpose: "" });
+    await authEm?.persistAndFlush(newUser);
+    done(null,profile);
+  }else{
+    logger.info("user logged in");
+    done(null, profile);
+  }
+    
   }
 ));
 
@@ -86,7 +88,7 @@ void (async () => {
 
   const webHandler = await web({ dev });
 
-  app.all('/app', isAuth, webHandler);
+  app.all('/app', authRequired, webHandler);
   app.all('*', webHandler);
 })()
   .then(() => {

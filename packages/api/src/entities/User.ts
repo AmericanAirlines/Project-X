@@ -34,7 +34,7 @@ export class User extends Node<User> {
   @Property({ columnType: 'Date', nullable: true })
   graduationDate?: Date;
 
-  constructor({ name, hireable, purpose, gitHubId, ...extraValues }: UserConstructorValues) {
+  constructor({ name, gitHubId, hireable, purpose, ...extraValues }: UserConstructorValues) {
     super(extraValues);
 
     this.name = name;

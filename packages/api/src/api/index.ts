@@ -4,7 +4,7 @@ import { auth } from './auth';
 import { health } from './health';
 import { users } from './users';
 import { videos } from './videos';
- 
+
 export const api = Router();
 
 api.use('/health', health);
