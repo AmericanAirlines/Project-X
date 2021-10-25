@@ -19,10 +19,10 @@ describe('community page', () => {
     expect(screen.getByText('Community')).toBeVisible();
 
     // Check that the Community Guidelines section is displayed by default
-    await waitFor(() => expect(screen.getByText('1. Be respectful.')).toBeVisible());
+    await waitFor(() => expect(screen.getByText('Be respectful.')).toBeVisible());
 
     expect(
-      screen.queryByText('Remeber to follow the Community Guidlines listed above.'),
+      screen.queryByText('Remember to follow the Community Guidelines listed above.'),
     ).not.toBeVisible();
     expect(screen.queryByText('Should I change my Discord profile avatar?')).not.toBeVisible();
     expect(screen.queryByText('Join our Discord')).toBeVisible();
