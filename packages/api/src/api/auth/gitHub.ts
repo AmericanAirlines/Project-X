@@ -4,11 +4,11 @@ import passport from 'passport';
 export const github = Router();
 
 const logout: Handler = (req, res, next) => {
-  req.session.destroy(() => {  
+  req.session.destroy(() => {
     req.logout();
     next();
   });
-}
+};
 
 github.get('/github/logout', logout, (req, res) => {
   // when they logout redirect them home
