@@ -1,8 +1,8 @@
 import 'jest';
 import passport from 'passport';
 import { Handler } from 'express';
-import { testHandler } from '../testUtils/testHandler';
-import { getMock } from '../testUtils/getMock';
+import { testHandler } from '../../testUtils/testHandler';
+import { getMock } from '../../testUtils/getMock';
 
 jest.mock('passport');
 const passportAuthenticateMock = getMock(passport.authenticate).mockImplementation(
@@ -23,7 +23,7 @@ describe('/github endpoints', () => {
 
   it('goes to github link for Login', (done) => {
     jest.isolateModules(async () => {
-      const { github } = require('../../src/api/auth/github');
+      const { github } = require('../../../src/api/auth/github');
       await testHandler(github).get('/github/login').expect(200);
       expect(passportAuthenticateMock).toHaveBeenCalledWith('github');
       done();
@@ -32,7 +32,7 @@ describe('/github endpoints', () => {
 
   it('redirects to /app when authenticated', (done) => {
     jest.isolateModules(async () => {
-      const { github } = require('../../src/api/auth/github');
+      const { github } = require('../../../src/api/auth/github');
       await testHandler(github).get('/github/callback').expect(302);
       expect(passportAuthenticateMock).toHaveBeenCalledWith('github', {
         failureRedirect: '/github/login',
@@ -42,7 +42,7 @@ describe('/github endpoints', () => {
   });
   it('destroys session and logs out when logout is called', (done) => {
     jest.isolateModules(async () => {
-      const { github } = require('../../src/api/auth/github');
+      const { github } = require('../../../src/api/auth/github');
       const destroyMock = jest.fn((callback) => callback());
       const logoutMock = jest.fn();
       await testHandler(github, (req, _res, next) => {
