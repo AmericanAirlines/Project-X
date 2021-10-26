@@ -10,6 +10,6 @@ describe('NavLink Components', () => {
 
     expect(screen.getByText('Edit Profile')).toHaveAttribute('href', '/app/profile');
     expect(screen.getByText('View Contributions')).toHaveAttribute('href', '/app/contributions');
-    expect(screen.getByText('Log Out')).toHaveAttribute('href', '/app/logout');
+    expect(screen.getByText('Log Out')).toHaveAttribute('href', '/api/auth/github/logout');
   });
 });

@@ -1,23 +1,61 @@
 import 'jest';
 import passport from 'passport';
-import { github } from '../../src/api/auth/github';
+import { Handler } from 'express';
 import { testHandler } from '../testUtils/testHandler';
-import { env } from '../../src/env';
+import { getMock } from '../testUtils/getMock';
 
-const url = `https://github.com/login/oauth/authorize?client_id=${env.githubClientId}&redirect_uri=http://localhost:3000/api/auth/github/callback`;
-// const callbackUrl = 'http://localhost:3000/api/auth/github/callback';
+jest.mock('passport');
+const passportAuthenticateMock = getMock(passport.authenticate).mockImplementation(
+  (_oauthName, options) =>
+    ((_req, res, next) => {
+      if (options) {
+        next();
+      } else {
+        res.sendStatus(200);
+      }
+    }) as Handler,
+);
 
-describe('/GitHub endpoints', () => {
+describe('/github endpoints', () => {
   beforeEach(async () => {
     jest.clearAllMocks();
   });
 
-  it('Goes to GitHub link for user to Login', async () => {
-    await testHandler(github)
-    .get('/github/callback')
-    .expect(302)
-    .expect('Location', callbackUrl);
-  }); // still needs to finish testing
-  
-  
+  it('goes to github link for Login', (done) => {
+    jest.isolateModules(async () => {
+      const { github } = require('../../src/api/auth/github');
+      await testHandler(github).get('/github/login').expect(200);
+      expect(passportAuthenticateMock).toHaveBeenCalledWith('github');
+      done();
+    });
+  });
+
+  it('redirects to /app when authenticated', (done) => {
+    jest.isolateModules(async () => {
+      const { github } = require('../../src/api/auth/github');
+      await testHandler(github).get('/github/callback').expect(302);
+      expect(passportAuthenticateMock).toHaveBeenCalledWith('github', {
+        failureRedirect: '/github/login',
+      });
+      done();
+    });
+  });
+  it('destroys session and logs out when logout is called', (done) => {
+    jest.isolateModules(async () => {
+      const { github } = require('../../src/api/auth/github');
+      const destroyMock = jest.fn((callback) => callback());
+      const logoutMock = jest.fn();
+      await testHandler(github, (req, _res, next) => {
+        req.session = { destroy: destroyMock } as any;
+        req.logout = logoutMock;
+        next();
+      })
+        .get('/github/logout')
+        .expect(302)
+        .expect('Location', '/');
+      expect(destroyMock).toHaveBeenCalledTimes(1);
+      expect(logoutMock).toHaveBeenCalledTimes(1);
+      done();
+    });
+  });
 });

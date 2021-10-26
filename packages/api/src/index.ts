@@ -42,6 +42,14 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
+passport.serializeUser((user: any, done) => {
+  done(null, user.id);
+});
+
+passport.deserializeUser((id: string, done) => {
+  done(null, id);
+});
+
 passport.use(
   new GitHubStrategy(
     {

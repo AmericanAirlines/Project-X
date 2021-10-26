@@ -3,14 +3,6 @@ import passport from 'passport';
 
 export const github = Router();
 
-passport.serializeUser((user: any, done) => {
-  done(null, user.id);
-});
-
-passport.deserializeUser((id: string, done) => {
-  done(null, id);
-});
-
 const logout: Handler = (req, res, next) => {
   req.session.destroy(() => {  
     req.logout();
