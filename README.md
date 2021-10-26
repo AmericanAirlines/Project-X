@@ -64,6 +64,7 @@
 
 - Generate a Client Secret ID from GitHub and use it to replace the value of `GITHUB_SECRET` within your `.env.local`
 
+
 ## Setting up Discord OAuth
 
 - Go to the [Discord Develop Portal](https://discord.com/developers/applications) and log in.
@@ -76,6 +77,16 @@
   1. Copy the Client ID and update the `DISCORD_CLIENT_ID` value.
 
   2. Reveal and copy the Client Secret and update the `DISCORD_SECRET` value.
+
+
+## Setting up Discord Server
+
+- Go to the Discord App and create a new server.
+- Navigate to "Invite People". This can be found in the dropdown panel next to your server name in the upper-left corner.
+- In the pop-up a link is displayed. The link by default will last for 7 days.
+- To create a permanent link navigate to the "Invite People" window and click on "Edit invite link" at the bottom of the window.
+- Select "Never" for expiration and "No limit" for the number of uses.
+
 
 ## Learn More
 
