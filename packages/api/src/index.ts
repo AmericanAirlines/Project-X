@@ -1,26 +1,22 @@
 /* istanbul ignore file */
-import express from 'express';
+import express, { Handler } from 'express';
 import { web } from '@x/web';
 import { EntityManager } from '@mikro-orm/core';
 import { PostgreSqlDriver } from '@mikro-orm/postgresql';
+import session from 'express-session';
+import passport from 'passport';
 import { env } from './env';
 import { api } from './api';
 import { initDatabase } from './database';
 import logger from './logger';
 import { User } from './entities/User';
 
-
 const app = express();
 const port = Number(env.port ?? '') || 3000;
 const dev = env.nodeEnv === 'development';
-const session = require('express-session'); // express-session
-const passport = require('passport');
 const GitHubStrategy = require('passport-github2');
 
-const gitHubClientId = env.gitHubClientId;
-const gitHubClientSecret = env.gitHubSecret;
-
-const authRequired = (req: any, res: any, next: any) => {
+const authRequired: Handler = (req, res, next) => {
   if (req.user) {
     next();
   } else {
@@ -30,50 +26,54 @@ const authRequired = (req: any, res: any, next: any) => {
 
 let authEm: EntityManager<PostgreSqlDriver> | undefined;
 
+app.use(
+  session({
+    secret: 'keyboard cat',
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      httpOnly: true,
+      secure: false,
+      maxAge: 24 * 60 * 60 * 1000,
+    },
+  }),
+);
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+passport.use(
+  new GitHubStrategy(
+    {
+      clientID: env.githubClientId,
+      clientSecret: env.githubSecret,
+      callbackURL: `${env.appUrl}/api/auth/github/callback`,
+    },
+    async (accessToken: any, refreshToken: any, profile: any, done: any) => {
+      const currentUser = await authEm?.findOne(User, {
+        name: profile.username,
+        githubId: profile.id,
+      });
+      if (!currentUser) {
+        logger.info('Creating new user.');
+        const newUser = new User({
+          name: profile.username,
+          githubId: profile.id,
+          hireable: false,
+          purpose: '',
+        });
+        await authEm?.persistAndFlush(newUser);
+        done(null, profile);
+      } else {
+        done(null, profile);
+      }
+    },
+  ),
+);
+
 void (async () => {
   const orm = await initDatabase();
   authEm = authEm ?? orm.em.fork();
-});
-
-  app.use(
-    session({
-      secret: 'keyboard cat',
-      resave: false,
-      saveUninitialized: false,
-      cookie: {
-        httpOnly: true,
-        secure: false,
-        maxAge: 24 * 60 * 60 * 1000,
-      },
-    }),
-  );
-
-app.use(passport.initialize());
-app.use(passport.session(session));
-
-passport.use(new GitHubStrategy({
-  clientID: gitHubClientId,
-  clientSecret: gitHubClientSecret,
-  callbackURL: "http://localhost:3000/api/auth/github/callback"
-},
-  async (accessToken: any, refreshToken: any, profile: any, done: any) => {
-    
-   const currentUser = await authEm?.findOne(User, {name: profile.username, gitHubId: profile.id});
-  if(!currentUser){
-    logger.info("Creating new user.");
-    const newUser = new User({name: profile.username, gitHubId: profile.id, hireable: false, purpose: "" });
-    await authEm?.persistAndFlush(newUser);
-    done(null,profile);
-  }else{
-    logger.info("user logged in");
-    done(null, profile);
-  }
-    
-  }
-));
-
-void (async () => {
-  const orm = await initDatabase();
 
   app.use(
     '/api',

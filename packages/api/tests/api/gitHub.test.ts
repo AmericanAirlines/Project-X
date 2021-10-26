@@ -1,9 +1,11 @@
 import 'jest';
-import { gitHub } from '../../src/api/auth/gitHub';
+import passport from 'passport';
+import { github } from '../../src/api/auth/github';
 import { testHandler } from '../testUtils/testHandler';
 import { env } from '../../src/env';
 
-const url = `https://github.com/login/oauth/authorize?client_id=${env.gitHubClientId}&redirect_uri=http://localhost:3000/api/auth/github/callback`;
+const url = `https://github.com/login/oauth/authorize?client_id=${env.githubClientId}&redirect_uri=http://localhost:3000/api/auth/github/callback`;
+// const callbackUrl = 'http://localhost:3000/api/auth/github/callback';
 
 describe('/GitHub endpoints', () => {
   beforeEach(async () => {
@@ -11,6 +13,11 @@ describe('/GitHub endpoints', () => {
   });
 
   it('Goes to GitHub link for user to Login', async () => {
-    await testHandler(gitHub).get('/github/login').expect(302).expect('Location', url);
-  });
+    await testHandler(github)
+    .get('/github/callback')
+    .expect(302)
+    .expect('Location', callbackUrl);
+  }); // still needs to finish testing
+  
+  
 });

@@ -11,7 +11,7 @@ export class User extends Node<User> {
   name: string;
 
   @Property({ columnType: 'text' })
-  gitHubId: string;
+  githubId: string;
 
   @Property({ columnType: 'text', nullable: true })
   pronouns?: string;
@@ -34,13 +34,12 @@ export class User extends Node<User> {
   @Property({ columnType: 'Date', nullable: true })
   graduationDate?: Date;
 
-  constructor({ name, gitHubId, hireable, purpose, ...extraValues }: UserConstructorValues) {
+  constructor({ name, githubId, hireable, purpose, ...extraValues }: UserConstructorValues) {
     super(extraValues);
 
     this.name = name;
     this.hireable = hireable;
     this.purpose = purpose;
-    this.gitHubId = gitHubId;
-
+    this.githubId = githubId;
   }
 }

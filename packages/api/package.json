@@ -18,6 +18,7 @@
     "@americanairlines/simple-env": "^1.0.4",
     "@mikro-orm/core": "^4.5.9",
     "@mikro-orm/postgresql": "^4.5.9",
+    "@types/express-session": "^1.17.4",
     "@x/web": "*",
     "dotenv-flow": "^3.2.0",
     "express": "^4.17.1",

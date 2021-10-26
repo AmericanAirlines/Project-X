@@ -9,7 +9,7 @@ const stripSensitiveFields = (user: User): Partial<User> => ({
   name: user.name,
   pronouns: user.pronouns,
   schoolName: user.schoolName,
-  gitHubId: user.gitHubId,
+  githubId: user.githubId,
 });
 
 users.get('/:userId', async (req, res) => {

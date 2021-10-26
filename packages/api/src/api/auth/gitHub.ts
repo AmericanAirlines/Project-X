@@ -1,31 +1,35 @@
-import { Router } from 'express';
+import { Handler, Router } from 'express';
 import passport from 'passport';
 
-export const gitHub = Router();
+export const github = Router();
 
-passport.serializeUser((user: any, done: any) => {
+passport.serializeUser((user: any, done) => {
   done(null, user.id);
 });
 
-passport.deserializeUser((id: any, done: any) => {
+passport.deserializeUser((id: string, done) => {
   done(null, id);
 });
 
-function logout(req: any, res: any, next: any) {
-  req.session.destroy();
-  req.logout();
-  next();
+const logout: Handler = (req, res, next) => {
+  req.session.destroy(() => {  
+    req.logout();
+    next();
+  });
 }
 
-gitHub.get('/github/logout', logout, (req, res) => {
+github.get('/github/logout', logout, (req, res) => {
+  // when they logout redirect them home
   res.redirect('/');
 });
 
-gitHub.get('/github/login', passport.authenticate('github'));
+github.get('/github/login', passport.authenticate('github'));
 
-gitHub.get('/github/callback', 
+github.get(
+  '/github/callback',
   passport.authenticate('github', { failureRedirect: '/github/login' }),
   (req, res) => {
-    // Successful authentication, redirect home.
+    // Successful authentication, redirect to app.
     res.redirect('/app');
-  });
+  },
+);
