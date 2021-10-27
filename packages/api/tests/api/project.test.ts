@@ -1,19 +1,19 @@
 import fetchMock from 'fetch-mock-jest';
-import { repository } from '../../src/api/repository';
-import { Repository } from '../../src/entities/Repository';
+import { project } from '../../src/api/project';
+import { Project } from '../../src/entities/Project';
 import logger from '../../src/logger';
 import { testHandler } from '../testUtils/testHandler';
 
 const loggerSpy = jest.spyOn(logger, 'error').mockImplementation();
 
-interface MockRepositoryDetails {
+interface MockProjectDetails {
   node_id: string;
   url: string;
   name: string;
   stargazer_count: number;
 }
 
-const MockRepositoryResults: MockRepositoryDetails[] = [
+const MockProjectResults: MockProjectDetails[] = [
   {
     node_id: 'VeryGreatRepo',
     url: 'www.github.com/AmericanAirlines/VeryLargePlane',
@@ -28,21 +28,21 @@ const MockRepositoryResults: MockRepositoryDetails[] = [
   },
 ];
 
-describe('Repository POST route', () => {
+describe('Project POST route', () => {
   beforeEach(async () => {
     jest.clearAllMocks();
     fetchMock.reset();
   });
 
   it('throw 500 error when error during findOne', async () => {
-    const handler = testHandler(repository);
+    const handler = testHandler(project);
 
     fetchMock.get('https://api.github.com/orgs/AmericanAirlines/repos', {});
 
     handler.entityManager.flush.mockRejectedValueOnce(new Error(''));
 
     const { text } = await handler.post('/').expect(500);
-    expect(text).toEqual('There was an issue adding the repo(s) to the database');
+    expect(text).toEqual('There was an issue adding the project(s) to the database');
 
     expect(loggerSpy).toBeCalledTimes(1);
 
@@ -50,28 +50,28 @@ describe('Repository POST route', () => {
   });
 
   it('Successful fetch', async () => {
-    const handler = testHandler(repository);
+    const handler = testHandler(project);
 
-    fetchMock.get('https://api.github.com/orgs/AmericanAirlines/repos', MockRepositoryResults);
+    fetchMock.get('https://api.github.com/orgs/AmericanAirlines/repos', MockProjectResults);
 
-    // First iteration: Repository already exists in db so no persist
+    // First iteration: Project already exists in db so no persist
     handler.entityManager.findOne.mockResolvedValueOnce(
-      new Repository({ nodeID: MockRepositoryResults[0].node_id }),
+      new Project({ nodeID: MockProjectResults[0].node_id }),
     );
-    // Iterations after first: Repository does not exist in db so persist
+    // Iterations after first: Project does not exist in db so persist
     handler.entityManager.findOne.mockResolvedValueOnce(null);
 
     const { body } = await handler.post('/').expect(201);
 
-    expect(handler.entityManager.findOne).toHaveBeenCalledWith(Repository, {
-      nodeID: MockRepositoryResults[0].node_id,
+    expect(handler.entityManager.findOne).toHaveBeenCalledWith(Project, {
+      nodeID: MockProjectResults[0].node_id,
     });
 
-    expect(handler.entityManager.findOne).toHaveBeenCalledWith(Repository, {
-      nodeID: MockRepositoryResults[1].node_id,
+    expect(handler.entityManager.findOne).toHaveBeenCalledWith(Project, {
+      nodeID: MockProjectResults[1].node_id,
     });
     expect(handler.entityManager.persist).toHaveBeenCalledWith(
-      new Repository({ nodeID: MockRepositoryResults[1].node_id }),
+      new Project({ nodeID: MockProjectResults[1].node_id }),
     );
 
     expect(handler.entityManager.findOne).toHaveBeenCalledTimes(2);
@@ -79,7 +79,7 @@ describe('Repository POST route', () => {
 
     expect(handler.entityManager.flush).toHaveBeenCalledTimes(1);
 
-    expect(body).toEqual(MockRepositoryResults);
+    expect(body).toEqual(MockProjectResults);
 
     expect(fetchMock).toHaveFetchedTimes(1);
   });

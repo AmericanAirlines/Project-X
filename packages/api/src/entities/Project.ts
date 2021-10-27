@@ -3,14 +3,14 @@ import { Entity, Property } from '@mikro-orm/core';
 import { ConstructorValues } from '../utils/types';
 import { Node } from './Node';
 
-export type RepositoryConstructorValues = ConstructorValues<Repository>;
+export type ProjectConstructorValues = ConstructorValues<Project>;
 
 @Entity()
-export class Repository extends Node<Repository> {
+export class Project extends Node<Project> {
   @Property({ columnType: 'text' })
   nodeID: string;
 
-  constructor({ nodeID, ...extraValues }: RepositoryConstructorValues) {
+  constructor({ nodeID, ...extraValues }: ProjectConstructorValues) {
     super(extraValues);
     this.nodeID = nodeID;
   }
