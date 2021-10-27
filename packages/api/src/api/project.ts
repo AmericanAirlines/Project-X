@@ -1,29 +1,54 @@
 import { Router } from 'express';
 import { Project } from '../entities/Project';
 import logger from '../logger';
+import { env } from '../env'
 
 export const project = Router();
 
-project.post('/', async (req, res) => {
+project.post('/:owner/:repo', async (req, res) => {
+  const { owner, repo } = req.params;
+
   try {
-    const fetchRes = await fetch('https://api.github.com/orgs/AmericanAirlines/repos');
+    const fetchRes = await fetch('https://api.github.com/graphql', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `bearer ${env.githubGraphQLPAT}`,
+      },
+      body: JSON.stringify({
+        query: `
+          query ($ownerName: String!, $repoName: String!) {
+            repository(owner:$ownerName, name:$repoName) {
+              id
+            }
+          }
+          `,
+          variables: {
+            ownerName: owner,
+            repoName: repo
+          }
+        }),
+    });
 
-    const projects = await fetchRes.json();
+    const responseData = await fetchRes.json();
 
-    // Select one by one or by user
-    for (let i = 0; i < projects.length; i += 1) {
-      const currentProjects = await req.entityManager.findOne(Project, { nodeID: projects[i].node_id });
-      if (!currentProjects) {
-        const newProject = new Project({ nodeID: projects[i].node_id });
-        req.entityManager.persist(newProject);
-      }
+    if(responseData.errors !== undefined)
+    {
+      res.status(404).send("The repository could not be found");
     }
+    else
+    {      
+      if (!(await req.entityManager.findOne(Project, { nodeID: responseData.data.repository.id }))) 
+      {
+        const newProject = new Project({ nodeID: responseData.data.repository.id });
+        await req.entityManager.persistAndFlush(newProject);
+      }
 
-    await req.entityManager.flush();
-
-    res.status(201).send(projects);
-  } catch (error) {
-    const errorMessage = 'There was an issue adding the project(s) to the database'
+      res.send(responseData);
+    }
+  }
+  catch (error) {
+    const errorMessage = 'There was an issue adding the project to the database'
     logger.error(errorMessage, error);
     res.status(500).send(errorMessage);
   }

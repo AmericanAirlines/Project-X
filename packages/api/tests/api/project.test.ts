@@ -6,27 +6,33 @@ import { testHandler } from '../testUtils/testHandler';
 
 const loggerSpy = jest.spyOn(logger, 'error').mockImplementation();
 
-interface MockProjectDetails {
-  node_id: string;
-  url: string;
-  name: string;
-  stargazer_count: number;
+const mockValidResponse =
+{
+  data: {
+    repository: {
+      id: 'VeryGreatRepo',
+    }
+  }
 }
 
-const MockProjectResults: MockProjectDetails[] = [
-  {
-    node_id: 'VeryGreatRepo',
-    url: 'www.github.com/AmericanAirlines/VeryLargePlane',
-    name: 'VeryLargePlane',
-    stargazer_count: 12345,
-  },
-  {
-    node_id: 'EvenBetterRepo',
-    url: 'www.github.com/AmericanAirlines/EvenBiggerPlane',
-    name: 'EvenBiggerPlane',
-    stargazer_count: 54321,
-  },
-];
+const mockHeaders = {
+  'Content-Type': 'application/json',
+  'Authorization': `bearer `,
+}
+
+const mockBody = {
+  query: `
+          query ($ownerName: String!, $repoName: String!) {
+            repository(owner:$ownerName, name:$repoName) {
+              id
+            }
+          }
+          `,
+  variables: {
+    ownerName: "owner",
+    repoName: "repo"
+  }
+}
 
 describe('Project POST route', () => {
   beforeEach(async () => {
@@ -34,52 +40,67 @@ describe('Project POST route', () => {
     fetchMock.reset();
   });
 
-  it('throw 500 error when error during findOne', async () => {
+  it('404 error when given invalid owner and/or repo name', async () => {
     const handler = testHandler(project);
 
-    fetchMock.get('https://api.github.com/orgs/AmericanAirlines/repos', {});
+    fetchMock.post('https://api.github.com/graphql', {errors: {status: 404}});
 
-    handler.entityManager.flush.mockRejectedValueOnce(new Error(''));
+    const { text } = await handler.post('/AmericanWaterlines/NiceBoat').expect(404);
+    expect(text).toEqual('The repository could not be found');
 
-    const { text } = await handler.post('/').expect(500);
-    expect(text).toEqual('There was an issue adding the project(s) to the database');
+    expect(fetchMock).toHaveFetchedTimes(1);
+
+    expect(fetchMock).toHaveFetched('https://api.github.com/graphql');
+  });
+
+  it('500 error when error occurs during persistAndFlush', async () => {
+    const handler = testHandler(project);
+
+    fetchMock.post('https://api.github.com/graphql', {data: {repository: mockValidResponse}});
+
+    handler.entityManager.persistAndFlush.mockRejectedValueOnce(new Error("An error has occurred during persistAndFlush"));
+
+    const { text } = await handler.post('/AmericanAirlines/VeryLargePlane').expect(500);
+    expect(text).toEqual('There was an issue adding the project to the database');
+
+    expect(handler.entityManager.findOne).toBeCalledTimes(1);
+    expect(handler.entityManager.persistAndFlush).toBeCalledTimes(1);
 
     expect(loggerSpy).toBeCalledTimes(1);
 
     expect(fetchMock).toHaveFetchedTimes(1);
   });
 
-  it('Successful fetch', async () => {
+  it('Successful fetch and project not already in database', async () => {
     const handler = testHandler(project);
 
-    fetchMock.get('https://api.github.com/orgs/AmericanAirlines/repos', MockProjectResults);
+    fetchMock.post('https://api.github.com/graphql', mockValidResponse);
 
-    // First iteration: Project already exists in db so no persist
-    handler.entityManager.findOne.mockResolvedValueOnce(
-      new Project({ nodeID: MockProjectResults[0].node_id }),
-    );
-    // Iterations after first: Project does not exist in db so persist
     handler.entityManager.findOne.mockResolvedValueOnce(null);
 
-    const { body } = await handler.post('/').expect(201);
+    const { body } = await handler.post('/AmericanAirlines/VeryLargePlane').expect(200);
 
-    expect(handler.entityManager.findOne).toHaveBeenCalledWith(Project, {
-      nodeID: MockProjectResults[0].node_id,
-    });
+    expect(body).toEqual(mockValidResponse);
 
-    expect(handler.entityManager.findOne).toHaveBeenCalledWith(Project, {
-      nodeID: MockProjectResults[1].node_id,
-    });
-    expect(handler.entityManager.persist).toHaveBeenCalledWith(
-      new Project({ nodeID: MockProjectResults[1].node_id }),
-    );
+    expect(handler.entityManager.findOne).toBeCalledTimes(1);
+    expect(handler.entityManager.persistAndFlush).toBeCalledTimes(1);
 
-    expect(handler.entityManager.findOne).toHaveBeenCalledTimes(2);
-    expect(handler.entityManager.persist).toHaveBeenCalledTimes(1);
+    expect(fetchMock).toHaveFetchedTimes(1);
+  });
 
-    expect(handler.entityManager.flush).toHaveBeenCalledTimes(1);
+  it('Successful fetch and project is already in database', async () => {
+    const handler = testHandler(project);
 
-    expect(body).toEqual(MockProjectResults);
+    fetchMock.post('https://api.github.com/graphql', mockValidResponse);
+
+    handler.entityManager.findOne.mockResolvedValueOnce(new Project({nodeID: mockValidResponse.data.repository.id}));
+
+    const { body } = await handler.post('/AmericanAirlines/VeryLargePlane').expect(200);
+
+    expect(body).toEqual(mockValidResponse);
+
+    expect(handler.entityManager.findOne).toBeCalledTimes(1);
+    expect(handler.entityManager.persistAndFlush).toBeCalledTimes(0);
 
     expect(fetchMock).toHaveFetchedTimes(1);
   });
