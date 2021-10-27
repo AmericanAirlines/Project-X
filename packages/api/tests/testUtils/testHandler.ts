@@ -1,4 +1,4 @@
-import express, { RequestHandler } from 'express';
+import express, { Handler, RequestHandler } from 'express';
 import supertest, { SuperTest, Test } from 'supertest';
 import type { ParamsDictionary } from 'express-serve-static-core';
 import type { ParsedQs } from 'qs';
@@ -13,7 +13,7 @@ type MockEntityManager = jest.Mocked<
 
 type SuperTestWithEntityManager = SuperTest<Test> & { entityManager: MockEntityManager };
 
-const createTestApp = (handler: TestRequestHandler) => {
+const createTestApp = (handler: TestRequestHandler, middleware?: Handler) => {
   // If additional methods are needed, add them here and to the `MockEntityManager` type
   const entityManager: MockEntityManager = {
     find: jest.fn(),
@@ -22,6 +22,9 @@ const createTestApp = (handler: TestRequestHandler) => {
   };
 
   const app = express();
+  const continueMiddleware: Handler = (_req, _res, next) => next();
+  app.use(middleware ?? continueMiddleware);
+
   app.use((req, _res, next) => {
     req.entityManager = entityManager as unknown as EntityManager<PostgreSqlDriver>;
     next();
@@ -31,8 +34,11 @@ const createTestApp = (handler: TestRequestHandler) => {
   return { app, entityManager };
 };
 
-export const testHandler = (handler: TestRequestHandler): SuperTestWithEntityManager => {
-  const { app, entityManager } = createTestApp(handler);
+export const testHandler = (
+  handler: TestRequestHandler,
+  middleware?: Handler,
+): SuperTestWithEntityManager => {
+  const { app, entityManager } = createTestApp(handler, middleware);
   const handlerInstance = supertest(app) as SuperTestWithEntityManager;
   handlerInstance.entityManager = entityManager;
   return handlerInstance;
