@@ -28,7 +28,7 @@ export const NavProfileMenu: React.FC = () => (
       </MenuItem>
       <MenuDivider />
       <MenuItem>
-        <Link variant="navbarMenuItem" href="/app/logout">
+        <Link variant="navbarMenuItem" href="/api/auth/github/logout">
           Log Out
         </Link>
       </MenuItem>
