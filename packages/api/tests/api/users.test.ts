@@ -7,12 +7,14 @@ interface MockPartialUser {
   name: string;
   pronouns: string;
   schoolName: string;
+  githubId: string;
 }
 
 const sampleUser: MockPartialUser = {
   name: 'Bill Nye',
   pronouns: 'he/him',
   schoolName: 'Science School',
+  githubId: '234234',
 };
 
 const loggerSpy = jest.spyOn(logger, 'error').mockImplementation();

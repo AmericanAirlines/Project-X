@@ -1,9 +1,9 @@
 /* istanbul ignore file */
 import { Router } from 'express';
-import { gitHub } from './gitHub';
+import { github } from './github';
 import { discord } from './discord';
 
 export const auth = Router();
 
-auth.use(gitHub);
+auth.use(github);
 auth.use(discord);
