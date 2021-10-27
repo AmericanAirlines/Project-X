@@ -11,7 +11,7 @@ export const env = setEnv({
     databaseUrl: 'DATABASE_URL',
     githubClientId: 'GITHUB_CLIENT_ID',
     githubSecret: 'GITHUB_SECRET',
-    appUrl: 'APPURL',
+    appUrl: 'APP_URL',
   },
   optional: {
     databaseUser: 'DATABASE_USER',
