@@ -23,7 +23,7 @@ const createTestApp = (handler: TestRequestHandler, middleware?: Handler) => {
 
   const app = express();
   app.use(express.json());
-  
+
   const continueMiddleware: Handler = (_req, _res, next) => next();
   app.use(middleware ?? continueMiddleware);
 
