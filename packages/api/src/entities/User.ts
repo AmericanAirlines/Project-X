@@ -10,6 +10,9 @@ export class User extends Node<User> {
   @Property({ columnType: 'text' })
   name: string;
 
+  @Property({ columnType: 'text' })
+  githubId: string;
+
   @Property({ columnType: 'text', nullable: true })
   pronouns?: string;
 
@@ -31,11 +34,12 @@ export class User extends Node<User> {
   @Property({ columnType: 'Date', nullable: true })
   graduationDate?: Date;
 
-  constructor({ name, hireable, purpose, ...extraValues }: UserConstructorValues) {
+  constructor({ name, githubId, hireable, purpose, ...extraValues }: UserConstructorValues) {
     super(extraValues);
 
     this.name = name;
     this.hireable = hireable;
     this.purpose = purpose;
+    this.githubId = githubId;
   }
 }

@@ -8,6 +8,7 @@ const sampleUser: Partial<User> = {
   pronouns: 'he/him',
   schoolName: 'Science School',
   assign: jest.fn(),
+  githubId: '234234',
 };
 
 const loggerSpy = jest.spyOn(logger, 'error').mockImplementation();

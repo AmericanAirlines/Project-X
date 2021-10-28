@@ -1,18 +1,89 @@
 /* istanbul ignore file */
-import express from 'express';
+import express, { Handler } from 'express';
 import { web } from '@x/web';
+import { EntityManager } from '@mikro-orm/core';
+import { PostgreSqlDriver } from '@mikro-orm/postgresql';
+import session from 'express-session';
+import passport from 'passport';
 import { env } from './env';
 import { api } from './api';
 import { initDatabase } from './database';
 import logger from './logger';
+import { User } from './entities/User';
 
 const app = express();
 const port = Number(env.port ?? '') || 3000;
 const dev = env.nodeEnv === 'development';
 app.use(express.json());
 
+const GitHubStrategy = require('passport-github2');
+
+const authRequired: Handler = (req, res, next) => {
+  if (req.user) {
+    next();
+  } else {
+    res.redirect('/api/auth/github/login'); // 401
+  }
+};
+
+let authEm: EntityManager<PostgreSqlDriver> | undefined;
+
+app.use(
+  session({
+    secret: 'keyboard cat',
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      httpOnly: true,
+      secure: false,
+      maxAge: 24 * 60 * 60 * 1000,
+    },
+  }),
+);
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+passport.serializeUser((user: any, done) => {
+  done(null, user.id);
+});
+
+passport.deserializeUser((id: string, done) => {
+  done(null, id);
+});
+
+passport.use(
+  new GitHubStrategy(
+    {
+      clientID: env.githubClientId,
+      clientSecret: env.githubSecret,
+      callbackURL: `${env.appUrl}/api/auth/github/callback`,
+    },
+    async (accessToken: any, refreshToken: any, profile: any, done: any) => {
+      const currentUser = await authEm?.findOne(User, {
+        name: profile.username,
+        githubId: profile.id,
+      });
+      if (!currentUser) {
+        logger.info('Creating new user.');
+        const newUser = new User({
+          name: profile.username,
+          githubId: profile.id,
+          hireable: false,
+          purpose: '',
+        });
+        await authEm?.persistAndFlush(newUser);
+        done(null, profile);
+      } else {
+        done(null, profile);
+      }
+    },
+  ),
+);
+
 void (async () => {
   const orm = await initDatabase();
+  authEm = authEm ?? orm.em.fork();
 
   app.use(
     '/api',
@@ -27,7 +98,7 @@ void (async () => {
 
   const webHandler = await web({ dev });
 
-  app.all('/app', /* loginMiddleware, */ webHandler);
+  app.all('/app', authRequired, webHandler);
   app.all('*', webHandler);
 })()
   .then(() => {

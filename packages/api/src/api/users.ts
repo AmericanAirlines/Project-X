@@ -1,13 +1,15 @@
-import { Router } from 'express';
+import express, { Router } from 'express';
 import { User, UserConstructorValues } from '../entities/User';
 import logger from '../logger';
 
 export const users = Router();
+users.use(express.json());
 
 const stripSensitiveFields = (user: User): Partial<User> => ({
   name: user.name,
   pronouns: user.pronouns,
   schoolName: user.schoolName,
+  githubId: user.githubId,
 });
 
 users.get('/:userId', async (req, res) => {
