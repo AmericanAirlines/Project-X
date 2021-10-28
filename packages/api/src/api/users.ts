@@ -53,8 +53,10 @@ users.patch('/:userId', async (req, res) => {
       res.sendStatus(404);
       return;
     }
+
     const editableFields: Array<keyof UserConstructorValues> = ['name', 'pronouns', 'schoolName'];
 
+    // Create new patch object only containing fields that are in `editableFields`
     const sanitizedUser = Object.entries(req.body).reduce((acc, [key, value]) => {
       if (editableFields.includes(key as keyof UserConstructorValues)) {
         return {
