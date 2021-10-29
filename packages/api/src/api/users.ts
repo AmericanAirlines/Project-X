@@ -58,48 +58,27 @@ users.patch('/:userId', async (req, res) => {
       return;
     }
 
-    if (adminValue) {
-      const editableFields: Array<keyof UserConstructorValues> = [
-        'name',
-        'pronouns',
-        'schoolName',
-        'isAdmin',
-      ];
+    // if (adminValue) {
 
-      // Create new patch object only containing fields that are in `editableFields`
-      const sanitizedUser = Object.entries(req.body).reduce((acc, [key, value]) => {
-        if (editableFields.includes(key as keyof UserConstructorValues)) {
-          return {
-            ...acc,
-            [key]: value,
-          };
-        }
-        return acc;
-      }, {} as UserConstructorValues);
+    const editableFields: Array<keyof UserConstructorValues> = adminValue
+      ? ['name', 'pronouns', 'schoolName', 'isAdmin']
+      : ['name', 'pronouns', 'schoolName'];
 
-      user.assign(sanitizedUser);
+    // Create new patch object only containing fields that are in `editableFields`
+    const sanitizedUser = Object.entries(req.body).reduce((acc, [key, value]) => {
+      if (editableFields.includes(key as keyof UserConstructorValues)) {
+        return {
+          ...acc,
+          [key]: value,
+        };
+      }
+      return acc;
+    }, {} as UserConstructorValues);
 
-      await req.entityManager.flush();
-      res.send(user);
-    } else {
-      const editableFields: Array<keyof UserConstructorValues> = ['name', 'pronouns', 'schoolName'];
+    user.assign(sanitizedUser);
 
-      // Create new patch object only containing fields that are in `editableFields`
-      const sanitizedUser = Object.entries(req.body).reduce((acc, [key, value]) => {
-        if (editableFields.includes(key as keyof UserConstructorValues)) {
-          return {
-            ...acc,
-            [key]: value,
-          };
-        }
-        return acc;
-      }, {} as UserConstructorValues);
-
-      user.assign(sanitizedUser);
-
-      await req.entityManager.flush();
-      res.send(user);
-    }
+    await req.entityManager.flush();
+    res.send(user);
   } catch (error) {
     logger.error(`There was an issue updating user "${userId}"`, error);
     res.status(500).send(`There was an issue updating user "${userId}"`);
