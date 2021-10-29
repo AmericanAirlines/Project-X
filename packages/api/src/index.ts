@@ -43,7 +43,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 passport.serializeUser((user: any, done) => {
-  done(null, {id: user.userProfile.id, githubToken: user.githubToken});
+  done(null, user);
 });
 
 passport.deserializeUser((user: any, done) => {
