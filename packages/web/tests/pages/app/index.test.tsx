@@ -11,6 +11,6 @@ describe('web /app', () => {
   it('renders', async () => {
     render(<AppHome />);
 
-    expect(screen.getByText('Signed in!')).toBeVisible();
+    expect(screen.getByText('App Home')).toBeVisible();
   });
 });
