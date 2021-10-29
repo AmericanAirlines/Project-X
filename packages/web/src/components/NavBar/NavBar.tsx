@@ -5,11 +5,11 @@ import { NavProfileMenu } from './NavProfileMenu';
 
 export const NavBar: React.FC = () => {
   return (
-    <HStack bg={useColorModeValue('gray.100', 'gray.900')}>
+    <HStack >
       <NavLink label="Home" href="/app" />
       <NavLink label="Community" href="/app/community" />
       <NavLink label="Videos" href="/app/videos" />
-      <NavLink label="Repositories" href="/app/repositories" />
+      <NavLink label="Projects" href="/app/projects" />
       <Spacer />
       <NavProfileMenu />
     </HStack>
