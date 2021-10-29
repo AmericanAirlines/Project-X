@@ -80,6 +80,6 @@ describe('repo page', () => {
 
     expect(screen.getByText('Repo Search')).toBeVisible();
 
-    // expect(screen.getAllByDisplayValue('Box Row').length).toEqual(2);
+    expect(screen.getAllByDisplayValue('Box Row').length).toEqual(2);
   });
 });
