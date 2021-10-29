@@ -14,6 +14,8 @@ import { User } from './entities/User';
 const app = express();
 const port = Number(env.port ?? '') || 3000;
 const dev = env.nodeEnv === 'development';
+app.use(express.json());
+
 const GitHubStrategy = require('passport-github2');
 
 const authRequired: Handler = (req, res, next) => {
