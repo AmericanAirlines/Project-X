@@ -13,12 +13,11 @@ project.get('/', async (req, res) => {
 
       projectList.forEach(repo => repoNodeIds.push(repo.nodeID));
 
-      // Put in a utility
       const fetchRes = await fetch('https://api.github.com/graphql', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `bearer ${env.gitHubGraphQLPAT}`, // Use user's token from session instead
+          'Authorization': `bearer ${req.user?.githubToken}`,
         },
         body: JSON.stringify({
           query: `
