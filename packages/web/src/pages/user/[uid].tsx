@@ -49,11 +49,7 @@ const UserProfilePage: NextPage = () => {
         </MarketingLayout>
       );
   } else {
-    return (
-      //above marketing layout add button that will redirect to discord oauth endpoint.
-      //<Button size="lg" colorScheme="blue" href="/api/auth/discord}">
-      //Login with Discord
-      //</Button>
+    return (    
       <MarketingLayout>
         <UserProfile {...user} />
       </MarketingLayout>
