@@ -14,15 +14,6 @@ export interface DiscordAccessTokenResponse {
   token_type: string;
 }
 
-export interface PassportData {
-  user: string;
-}
-
-export interface SessionData {
-  cookies: {};
-  passport: PassportData;
-}
-
 discord.get('/discord/login', (_req, res) => {
   const url = `https://discord.com/api/oauth2/authorize?client_id=${env.discordClientId}&redirect_uri=http://localhost:3000/api/auth/discord/callback&response_type=code&scope=identify`;
   res.redirect(url);
@@ -58,21 +49,19 @@ discord.get('/discord/callback', async (req, res) => {
 
       const { id: discordId } = await userResponse.json();
 
-      const { passport } = req.session as unknown as SessionData;
-      const { user: userGithubId } = passport as PassportData;
-      const user = await req.entityManager.findOne(User, { githubId: userGithubId });
+      const user = await req.entityManager.findOne(User, { githubId: req.user });
 
       if (user) {
         user.discordId = discordId;
-        void req.entityManager.flush();
-        res.redirect('/app/community', 200);
+        await req.entityManager.flush();
+        res.redirect('/app/community');
       } else {
-        res.redirect('/app/community', 400);
+        res.redirect('/app/community');
       }
     } catch (error) {
       const userRetrievalErrorString = 'There was an issue getting Discord user information';
       logger.error(userRetrievalErrorString, error);
-      res.status(400).send(userRetrievalErrorString);
+      res.status(500).send(userRetrievalErrorString);
     }
   } else {
     const discordAuthErrorString = 'There was an issue authrozing with Discord';

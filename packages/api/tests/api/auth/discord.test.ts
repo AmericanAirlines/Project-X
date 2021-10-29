@@ -51,7 +51,7 @@ describe('Discord', () => {
   });
 
   it('/discord/callback handles a discord user fetch error', async () => {
-    const { text } = await testHandler(discord).get('/discord/callback?code=testCode').expect(400);
+    const { text } = await testHandler(discord).get('/discord/callback?code=testCode').expect(500);
     fetchMock
       .mock()
       .postOnce('https://discord.com/api/v9/oauth2/token', new Error('Something is broken'));
@@ -87,7 +87,7 @@ describe('Discord', () => {
     handler.entityManager.findOne.mockResolvedValueOnce(testUser);
     await handler
       .get('/discord/callback?code=testCod')
-      .expect(200)
+      .expect(302)
       .expect('Location', '/app/community');
 
     expect(fetchMock).toHaveFetched(
@@ -120,7 +120,7 @@ describe('Discord', () => {
 
     await handler
       .get('/discord/callback?code=testCode')
-      .expect(400)
+      .expect(302)
       .expect('Location', '/app/community');
 
     expect(handler.entityManager.flush).toBeCalledTimes(0);
