@@ -1,5 +1,5 @@
 import React from 'react';
-import { Tr, Td, useTheme, Link } from '@chakra-ui/react';
+import { Tr, Td, Link } from '@chakra-ui/react';
 
 export interface VideoTableRowProps {
   video: {
@@ -10,7 +10,6 @@ export interface VideoTableRowProps {
 }
 
 export const VideoTableRow: React.FC<VideoTableRowProps> = ({ video }) => {
-  const theme = useTheme();
 
   // Convert durationInSeconds
   var hours = Math.floor(video.durationInSeconds / 3600);
