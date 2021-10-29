@@ -61,7 +61,6 @@ passport.use(
     },
     async (accessToken: any, refreshToken: any, profile: any, done: any) => {
       const currentUser = await authEm?.findOne(User, {
-        name: profile.username,
         githubId: profile.id,
       });
       if (!currentUser) {

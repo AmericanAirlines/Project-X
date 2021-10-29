@@ -10,6 +10,7 @@ const stripSensitiveFields = (user: User): Partial<User> => ({
   pronouns: user.pronouns,
   schoolName: user.schoolName,
   githubId: user.githubId,
+  isAdmin: user.isAdmin,
 });
 
 users.get('/:userId', async (req, res) => {
@@ -41,6 +42,9 @@ users.get('/:userId', async (req, res) => {
 users.patch('/:userId', async (req, res) => {
   const { userId } = req.params;
 
+  const currentUser = await req.entityManager.findOne(User, { githubId: req.user });
+  const adminValue = currentUser?.isAdmin;
+
   try {
     if (Number.isNaN(Number(userId))) {
       res.status(400).send(`"${userId}" is not a valid id, it must be a number.`);
@@ -54,24 +58,48 @@ users.patch('/:userId', async (req, res) => {
       return;
     }
 
-    const editableFields: Array<keyof UserConstructorValues> = ['name', 'pronouns', 'schoolName'];
+    if (adminValue) {
+      const editableFields: Array<keyof UserConstructorValues> = [
+        'name',
+        'pronouns',
+        'schoolName',
+        'isAdmin',
+      ];
 
-    // Create new patch object only containing fields that are in `editableFields`
-    const sanitizedUser = Object.entries(req.body).reduce((acc, [key, value]) => {
-      if (editableFields.includes(key as keyof UserConstructorValues)) {
-        return {
-          ...acc,
-          [key]: value,
-        };
-      }
-      return acc;
-    }, {} as UserConstructorValues);
+      // Create new patch object only containing fields that are in `editableFields`
+      const sanitizedUser = Object.entries(req.body).reduce((acc, [key, value]) => {
+        if (editableFields.includes(key as keyof UserConstructorValues)) {
+          return {
+            ...acc,
+            [key]: value,
+          };
+        }
+        return acc;
+      }, {} as UserConstructorValues);
 
-    user.assign(sanitizedUser);
+      user.assign(sanitizedUser);
 
-    await req.entityManager.flush();
+      await req.entityManager.flush();
+      res.send(user);
+    } else {
+      const editableFields: Array<keyof UserConstructorValues> = ['name', 'pronouns', 'schoolName'];
 
-    res.send(user);
+      // Create new patch object only containing fields that are in `editableFields`
+      const sanitizedUser = Object.entries(req.body).reduce((acc, [key, value]) => {
+        if (editableFields.includes(key as keyof UserConstructorValues)) {
+          return {
+            ...acc,
+            [key]: value,
+          };
+        }
+        return acc;
+      }, {} as UserConstructorValues);
+
+      user.assign(sanitizedUser);
+
+      await req.entityManager.flush();
+      res.send(user);
+    }
   } catch (error) {
     logger.error(`There was an issue updating user "${userId}"`, error);
     res.status(500).send(`There was an issue updating user "${userId}"`);
