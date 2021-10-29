@@ -58,8 +58,6 @@ users.patch('/:userId', async (req, res) => {
       return;
     }
 
-    // if (adminValue) {
-
     const editableFields: Array<keyof UserConstructorValues> = adminValue
       ? ['name', 'pronouns', 'schoolName', 'isAdmin']
       : ['name', 'pronouns', 'schoolName'];
