@@ -9,9 +9,7 @@ project.get('', async (req, res) => {
     try {
       const projectList = await req.entityManager.find(Project, {});
       
-      const repoNodeIds: string[] = [];
-
-      projectList.forEach(repo => repoNodeIds.push(repo.nodeID));
+      const repoNodeIds = projectList.map(project => project.nodeID);
 
       const fetchRes = await fetch('https://api.github.com/graphql', {
         method: 'POST',
