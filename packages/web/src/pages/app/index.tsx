@@ -5,9 +5,7 @@ import { AppLayout } from '../../components/Layout';
 const AppHome: NextPage = () => {
   return (
     <AppLayout>
-      <Text textAlign="left" maxWidth="60ch" fontSize="2xl" lineHeight="2">
-        Signed in!
-      </Text>
+      <Heading>App Home</Heading>
     </AppLayout>
   );
 };
