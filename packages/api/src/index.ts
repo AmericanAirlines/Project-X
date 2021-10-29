@@ -70,7 +70,6 @@ passport.use(
           githubId: profile.id,
           hireable: false,
           purpose: '',
-          isAdmin: false,
         });
         await authEm?.persistAndFlush(newUser);
         done(null, profile);

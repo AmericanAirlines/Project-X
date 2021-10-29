@@ -43,7 +43,7 @@ users.patch('/:userId', async (req, res) => {
   const { userId } = req.params;
 
   const currentUser = await req.entityManager.findOne(User, { githubId: req.user });
-  const adminValue = currentUser?.isAdmin;
+  const adminValue = currentUser?.isAdmin ?? false;
 
   try {
     if (Number.isNaN(Number(userId))) {

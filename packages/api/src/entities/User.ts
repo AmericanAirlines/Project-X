@@ -3,7 +3,7 @@ import { Entity, Property } from '@mikro-orm/core';
 import { ConstructorValues } from '../utils/types';
 import { Node } from './Node';
 
-export type UserConstructorValues = ConstructorValues<User>;
+export type UserConstructorValues = ConstructorValues<User, never, 'isAdmin'>;
 
 @Entity()
 export class User extends Node<User> {
@@ -51,6 +51,6 @@ export class User extends Node<User> {
     this.hireable = hireable;
     this.purpose = purpose;
     this.githubId = githubId;
-    this.isAdmin = isAdmin;
+    this.isAdmin = isAdmin ?? false;
   }
 }
