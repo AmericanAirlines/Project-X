@@ -3,20 +3,20 @@ import { Box, useTheme, Link } from '@chakra-ui/react';
 
 export interface RepoBoxProps {
   repolist: {
-    id: React.Key | undefined;
+    id: string;
     name: string;
     html_url: string;
     stargazers_count: Number;
     language: string;
     description: string | null;
-  };
+  }
 }
 
-export const RepoBox: React.FC<RepoBoxProps> = ({ repolist }) => {
+export const RepoBox: React.FC<RepoBoxProps> = ( {repolist} ) => {
   const theme = useTheme();
   return (
     <Box maxW="sm" borderWidth="1px" borderRadius="lg" overflow="hidden" key={repolist.id}>
-      {' '}
+      
       <Box p="6">
         <Box
           color="gray.500"
@@ -39,7 +39,7 @@ export const RepoBox: React.FC<RepoBoxProps> = ({ repolist }) => {
         >
           <Link href={repolist.html_url} isExternal>
             {repolist.name}
-          </Link>{' '}
+          </Link>
         </Box>
         <Box mt="1">☆ {repolist.stargazers_count}</Box>
         <Box mt="1" color="gray" fontSize="xs">

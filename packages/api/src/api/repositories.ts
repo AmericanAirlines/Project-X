@@ -19,7 +19,7 @@ repos.get('/:repoId', async (req, res) => {
   const { repoId } = req.params;
 
   try {
-    // Check if videoId is in the expected format
+    // Check if repoId is in the expected format
     if (Number.isNaN(Number(repoId))) {
       res.status(400).send(`"${repoId}" is not a valid id, it must be a number.`);
       return;

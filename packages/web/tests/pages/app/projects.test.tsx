@@ -3,19 +3,16 @@ import fetchMock from 'fetch-mock-jest';
 import { render, screen, act } from '../../testUtils/testTools';
 import { getMock } from '../../testUtils/getMock';
 import { AppLayout } from '../../../src/components/Layout';
-import SearchBar from '../../../src/pages/app/repositories';
-import { Box } from '@chakra-ui/layout';
+import Projects from '../../../src/pages/app/projects';
 import { RepoBox } from '../../../src/components/Repos';
-import { RepoList } from '../../../src/pages/app/repositories';
+import { RepoList } from '../../../src/pages/app/projects';
 
 jest.mock('../../../src/components/Layout/AppLayout.tsx');
 getMock(AppLayout).mockImplementation(({ children }) => <>{children}</>);
 
 jest.mock('../../../src/components/Repos/RepoBox.tsx');
 getMock(RepoBox).mockImplementation(({ repolist }) => (
-  <Box>
-    <Box>Box Row</Box>
-  </Box>
+  <p>Box Row</p>
 ));
 
 const repo1: RepoList = {
@@ -45,41 +42,27 @@ describe('repo page', () => {
     fetchMock.reset();
   });
 
-  it('renders', async () => {
-    fetchMock.get(`https://api.github.com/users/AmericanAirlines/repos`, []);
-
-    expect(() => render(<SearchBar />)).not.toThrow();
-
-    // Wait for fetch
-    await act(wait);
-
-    expect(screen.getByText('Repo Search')).toBeVisible();
-  });
-
   it('renders the table properly when no repo are returned', async () => {
-    fetchMock.get(`https://api.github.com/users/AmericanAirlines/repos`, []);
+    fetchMock.get(`/api/repositories`, []);
 
-    expect(() => render(<SearchBar />)).not.toThrow();
+    expect(() => render(<Projects />)).not.toThrow();
 
     // Wait for fetch
     await act(wait);
-
-    expect(screen.getByText('Repo Search')).toBeVisible();
 
     expect(RepoBox).toBeCalledTimes(0);
-    expect(screen.getByText('No repos found')).toBeVisible();
+    expect(screen.getByText('No Projects Found')).toBeVisible();
   });
 
+  
   it('renders the table properly when repo are returned', async () => {
-    fetchMock.get('/api/videos', [repo1, repo2]);
 
-    expect(() => render(<SearchBar />)).not.toThrow();
+    fetchMock.mock().getOnce(`/api/repositories`, [repo1, repo2]);
+    expect(() => render(<Projects />)).not.toThrow();
 
     // Wait for fetch
     await act(wait);
 
-    expect(screen.getByText('Repo Search')).toBeVisible();
-
-    expect(screen.getAllByDisplayValue('Box Row').length).toEqual(2);
+    expect(screen.getAllByText('Box Row').length).toEqual(2);
   });
 });

@@ -4,6 +4,7 @@ import { auth } from './auth';
 import { health } from './health';
 import { users } from './users';
 import { videos } from './videos';
+import { repos } from './repositories';
 
 export const api = Router();
 
@@ -12,3 +13,4 @@ api.use('/users', users);
 api.use('/videos', videos);
 api.use('/auth', auth);
 api.use('/users', users);
+api.use('/repositories', repos);
