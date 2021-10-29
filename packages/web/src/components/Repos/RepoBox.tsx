@@ -4,11 +4,11 @@ import { Box, useTheme, Link } from '@chakra-ui/react';
 export interface RepoBoxProps {
   repolist: {
     id: React.Key | undefined;
-  name: string;
-  html_url: string;
-  stargazers_count: Number;
-  language: string;
-  description: string | null;
+    name: string;
+    html_url: string;
+    stargazers_count: Number;
+    language: string;
+    description: string | null;
   };
 }
 
