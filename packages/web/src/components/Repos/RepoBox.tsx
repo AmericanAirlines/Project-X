@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, useTheme, Link } from '@chakra-ui/react';
+import { Box, Link } from '@chakra-ui/react';
 
 export interface RepoBoxProps {
   repolist: {
@@ -13,7 +13,6 @@ export interface RepoBoxProps {
 }
 
 export const RepoBox: React.FC<RepoBoxProps> = ( {repolist} ) => {
-  const theme = useTheme();
   return (
     <Box maxW="sm" borderWidth="1px" borderRadius="lg" overflow="hidden" key={repolist.id}>
       
