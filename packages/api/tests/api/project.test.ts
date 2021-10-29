@@ -5,7 +5,6 @@ import logger from '../../src/logger';
 import { testHandler } from '../testUtils/testHandler';
 
 const loggerSpy = jest.spyOn(logger, 'error').mockImplementation();
-// const mockFetch = jest.fn(fetch);
 
 interface MockProjectEntity {
     nodeID: string,
