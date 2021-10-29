@@ -1,17 +1,17 @@
 import { Router } from 'express';
-import { Repository } from '../entities/Repository';
+import { Project } from '../entities/Project';
 import logger from '../logger';
 import { env } from '../env';
 
-export const repository = Router();
+export const project = Router();
 
-repository.get('/', async (req, res) => {
+project.get('/', async (req, res) => {
     try {
-      const repositoryList = await req.entityManager.find(Repository, {});
+      const projectList = await req.entityManager.find(Project, {});
       
       const repoNodeIds: string[] = [];
 
-      repositoryList.forEach(repo => repoNodeIds.push(repo.nodeID));
+      projectList.forEach(repo => repoNodeIds.push(repo.nodeID));
 
       // Put in a utility
       const fetchRes = await fetch('https://api.github.com/graphql', {
@@ -43,7 +43,8 @@ repository.get('/', async (req, res) => {
       
     }
     catch(error) {
-        logger.error(`There was an issue getting the repositories`, error);
-        res.status(500).send(`There was an issue getting the repositories`);
+        const errorMessage = "There was an issue getting the projects";
+        logger.error(errorMessage, error);
+        res.status(500).send(errorMessage);
     }  
 });

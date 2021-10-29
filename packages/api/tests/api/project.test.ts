@@ -1,0 +1,70 @@
+import fetchMock from 'fetch-mock-jest';
+import { project } from '../../src/api/project';
+import { Project } from '../../src/entities/Project';
+import logger from '../../src/logger';
+import { testHandler } from '../testUtils/testHandler';
+
+const loggerSpy = jest.spyOn(logger, 'error').mockImplementation();
+// const mockFetch = jest.fn(fetch);
+
+interface MockProjectEntity {
+    nodeID: string,
+}
+
+interface MockProjectDetails {
+    url: string;
+    name: string;
+    stargazer_count: number;
+}
+
+const MockProjectList: MockProjectEntity[] = [{nodeID: "VeryGreatRepo"}, {nodeID: "EvenBetterRepo"}];
+
+const MockProjectResults: MockProjectDetails[] = [
+    {url: "www.github.com/AmericanAirlines/VeryLargePlane", name: "VeryLargePlane", stargazer_count: 12345},
+    {url: "www.github.com/AmericanAirlines/EvenBiggerPlane", name: "EvenBiggerPlane", stargazer_count: 54321}
+];
+
+const MockBody = {
+    query: `
+            query ($id: [ID!]!){
+              nodes(ids: $id){
+                ...on Repository{
+                  name
+                  url
+                  stargazerCount
+                }
+              }
+            }
+            `,
+    variables: {
+        id: MockProjectList,
+    }
+}
+
+describe("Project GET route", () => {
+    beforeEach(async() => {
+        jest.clearAllMocks();
+        fetchMock.reset();
+    })
+
+    it("error on find returns 500 status code", async () => {
+        const handler = testHandler(project);
+        handler.entityManager.find.mockRejectedValueOnce(new Error("here was an issue getting the projects"));
+
+        const { text } = await handler.get('/').expect(500);
+        expect(text).toEqual("here was an issue getting the projects");
+        expect(loggerSpy).toBeCalledTimes(1);
+    });
+
+    it("Successful fetch from GitHub", async () => {
+        const handler = testHandler(project);
+        handler.entityManager.find.mockResolvedValueOnce(MockProjectList);
+
+        fetchMock.post("https://api.github.com/graphql", MockProjectResults); // <- works
+
+        const { body } = await handler.get('/').expect(200);
+        expect(body).toEqual(MockProjectResults);
+        expect(fetchMock).toHaveLastFetched("https://api.github.com/graphql", 'post');
+        expect(fetchMock).toHaveFetchedTimes(1);        
+    });
+});
