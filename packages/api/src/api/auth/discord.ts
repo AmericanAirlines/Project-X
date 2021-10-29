@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import { URLSearchParams } from 'url';
+import { User } from '../../entities/User';
 import { env } from '../../env';
 import logger from '../../logger';
 
@@ -11,6 +12,15 @@ export interface DiscordAccessTokenResponse {
   refresh_token: string;
   scope: string;
   token_type: string;
+}
+
+export interface PassportData {
+  user: string;
+}
+
+export interface SessionData {
+  cookies: {};
+  passport: PassportData;
 }
 
 discord.get('/discord/login', (_req, res) => {
@@ -46,14 +56,23 @@ discord.get('/discord/callback', async (req, res) => {
         },
       });
 
-      const userData = await userResponse.json();
+      const { id: discordId } = await userResponse.json();
 
-      // TODO: Update User row with Discord ID
-      res.send(userData);
+      const { passport } = req.session as unknown as SessionData;
+      const { user: userGithubId } = passport as PassportData;
+      const user = await req.entityManager.findOne(User, { githubId: userGithubId });
+
+      if (user) {
+        user.discordId = discordId;
+        void req.entityManager.flush();
+        res.redirect('/app/community', 200);
+      } else {
+        res.redirect('/app/community', 400);
+      }
     } catch (error) {
       const userRetrievalErrorString = 'There was an issue getting Discord user information';
       logger.error(userRetrievalErrorString, error);
-      res.status(500).send(userRetrievalErrorString);
+      res.status(400).send(userRetrievalErrorString);
     }
   } else {
     const discordAuthErrorString = 'There was an issue authrozing with Discord';
