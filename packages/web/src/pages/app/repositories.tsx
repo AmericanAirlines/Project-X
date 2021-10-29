@@ -66,9 +66,7 @@ const SearchBar: NextPage = () => {
 
       <SimpleGrid padding="4px" minChildWidth="250px" spacing="15px">
         {repos.length != 0 ? (
-          repos.map((repolist) => (
-              <RepoBox key={repolist.id} repolist={repolist} />
-            ))
+          repos.map((repolist) => <RepoBox key={repolist.id} repolist={repolist} />)
         ) : (
           <Box fontSize="large">No repos found</Box>
         )}

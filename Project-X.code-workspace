@@ -31,6 +31,5 @@
     "jest.disabledWorkspaceFolders": ["root"],
     "liveServer.settings.multiRootWorkspaceName": "root",
     "typescript.tsdk": "root/node_modules/typescript/lib",
-    "liveshare.allowGuestDebugControl": true
   }
 }

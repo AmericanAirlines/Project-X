@@ -15,7 +15,6 @@ jest.mock('../../../src/components/Repos/RepoBox.tsx');
 getMock(RepoBox).mockImplementation(({ repolist }) => (
   <Box>
     <Box>Box Row</Box>
-   
   </Box>
 ));
 
@@ -71,20 +70,16 @@ describe('repo page', () => {
     expect(screen.getByText('No repos found')).toBeVisible();
   });
 
+  it('renders the table properly when repo are returned', async () => {
+    fetchMock.get('/api/videos', [repo1, repo2]);
 
-it('renders the table properly when repo are returned', async () => {
-  fetchMock.get('/api/videos', [repo1, repo2]);
+    expect(() => render(<SearchBar />)).not.toThrow();
 
-  expect(() => render(<SearchBar />)).not.toThrow();
+    // Wait for fetch
+    await act(wait);
 
-  // Wait for fetch
-  await act(wait);
+    expect(screen.getByText('Repo Search')).toBeVisible();
 
-  expect(screen.getByText('Repo Search')).toBeVisible();
-
-
-  // expect(screen.getAllByDisplayValue('Box Row').length).toEqual(2);
+    // expect(screen.getAllByDisplayValue('Box Row').length).toEqual(2);
   });
 });
-
-
