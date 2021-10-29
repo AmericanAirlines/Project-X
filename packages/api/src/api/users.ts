@@ -1,46 +1,79 @@
 import express, { Router } from 'express';
-import { User } from '../entities/User';
+import { User, UserConstructorValues } from '../entities/User';
 import logger from '../logger';
 
 export const users = Router();
 users.use(express.json());
 
-users.post('', async (req, res) => {
-  try {
-    const user1 = req.body;
-
-    const user = new User(user1);
-    // const something = req.entityManager.create(User, user1);
-
-    void req.entityManager.persistAndFlush(user);
-
-    res.status(201).send();
-  } catch (error) {
-    logger.error('There was an issue geting all videos: ', error);
-    res.status(500).send('Couldnt save the user');
-  }
+const stripSensitiveFields = (user: User): Partial<User> => ({
+  name: user.name,
+  pronouns: user.pronouns,
+  schoolName: user.schoolName,
+  githubId: user.githubId,
 });
 
-users.get('/:gitHubId', async (req, res) => {
-  const { gitHubId } = req.params;
+users.get('/:userId', async (req, res) => {
+  const { userId } = req.params;
 
   try {
-    // Check if videoId is in the expected format
-    if (Number.isNaN(Number(gitHubId))) {
-      res.status(400).send(`"${gitHubId}" is not a valid id, it must be a number.`);
+    // Check if userId is in correct format
+    if (Number.isNaN(Number(userId))) {
+      res.status(400).send(`"${userId}" is not a valid id, it must be a number.`);
       return;
     }
 
-    const user = await req.entityManager.findOne(User, { gitHubId });
+    const user = await req.entityManager.findOne(User, { id: userId });
+
+    // Check if user exists
+    if (!user) {
+      res.sendStatus(404);
+      return;
+    }
+
+    // Return stripped user information
+    res.status(200).send(stripSensitiveFields(user));
+  } catch (error) {
+    logger.error(`There was an issue getting user "${userId}"`, error);
+    res.status(500).send(`There was an issue getting user "${userId}"`);
+  }
+});
+
+users.patch('/:userId', async (req, res) => {
+  const { userId } = req.params;
+
+  try {
+    if (Number.isNaN(Number(userId))) {
+      res.status(400).send(`"${userId}" is not a valid id, it must be a number.`);
+      return;
+    }
+
+    const user = await req.entityManager.findOne(User, { id: userId });
 
     if (!user) {
       res.sendStatus(404);
       return;
     }
 
-    res.status(200).send(user);
+    const editableFields: Array<keyof UserConstructorValues> = ['name', 'pronouns', 'schoolName'];
+
+    // Create new patch object only containing fields that are in `editableFields`
+    const sanitizedUser = Object.entries(req.body).reduce((acc, [key, value]) => {
+      if (editableFields.includes(key as keyof UserConstructorValues)) {
+        return {
+          ...acc,
+          [key]: value,
+        };
+      }
+      return acc;
+    }, {} as UserConstructorValues);
+
+    user.assign(sanitizedUser);
+
+    await req.entityManager.flush();
+
+    res.send(user);
   } catch (error) {
-    logger.error(`There was an issue geting user "${gitHubId}"`, error);
-    res.status(500).send(`There was an issue geting user "${gitHubId}"`);
+    logger.error(`There was an issue updating user "${userId}"`, error);
+    res.status(500).send(`There was an issue updating user "${userId}"`);
   }
 });

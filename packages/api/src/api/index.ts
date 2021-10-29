@@ -11,3 +11,4 @@ api.use('/health', health);
 api.use('/users', users);
 api.use('/videos', videos);
 api.use('/auth', auth);
+api.use('/users', users);

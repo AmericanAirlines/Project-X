@@ -11,12 +11,35 @@ export class User extends Node<User> {
   name: string;
 
   @Property({ columnType: 'text' })
-  gitHubId: string;
+  githubId: string;
 
-  constructor({ name, gitHubId, ...extraValues }: UserConstructorValues) {
+  @Property({ columnType: 'text', nullable: true })
+  pronouns?: string;
+
+  @Property({ columnType: 'text', nullable: true })
+  location?: string;
+
+  @Property({ columnType: 'boolean' })
+  hireable: boolean;
+
+  @Property({ columnType: 'text' })
+  purpose: string;
+
+  @Property({ columnType: 'text', nullable: true })
+  schoolName?: string;
+
+  @Property({ columnType: 'text', nullable: true })
+  major?: string;
+
+  @Property({ columnType: 'Date', nullable: true })
+  graduationDate?: Date;
+
+  constructor({ name, githubId, hireable, purpose, ...extraValues }: UserConstructorValues) {
     super(extraValues);
 
     this.name = name;
-    this.gitHubId = gitHubId;
+    this.hireable = hireable;
+    this.purpose = purpose;
+    this.githubId = githubId;
   }
 }
