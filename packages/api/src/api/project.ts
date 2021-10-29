@@ -5,7 +5,7 @@ import { env } from '../env';
 
 export const project = Router();
 
-project.get('/', async (req, res) => {
+project.get('', async (req, res) => {
     try {
       const projectList = await req.entityManager.find(Project, {});
       
