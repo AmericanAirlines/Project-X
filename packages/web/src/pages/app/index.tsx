@@ -1,6 +1,5 @@
 import { NextPage } from 'next';
-import { Button, Spacer, Link, Heading, HStack, Text, VStack } from '@chakra-ui/react';
-import { GiCrossFlare } from 'react-icons/gi';
+import { Heading } from '@chakra-ui/react';
 import { AppLayout } from '../../components/Layout';
 
 const AppHome: NextPage = () => {
