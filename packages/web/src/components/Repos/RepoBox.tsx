@@ -9,13 +9,12 @@ export interface RepoBoxProps {
     stargazers_count: Number;
     language: string;
     description: string | null;
-  }
+  };
 }
 
-export const RepoBox: React.FC<RepoBoxProps> = ( {repolist} ) => {
+export const RepoBox: React.FC<RepoBoxProps> = ({ repolist }) => {
   return (
     <Box maxW="sm" borderWidth="1px" borderRadius="lg" overflow="hidden" key={repolist.id}>
-      
       <Box p="6">
         <Box
           color="gray.500"

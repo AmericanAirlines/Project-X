@@ -11,9 +11,7 @@ jest.mock('../../../src/components/Layout/AppLayout.tsx');
 getMock(AppLayout).mockImplementation(({ children }) => <>{children}</>);
 
 jest.mock('../../../src/components/Repos/RepoBox.tsx');
-getMock(RepoBox).mockImplementation(({ repolist }) => (
-  <p>Box Row</p>
-));
+getMock(RepoBox).mockImplementation(({ repolist }) => <p>Box Row</p>);
 
 const repo1: RepoList = {
   id: '1',
@@ -54,9 +52,7 @@ describe('repo page', () => {
     expect(screen.getByText('No Projects Found')).toBeVisible();
   });
 
-  
   it('renders the table properly when repo are returned', async () => {
-
     fetchMock.mock().getOnce(`/api/repositories`, [repo1, repo2]);
     expect(() => render(<Projects />)).not.toThrow();
 

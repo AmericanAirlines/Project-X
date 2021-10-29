@@ -10,7 +10,6 @@ export interface VideoTableRowProps {
 }
 
 export const VideoTableRow: React.FC<VideoTableRowProps> = ({ video }) => {
-
   // Convert durationInSeconds
   var hours = Math.floor(video.durationInSeconds / 3600);
   var minutes = Math.floor((video.durationInSeconds - hours * 3600) / 60);

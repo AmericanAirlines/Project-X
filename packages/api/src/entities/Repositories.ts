@@ -7,7 +7,6 @@ export type RepoListConstructorValues = ConstructorValues<RepoList>;
 
 @Entity()
 export class RepoList extends Node<RepoList> {
-
   @Property({ columnType: 'int' })
   stargazers_count: number;
 
