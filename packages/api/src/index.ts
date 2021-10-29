@@ -22,7 +22,7 @@ const authRequired: Handler = (req, res, next) => {
   if (req.user) {
     next();
   } else {
-    res.redirect('/api/auth/github/login'); // 401
+    res.redirect('/api/auth/github/login');
   }
 };
 
@@ -61,7 +61,6 @@ passport.use(
     },
     async (accessToken: any, refreshToken: any, profile: any, done: any) => {
       const currentUser = await authEm?.findOne(User, {
-        name: profile.username,
         githubId: profile.id,
       });
       if (!currentUser) {
