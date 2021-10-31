@@ -40,8 +40,7 @@ users.get('/:userId', async (req, res) => {
 });
 
 users.patch('/:userId', async (req, res) => {
-  if(req.user)
-  {
+  if (req.user) {
     const { userId } = req.params;
 
     const currentUser = await req.entityManager.findOne(User, { githubId: req.user.id });
@@ -83,7 +82,5 @@ users.patch('/:userId', async (req, res) => {
       logger.error(`There was an issue updating user "${userId}"`, error);
       res.status(500).send(`There was an issue updating user "${userId}"`);
     }
-  }
-  else
-    res.sendStatus(401);
+  } else res.sendStatus(401);
 });
