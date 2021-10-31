@@ -1,21 +1,21 @@
 import { Router } from 'express';
 import { Project } from '../entities/Project';
 import logger from '../logger';
-import { env } from '../env';
 
 export const project = Router();
 
 project.get('', async (req, res) => {
+  if(req.user)
+  {
     try {
       const projectList = await req.entityManager.find(Project, {});
-      
-      const repoNodeIds = projectList.map(project => project.nodeID);
+      const repoNodeIds = projectList.map(repo => repo.nodeID);
 
       const fetchRes = await fetch('https://api.github.com/graphql', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `bearer ${req.user?.githubToken}`,
+          'Authorization': `bearer ${req.user.githubToken}`,
         },
         body: JSON.stringify({
           query: `
@@ -44,4 +44,8 @@ project.get('', async (req, res) => {
         logger.error(errorMessage, error);
         res.status(500).send(errorMessage);
     }  
+  }
+  else {
+    res.send(401);
+  }
 });
