@@ -3,7 +3,7 @@ import { Entity, Property } from '@mikro-orm/core';
 import { ConstructorValues } from '../utils/types';
 import { Node } from './Node';
 
-export type UserConstructorValues = ConstructorValues<User>;
+export type UserConstructorValues = ConstructorValues<User, never, 'isAdmin'>;
 
 @Entity()
 export class User extends Node<User> {
@@ -34,12 +34,23 @@ export class User extends Node<User> {
   @Property({ columnType: 'Date', nullable: true })
   graduationDate?: Date;
 
-  constructor({ name, githubId, hireable, purpose, ...extraValues }: UserConstructorValues) {
+  @Property({ columnType: 'boolean' })
+  isAdmin: boolean;
+
+  constructor({
+    name,
+    githubId,
+    hireable,
+    purpose,
+    isAdmin,
+    ...extraValues
+  }: UserConstructorValues) {
     super(extraValues);
 
     this.name = name;
     this.hireable = hireable;
     this.purpose = purpose;
     this.githubId = githubId;
+    this.isAdmin = isAdmin ?? false;
   }
 }

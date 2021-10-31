@@ -14,13 +14,15 @@ import { User } from './entities/User';
 const app = express();
 const port = Number(env.port ?? '') || 3000;
 const dev = env.nodeEnv === 'development';
+app.use(express.json());
+
 const GitHubStrategy = require('passport-github2');
 
 const authRequired: Handler = (req, res, next) => {
   if (req.user) {
     next();
   } else {
-    res.redirect('/api/auth/github/login'); // 401
+    res.redirect('/api/auth/github/login');
   }
 };
 
@@ -59,7 +61,6 @@ passport.use(
     },
     async (accessToken: any, refreshToken: any, profile: any, done: any) => {
       const currentUser = await authEm?.findOne(User, {
-        name: profile.username,
         githubId: profile.id,
       });
       if (!currentUser) {
