@@ -5,17 +5,16 @@ import logger from '../logger';
 export const project = Router();
 
 project.get('', async (req, res) => {
-  if(req.user)
-  {
+  if (req.user) {
     try {
       const projectList = await req.entityManager.find(Project, {});
-      const repoNodeIds = projectList.map(repo => repo.nodeID);
+      const repoNodeIds = projectList.map((repo) => repo.nodeID);
 
       const fetchRes = await fetch('https://api.github.com/graphql', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `bearer ${req.user.githubToken}`,
+          Authorization: `bearer ${req.user.githubToken}`,
         },
         body: JSON.stringify({
           query: `
@@ -30,22 +29,19 @@ project.get('', async (req, res) => {
               }
             }
             `,
-            variables: {
-              id: repoNodeIds,
-            }
+          variables: {
+            id: repoNodeIds,
+          },
         }),
-    });
-    
-    res.status(fetchRes.status).send(await fetchRes.json());
-      
+      });
+
+      res.status(fetchRes.status).send(await fetchRes.json());
+    } catch (error) {
+      const errorMessage = 'There was an issue getting the projects';
+      logger.error(errorMessage, error);
+      res.status(500).send(errorMessage);
     }
-    catch(error) {
-        const errorMessage = "There was an issue getting the projects";
-        logger.error(errorMessage, error);
-        res.status(500).send(errorMessage);
-    }  
-  }
-  else {
-    res.send(401);
+  } else {
+    res.sendStatus(401);
   }
 });

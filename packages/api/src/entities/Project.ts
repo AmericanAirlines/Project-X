@@ -7,12 +7,11 @@ export type ProjectConstructorValues = ConstructorValues<Project>;
 
 @Entity()
 export class Project extends Node<Project> {
-    @Property({ columnType: 'text' })
-    nodeID: string;
+  @Property({ columnType: 'text' })
+  nodeID: string;
 
-    constructor({ nodeID, ...extraValues }: ProjectConstructorValues)
-    {
-        super(extraValues);
-        this.nodeID = nodeID;
-    }
+  constructor({ nodeID, ...extraValues }: ProjectConstructorValues) {
+    super(extraValues);
+    this.nodeID = nodeID;
+  }
 }
