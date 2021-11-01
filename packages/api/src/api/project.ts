@@ -4,8 +4,8 @@ import logger from '../logger';
 
 export const project = Router();
 
-project.post('/:owner/:repo', async (req, res) => {
-  const { owner, repo } = req.params;
+project.post('', async (req, res) => {
+  const { owner, repo } = req.body;
     try {
       const fetchRes = await fetch('https://api.github.com/graphql', {
         method: 'POST',
