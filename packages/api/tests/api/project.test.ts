@@ -7,18 +7,17 @@ import { testHandler } from '../testUtils/testHandler';
 const loggerSpy = jest.spyOn(logger, 'error').mockImplementation();
 
 const mockBody = {
-  owner: "AmericanWaterlines",
-  repo: "NiceBoat"
-}
+  owner: 'AmericanWaterlines',
+  repo: 'NiceBoat',
+};
 
-const mockValidResponse =
-{
+const mockValidResponse = {
   data: {
     repository: {
       id: 'VeryGreatRepo',
-    }
-  }
-}
+    },
+  },
+};
 
 describe('Project POST route', () => {
   beforeEach(async () => {
@@ -32,7 +31,7 @@ describe('Project POST route', () => {
       next();
     });
 
-    fetchMock.post('https://api.github.com/graphql', {errors: {status: 404}});
+    fetchMock.post('https://api.github.com/graphql', { errors: { status: 404 } });
 
     const { text } = await handler.post('').send(mockBody).expect(404);
     expect(text).toEqual('The repository could not be found');
@@ -48,9 +47,11 @@ describe('Project POST route', () => {
       next();
     });
 
-    fetchMock.post('https://api.github.com/graphql', {data: {repository: mockValidResponse}});
+    fetchMock.post('https://api.github.com/graphql', { data: { repository: mockValidResponse } });
 
-    handler.entityManager.persistAndFlush.mockRejectedValueOnce(new Error("An error has occurred during persistAndFlush"));
+    handler.entityManager.persistAndFlush.mockRejectedValueOnce(
+      new Error('An error has occurred during persistAndFlush'),
+    );
 
     const { text } = await handler.post('').send(mockBody).expect(500);
     expect(text).toEqual('There was an issue adding the project to the database');
@@ -91,7 +92,9 @@ describe('Project POST route', () => {
 
     fetchMock.post('https://api.github.com/graphql', mockValidResponse);
 
-    handler.entityManager.findOne.mockResolvedValueOnce(new Project({nodeID: mockValidResponse.data.repository.id}));
+    handler.entityManager.findOne.mockResolvedValueOnce(
+      new Project({ nodeID: mockValidResponse.data.repository.id }),
+    );
 
     const { body } = await handler.post('').send(mockBody).expect(200);
 

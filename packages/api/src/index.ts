@@ -73,9 +73,9 @@ passport.use(
           purpose: '',
         });
         await authEm?.persistAndFlush(newUser);
-        done(null, { profile, githubToken: accessToken});
+        done(null, { profile, githubToken: accessToken });
       } else {
-        done(null, { profile, githubToken: accessToken});
+        done(null, { profile, githubToken: accessToken });
       }
     },
   ),
