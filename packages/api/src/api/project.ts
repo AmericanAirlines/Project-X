@@ -36,7 +36,8 @@ project.post('', async (req, res) => {
       }
       else
       {      
-        if (!(await req.entityManager.findOne(Project, { nodeID: responseData.data.repository.id }))) 
+        const existingProject = await req.entityManager.findOne(Project, { nodeID: responseData.data.repository.id });
+        if (!existingProject) 
         {
           const newProject = new Project({ nodeID: responseData.data.repository.id });
           await req.entityManager.persistAndFlush(newProject);
