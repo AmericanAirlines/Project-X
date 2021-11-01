@@ -1,5 +1,5 @@
 import { extendTheme, Theme, ThemeConfig, DeepPartial } from '@chakra-ui/react';
-import { mode } from '@chakra-ui/theme-tools';
+import { mode, StyleFunctionProps } from '@chakra-ui/theme-tools';
 
 const config: ThemeConfig = {
   useSystemColorMode: true,
@@ -13,16 +13,16 @@ export const theme = extendTheme({
     },
   },
   components: {
-    Link: {
+    Link: (props: StyleFunctionProps) => ({
       variants: {
         navbar: {
-          backgroundColor: mode('gray.100', 'gray.900'),
+          backgroundColor: mode('gray.100', 'gray.900')(props),
           px: 2,
           py: 4,
           rounded: 'md',
           _hover: {
             textDecoration: 'none',
-            backgroundColor: mode('gray.200', 'gray.700'),
+            backgroundColor: mode('gray.200', 'gray.700')(props),
           },
         },
         navbarMenuItem: {
@@ -31,7 +31,7 @@ export const theme = extendTheme({
           },
         },
       },
-    },
+    }),
     Menu: {
       parts: ['button'],
       variants: {

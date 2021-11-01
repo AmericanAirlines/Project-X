@@ -49,7 +49,7 @@ discord.get('/discord/callback', async (req, res) => {
 
       const { id: discordId } = await userResponse.json();
 
-      const user = await req.entityManager.findOne(User, { githubId: req.user });
+      const user = await req.entityManager.findOne(User, { githubId: req.user?.profile.id });
 
       if (user) {
         user.discordId = discordId;
