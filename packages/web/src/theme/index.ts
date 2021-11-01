@@ -1,5 +1,5 @@
 import { extendTheme, Theme, ThemeConfig, DeepPartial } from '@chakra-ui/react';
-import { mode, StyleFunctionProps } from '@chakra-ui/theme-tools';
+import { mode } from '@chakra-ui/theme-tools';
 
 const config: ThemeConfig = {
   useSystemColorMode: true,
