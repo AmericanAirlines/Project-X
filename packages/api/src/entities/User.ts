@@ -13,6 +13,9 @@ export class User extends Node<User> {
   @Property({ columnType: 'text' })
   githubId: string;
 
+  @Property({ columnType: 'text' })
+  discordId?: string;
+
   @Property({ columnType: 'text', nullable: true })
   pronouns?: string;
 
