@@ -82,5 +82,7 @@ users.patch('/:userId', async (req, res) => {
       logger.error(`There was an issue updating user "${userId}"`, error);
       res.status(500).send(`There was an issue updating user "${userId}"`);
     }
-  } else res.sendStatus(401);
+  } else {
+    res.sendStatus(401);
+  }
 });
