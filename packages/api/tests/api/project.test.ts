@@ -6,31 +6,17 @@ import { testHandler } from '../testUtils/testHandler';
 
 const loggerSpy = jest.spyOn(logger, 'error').mockImplementation();
 
+const mockBody = {
+  owner: "AmericanWaterlines",
+  repo: "NiceBoat"
+}
+
 const mockValidResponse =
 {
   data: {
     repository: {
       id: 'VeryGreatRepo',
     }
-  }
-}
-
-const mockHeaders = {
-  'Content-Type': 'application/json',
-  'Authorization': `bearer `,
-}
-
-const mockBody = {
-  query: `
-          query ($ownerName: String!, $repoName: String!) {
-            repository(owner:$ownerName, name:$repoName) {
-              id
-            }
-          }
-          `,
-  variables: {
-    ownerName: "owner",
-    repoName: "repo"
   }
 }
 
@@ -41,11 +27,14 @@ describe('Project POST route', () => {
   });
 
   it('404 error when given invalid owner and/or repo name', async () => {
-    const handler = testHandler(project);
+    const handler = testHandler(project, (req, _res, next) => {
+      req.user = { githubToken: 'abcd123', profile: { id: 'aaa' } };
+      next();
+    });
 
     fetchMock.post('https://api.github.com/graphql', {errors: {status: 404}});
 
-    const { text } = await handler.post('/AmericanWaterlines/NiceBoat').expect(404);
+    const { text } = await handler.post('').send(mockBody).expect(404);
     expect(text).toEqual('The repository could not be found');
 
     expect(fetchMock).toHaveFetchedTimes(1);
@@ -54,13 +43,16 @@ describe('Project POST route', () => {
   });
 
   it('500 error when error occurs during persistAndFlush', async () => {
-    const handler = testHandler(project);
+    const handler = testHandler(project, (req, _res, next) => {
+      req.user = { githubToken: 'abcd123', profile: { id: 'aaa' } };
+      next();
+    });
 
     fetchMock.post('https://api.github.com/graphql', {data: {repository: mockValidResponse}});
 
     handler.entityManager.persistAndFlush.mockRejectedValueOnce(new Error("An error has occurred during persistAndFlush"));
 
-    const { text } = await handler.post('/AmericanAirlines/VeryLargePlane').expect(500);
+    const { text } = await handler.post('').send(mockBody).expect(500);
     expect(text).toEqual('There was an issue adding the project to the database');
 
     expect(handler.entityManager.findOne).toBeCalledTimes(1);
@@ -72,13 +64,16 @@ describe('Project POST route', () => {
   });
 
   it('Successful fetch and project not already in database', async () => {
-    const handler = testHandler(project);
+    const handler = testHandler(project, (req, _res, next) => {
+      req.user = { githubToken: 'abcd123', profile: { id: 'aaa' } };
+      next();
+    });
 
     fetchMock.post('https://api.github.com/graphql', mockValidResponse);
 
     handler.entityManager.findOne.mockResolvedValueOnce(null);
 
-    const { body } = await handler.post('/AmericanAirlines/VeryLargePlane').expect(200);
+    const { body } = await handler.post('').send(mockBody).expect(200);
 
     expect(body).toEqual(mockValidResponse);
 
@@ -89,13 +84,16 @@ describe('Project POST route', () => {
   });
 
   it('Successful fetch and project is already in database', async () => {
-    const handler = testHandler(project);
+    const handler = testHandler(project, (req, _res, next) => {
+      req.user = { githubToken: 'abcd123', profile: { id: 'aaa' } };
+      next();
+    });
 
     fetchMock.post('https://api.github.com/graphql', mockValidResponse);
 
     handler.entityManager.findOne.mockResolvedValueOnce(new Project({nodeID: mockValidResponse.data.repository.id}));
 
-    const { body } = await handler.post('/AmericanAirlines/VeryLargePlane').expect(200);
+    const { body } = await handler.post('').send(mockBody).expect(200);
 
     expect(body).toEqual(mockValidResponse);
 
@@ -103,5 +101,13 @@ describe('Project POST route', () => {
     expect(handler.entityManager.persistAndFlush).toBeCalledTimes(0);
 
     expect(fetchMock).toHaveFetchedTimes(1);
+  });
+
+  it('401 Unauthorized Access', async () => {
+    const handler = testHandler(project);
+
+    fetchMock.post('https://api.github.com/graphql', mockValidResponse);
+    await handler.post('').expect(401);
+    expect(fetchMock).toHaveFetchedTimes(0);
   });
 });
