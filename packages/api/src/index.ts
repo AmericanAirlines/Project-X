@@ -22,7 +22,7 @@ const authRequired: Handler = (req, res, next) => {
   if (req.user) {
     next();
   } else {
-    res.redirect('/api/auth/github/login'); // 401
+    res.redirect('/api/auth/github/login');
   }
 };
 
@@ -45,11 +45,11 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 passport.serializeUser((user: any, done) => {
-  done(null, user.id);
+  done(null, user);
 });
 
-passport.deserializeUser((id: string, done) => {
-  done(null, id);
+passport.deserializeUser((user: any, done) => {
+  done(null, user);
 });
 
 passport.use(
@@ -61,7 +61,6 @@ passport.use(
     },
     async (accessToken: any, refreshToken: any, profile: any, done: any) => {
       const currentUser = await authEm?.findOne(User, {
-        name: profile.username,
         githubId: profile.id,
       });
       if (!currentUser) {
@@ -73,9 +72,9 @@ passport.use(
           purpose: '',
         });
         await authEm?.persistAndFlush(newUser);
-        done(null, profile);
+        done(null, { profile, githubToken: accessToken });
       } else {
-        done(null, profile);
+        done(null, { profile, githubToken: accessToken });
       }
     },
   ),

@@ -8,12 +8,13 @@ const sampleUser: Partial<User> = {
   pronouns: 'he/him',
   schoolName: 'Science School',
   assign: jest.fn(),
+  isAdmin: false,
   githubId: '234234',
 };
 
 const loggerSpy = jest.spyOn(logger, 'error').mockImplementation();
 
-describe('/users', () => {
+describe('users API GET route', () => {
   beforeEach(async () => {
     jest.clearAllMocks();
   });
@@ -55,13 +56,16 @@ describe('/users', () => {
   });
 });
 
-describe('/users/:userId', () => {
+describe('users API PATCH route', () => {
   beforeEach(async () => {
     jest.clearAllMocks();
   });
 
   it('non-numeric input returns 400 error while editing user', async () => {
-    const handler = testHandler(users);
+    const handler = testHandler(users, (req, _res, next) => {
+      req.user = { githubToken: 'abcd123', profile: { id: 'aaa' } };
+      next();
+    });
     handler.entityManager.findOne.mockReset();
     const { text } = await handler.patch('/abc').send({
       name: 'Bill Nye',
@@ -72,14 +76,22 @@ describe('/users/:userId', () => {
   });
 
   it('non-existant user returns 404 while editing user', async () => {
-    const handler = testHandler(users);
+    const handler = testHandler(users, (req, _res, next) => {
+      req.user = { githubToken: 'abcd123', profile: { id: 'aaa' } };
+      next();
+    });
     handler.entityManager.findOne.mockResolvedValueOnce(null);
 
     await handler.patch('/1').expect(404);
   });
 
   it('returns 500 error while editing user', async () => {
-    const handler = testHandler(users);
+    const handler = testHandler(users, (req, _res, next) => {
+      req.user = { githubToken: 'abcd123', profile: { id: 'aaa' } };
+      next();
+    });
+
+    handler.entityManager.findOne.mockResolvedValueOnce(sampleUser);
     handler.entityManager.findOne.mockRejectedValueOnce(new Error('Error has occurred'));
 
     const { text } = await handler.patch('/0').expect(500);
@@ -88,8 +100,11 @@ describe('/users/:userId', () => {
     expect(loggerSpy).toBeCalledTimes(1);
   });
 
-  it('successfully edits a user', async () => {
-    const handler = testHandler(users);
+  it('successfully edits a user as non admin', async () => {
+    const handler = testHandler(users, (req, _res, next) => {
+      req.user = { githubToken: 'abcd123', profile: { id: 'aaa' } };
+      next();
+    });
     let callIndex = 0;
     let assignTimestamp: number | undefined;
     let flushTimestamp: number | undefined;
@@ -98,6 +113,7 @@ describe('/users/:userId', () => {
       name: 'Bill Nye',
       pronouns: 'he/him',
       schoolName: 'Science School',
+      isAdmin: false,
       assign: jest.fn(() => {
         assignTimestamp = callIndex;
         callIndex += 1;
@@ -128,5 +144,61 @@ describe('/users/:userId', () => {
     expect(flushTimestamp).toBeGreaterThan(assignTimestamp ?? Infinity);
 
     expect(handler.entityManager.findOne).toHaveBeenCalledWith(User, { id: '0' });
+  });
+
+  it('successfully edits a user as admin', async () => {
+    const handler = testHandler(users, (req, _res, next) => {
+      req.user = { githubToken: 'abcd123', profile: { id: 'aaa' } };
+      next();
+    });
+    let callIndex = 0;
+    let assignTimestamp: number | undefined;
+    let flushTimestamp: number | undefined;
+
+    const userToModify: Partial<User> = {
+      name: 'Bill Nye',
+      pronouns: 'he/him',
+      schoolName: 'Science School',
+      isAdmin: true,
+      assign: jest.fn(() => {
+        assignTimestamp = callIndex;
+        callIndex += 1;
+      }) as any,
+    };
+
+    const patchContent: Partial<User> = {
+      name: 'Will Bye',
+      pronouns: 'she/her',
+      location: 'Dallas',
+      isAdmin: false,
+    };
+
+    handler.entityManager.findOne.mockResolvedValue(userToModify);
+
+    handler.entityManager.flush.mockImplementationOnce(async () => {
+      flushTimestamp = callIndex;
+      callIndex += 1;
+    });
+
+    await handler.patch('/0').send(patchContent).expect(200);
+
+    const { location, ...expectedPatch } = patchContent;
+
+    expect(userToModify.assign).toHaveBeenCalledWith(expectedPatch);
+
+    expect(handler.entityManager.flush).toHaveBeenCalled();
+
+    expect(flushTimestamp).toBeGreaterThan(assignTimestamp ?? Infinity);
+
+    expect(handler.entityManager.findOne).toHaveBeenCalledWith(User, { id: '0' });
+  });
+
+  it('401 when not logged in', async () => {
+    const handler = testHandler(users);
+
+    await handler.patch('/0').expect(401);
+
+    expect(handler.entityManager.findOne).toHaveBeenCalledTimes(0);
+    expect(handler.entityManager.flush).toHaveBeenCalledTimes(0);
   });
 });
