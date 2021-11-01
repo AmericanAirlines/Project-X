@@ -41,7 +41,7 @@ describe('Project GET route', () => {
 
   it('error on find returns 500 status code', async () => {
     const handler = testHandler(project, (req, _res, next) => {
-      req.user = { githubToken: 'abcd123', id: 'aaa' };
+      req.user = { githubToken: 'abcd123', profile: {id: 'aaa'} };
       next();
     });
 
@@ -65,7 +65,7 @@ describe('Project GET route', () => {
 
   it('Successful fetch from GitHub', async () => {
     const handler = testHandler(project, (req, _res, next) => {
-      req.user = { githubToken: 'abcd123', id: 'aaa' };
+      req.user = { githubToken: 'abcd123', profile: {id: 'aaa'} };
       next();
     });
 

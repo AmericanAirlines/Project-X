@@ -43,7 +43,7 @@ users.patch('/:userId', async (req, res) => {
   if (req.user) {
     const { userId } = req.params;
 
-    const currentUser = await req.entityManager.findOne(User, { githubId: req.user.id });
+    const currentUser = await req.entityManager.findOne(User, { githubId: req.user.profile.id });
     const adminValue = currentUser?.isAdmin ?? false;
 
     try {
