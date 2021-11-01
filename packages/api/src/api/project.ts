@@ -49,7 +49,9 @@ project.post('', async (req, res) => {
       logger.error(errorMessage, error);
       res.status(500).send(errorMessage);
     }
-  } else res.sendStatus(401);
+  } else {
+    res.sendStatus(401);
+  }
 });
 
 project.get('', async (req, res) => {
