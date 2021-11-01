@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import { URLSearchParams } from 'url';
+import { User } from '../../entities/User';
 import { env } from '../../env';
 import logger from '../../logger';
 
@@ -46,10 +47,17 @@ discord.get('/discord/callback', async (req, res) => {
         },
       });
 
-      const userData = await userResponse.json();
+      const { id: discordId } = await userResponse.json();
 
-      // TODO: Update User row with Discord ID
-      res.send(userData);
+      const user = await req.entityManager.findOne(User, { githubId: req.user?.profile.id });
+
+      if (user) {
+        user.discordId = discordId;
+        await req.entityManager.flush();
+        res.redirect('/app/community');
+      } else {
+        res.redirect('/app/community');
+      }
     } catch (error) {
       const userRetrievalErrorString = 'There was an issue getting Discord user information';
       logger.error(userRetrievalErrorString, error);
