@@ -45,7 +45,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 passport.serializeUser((user: any, done) => {
-  done(null, {id: user.userProfile.id, githubToken: user.githubToken});
+  done(null, user);
 });
 
 passport.deserializeUser((user: any, done) => {
@@ -73,9 +73,9 @@ passport.use(
           purpose: '',
         });
         await authEm?.persistAndFlush(newUser);
-        done(null, {userProfile: profile, githubToken: accessToken});
+        done(null, { profile, githubToken: accessToken});
       } else {
-        done(null, {userProfile: profile, githubToken: accessToken});
+        done(null, { profile, githubToken: accessToken});
       }
     },
   ),
