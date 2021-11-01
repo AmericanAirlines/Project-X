@@ -7,7 +7,9 @@ declare global {
       entityManager: EntityManager<PostgreSqlDriver>;
     }
     export interface User {
-      id: string;
+      profile: {
+        id: string;
+      };
       githubToken: string;
     }
   }
