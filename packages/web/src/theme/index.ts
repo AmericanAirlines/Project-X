@@ -13,16 +13,16 @@ export const theme = extendTheme({
     },
   },
   components: {
-    Link: (props: StyleFunctionProps) => ({
+    Link: {
       variants: {
         navbar: {
-          backgroundColor: mode('gray.100', 'gray.900')(props),
+          backgroundColor: mode('gray.100', 'gray.900'),
           px: 2,
           py: 4,
           rounded: 'md',
           _hover: {
             textDecoration: 'none',
-            backgroundColor: mode('gray.200', 'gray.700')(props),
+            backgroundColor: mode('gray.200', 'gray.700'),
           },
         },
         navbarMenuItem: {
@@ -31,7 +31,7 @@ export const theme = extendTheme({
           },
         },
       },
-    }),
+    },
     Menu: {
       parts: ['button'],
       variants: {

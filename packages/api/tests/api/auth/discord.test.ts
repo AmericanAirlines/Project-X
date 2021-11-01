@@ -79,6 +79,12 @@ describe('Discord', () => {
 
     const handler = testHandler(discord, (req, _res, next) => {
       req.session = mockSession as any;
+      req.user = {
+        profile: {
+          id: mockSession.passport.user,
+        },
+        githubToken: 'testToken',
+      };
       next();
     });
 
@@ -111,6 +117,7 @@ describe('Discord', () => {
   it('/discord/callback handles a database user fetch error', async () => {
     const handler = testHandler(discord, (req, _res, next) => {
       req.session = mockSession as any;
+      req.user = undefined;
       next();
     });
 
