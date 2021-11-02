@@ -5,16 +5,6 @@ import { testHandler } from '../../testUtils/testHandler';
 import { getMock } from '../../testUtils/getMock';
 
 jest.mock('passport');
-const passportAuthenticateMock = getMock(passport.authenticate).mockImplementation(
-  (_oauthName, options) =>
-    ((_req, res, next) => {
-      if (options) {
-        next();
-      } else {
-        res.sendStatus(200);
-      }
-    }) as Handler,
-);
 
 describe('/github endpoints', () => {
   beforeEach(async () => {
@@ -23,18 +13,30 @@ describe('/github endpoints', () => {
 
   it('goes to github link for Login', (done) => {
     jest.isolateModules(async () => {
+      const passportAuthenticateMock200 = getMock(passport.authenticate).mockImplementation(
+        () =>
+          ((_req, res) => {
+            res.sendStatus(200);
+          }) as Handler,
+      );
       const { github } = require('../../../src/api/auth/github');
       await testHandler(github).get('/github/login').expect(200);
-      expect(passportAuthenticateMock).toHaveBeenCalledWith('github');
+      expect(passportAuthenticateMock200).toHaveBeenCalledWith('github', { scope: ['user:email'] });
       done();
     });
   });
 
   it('redirects to /app when authenticated', (done) => {
     jest.isolateModules(async () => {
+      const passportAuthenticateMockNext = getMock(passport.authenticate).mockImplementation(
+        () =>
+          ((_req, res, next) => {
+            next();
+          }) as Handler,
+      );
       const { github } = require('../../../src/api/auth/github');
       await testHandler(github).get('/github/callback').expect(302);
-      expect(passportAuthenticateMock).toHaveBeenCalledWith('github', {
+      expect(passportAuthenticateMockNext).toHaveBeenCalledWith('github', {
         failureRedirect: '/github/login',
       });
       done();

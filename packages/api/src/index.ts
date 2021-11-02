@@ -5,6 +5,7 @@ import { EntityManager } from '@mikro-orm/core';
 import { PostgreSqlDriver } from '@mikro-orm/postgresql';
 import session from 'express-session';
 import passport from 'passport';
+// import fetch from 'node-fetch';
 import { env } from './env';
 import { api } from './api';
 import { initDatabase } from './database';
@@ -57,23 +58,37 @@ passport.use(
     {
       clientID: env.githubClientId,
       clientSecret: env.githubSecret,
+      scope: 'user:emails',
       callbackURL: `${env.appUrl}/api/auth/github/callback`,
     },
     async (accessToken: any, refreshToken: any, profile: any, done: any) => {
+      // const regex = new RegExp(/^[a-zA-Z0-9]+[@][a-zA-Z0-9]+[.][e][d][u]$/g);
+
       const currentUser = await authEm?.findOne(User, {
         githubId: profile.id,
       });
       if (!currentUser) {
-        logger.info('Creating new user.');
-        const newUser = new User({
-          name: profile.username,
-          githubId: profile.id,
-          hireable: false,
-          purpose: '',
-        });
-        await authEm?.persistAndFlush(newUser);
-        done(null, profile);
+        if (profile.emails.length > 0) {
+          if (regex.exec(profile.emails[0].value)) {
+            console.log(accessToken);
+            logger.info('Creating new user.');
+            const newUser = new User({
+              name: profile.username,
+              githubId: profile.id,
+              hireable: false,
+              purpose: '',
+              email: profile.emails[0].value,
+            });
+            await authEm?.persistAndFlush(newUser);
+            done(null, profile);
+          } else {
+            console.log('regex mismatch');
+          }
+        } else {
+          console.log('email not found');
+        }
       } else {
+        console.log(accessToken);
         done(null, profile);
       }
     },
