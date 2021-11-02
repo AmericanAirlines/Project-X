@@ -62,11 +62,12 @@ passport.use(
       callbackURL: `${env.appUrl}/api/auth/github/callback`,
     },
     async (accessToken: any, refreshToken: any, profile: any, done: any) => {
-      // const regex = new RegExp(/^[a-zA-Z0-9]+[@][a-zA-Z0-9]+[.][e][d][u]$/g);
+      const regex = new RegExp(/^[a-zA-Z0-9]+[@][a-zA-Z0-9]+[.][e][d][u]$/g);
 
       const currentUser = await authEm?.findOne(User, {
         githubId: profile.id,
       });
+
       if (!currentUser) {
         if (profile.emails.length > 0) {
           if (regex.exec(profile.emails[0].value)) {
@@ -77,7 +78,7 @@ passport.use(
               githubId: profile.id,
               hireable: false,
               purpose: '',
-              email: profile.emails[0].value,
+              email: profile.emails[0].value, // send the .edu email here
             });
             await authEm?.persistAndFlush(newUser);
             done(null, profile);
