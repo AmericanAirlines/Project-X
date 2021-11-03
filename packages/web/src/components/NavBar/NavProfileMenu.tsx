@@ -17,8 +17,11 @@ export const NavProfileMenu: React.FC = () => (
     </MenuButton>
     <MenuList>
       <MenuItem>
-        <Link variant="navbarMenuItem" href="/app/profile">
-          Edit Profile
+        {/*Change to /user/{uid}
+        - Will need to get logged in user's uid and insert into link
+          - should I make a empty GET route (/api/users) for the users api and return the currently logged in user's info (to get uid in this case)? */}
+        <Link variant="navbarMenuItem" href="/app/profile"> 
+          View Profile
         </Link>
       </MenuItem>
       <MenuItem>
