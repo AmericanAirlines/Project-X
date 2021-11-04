@@ -41,7 +41,7 @@ describe('repo page', () => {
   });
 
   it('renders the table properly when no repo are returned', async () => {
-    fetchMock.get(`/api/repositories`, []);
+    fetchMock.get(`/api/project`, []);
 
     expect(() => render(<Projects />)).not.toThrow();
 
@@ -53,7 +53,7 @@ describe('repo page', () => {
   });
 
   it('renders the table properly when repo are returned', async () => {
-    fetchMock.mock().getOnce(`/api/repositories`, [repo1, repo2]);
+    fetchMock.mock().getOnce(`/api/project`, [repo1, repo2]);
     expect(() => render(<Projects />)).not.toThrow();
 
     // Wait for fetch

@@ -19,11 +19,12 @@ const Projects: NextPage = () => {
   React.useEffect(() => {
     const fetchProjects = async () => {
       // Get all videos
-      const res = await fetch('/api/repositories');
+      const res = await fetch('/api/project');
       const projectsList = await res.json();
 
       // Set page status
       setProjects(projectsList);
+      console.log(projectsList);
     };
 
     fetchProjects();
