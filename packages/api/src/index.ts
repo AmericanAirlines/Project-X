@@ -90,13 +90,13 @@ passport.use(
               email: emailValue, // send the .edu email here
             });
             await authEm?.persistAndFlush(newUser);
-            done(null, { profile, githubToken: accessToken });
+            return done(null, { profile, githubToken: accessToken });
           }
         }
-        done(null, null);
       } else {
-        done(null, { profile, githubToken: accessToken });
+        return done(null, { profile, githubToken: accessToken });
       }
+      return done(null, null);
     },
   ),
 );
