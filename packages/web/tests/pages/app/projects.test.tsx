@@ -16,18 +16,22 @@ getMock(RepoBox).mockImplementation(({ repolist }) => <p>Box Row</p>);
 const repo1: RepoList = {
   id: '1',
   name: 'repo1',
-  html_url: 'github.com/test1',
-  stargazers_count: 123,
-  language: 'HTML',
+  url: 'github.com/test1',
+  stargazerCount: 123,
+  primaryLanguage: {
+    name: 'HTML'
+  },
   description: 'simple app',
 };
 
 const repo2: RepoList = {
   id: '2',
   name: 'repo2',
-  html_url: 'github.com/test2',
-  stargazers_count: 456,
-  language: 'CSS',
+  url: 'github.com/test2',
+  stargazerCount: 456,
+  primaryLanguage: {
+    name: 'CSS'
+  },
   description: 'simple css file',
 };
 

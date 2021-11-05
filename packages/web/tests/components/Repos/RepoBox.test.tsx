@@ -7,9 +7,11 @@ import { RepoList } from '../../../src/pages/app/projects';
 const repo1: RepoList = {
   id: '1',
   name: 'repo1',
-  html_url: 'github.com/test1',
-  stargazers_count: 123,
-  language: 'HTML',
+  url: 'github.com/test1',
+  stargazerCount: 123,
+  primaryLanguage: {
+    name: 'HTML'
+  },
   description: 'simple app',
 };
 

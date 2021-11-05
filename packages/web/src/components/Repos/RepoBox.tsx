@@ -5,9 +5,11 @@ export interface RepoBoxProps {
   repolist: {
     id: string;
     name: string;
-    html_url: string;
-    stargazers_count: Number;
-    language: string;
+    url: string;
+    stargazerCount: Number;
+    primaryLanguage: {
+      name: string;
+    }
     description: string | null;
   };
 }
@@ -23,7 +25,7 @@ export const RepoBox: React.FC<RepoBoxProps> = ({ repolist }) => {
           fontSize="xs"
           textTransform="uppercase"
         >
-          {repolist.language}
+          {repolist.primaryLanguage.name}
         </Box>
 
         <Box
@@ -35,11 +37,11 @@ export const RepoBox: React.FC<RepoBoxProps> = ({ repolist }) => {
           isTruncated
           color="cyan.500"
         >
-          <Link href={repolist.html_url} isExternal>
+          <Link href={repolist.url} isExternal>
             {repolist.name}
           </Link>
         </Box>
-        <Box mt="1">☆ {repolist.stargazers_count}</Box>
+        <Box mt="1">☆ {repolist.stargazerCount}</Box>
         <Box mt="1" color="gray" fontSize="xs">
           {repolist.description}
         </Box>

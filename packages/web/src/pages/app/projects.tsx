@@ -7,9 +7,11 @@ import { RepoBox } from '../../components/Repos';
 export interface RepoList {
   id: string;
   name: string;
-  html_url: string;
-  stargazers_count: Number;
-  language: string;
+  url: string;
+  stargazerCount: Number;
+  primaryLanguage: {
+    name: string;
+  }
   description: string | null;
 }
 

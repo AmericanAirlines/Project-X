@@ -123,6 +123,10 @@ interface MockProjectDetails {
   url: string;
   name: string;
   stargazer_count: number;
+  primaryLanguage: {
+    name: string,
+  }
+  description: string;
 }
 
 const MockProjectList: MockProjectEntity[] = [
@@ -135,11 +139,20 @@ const MockProjectResults: MockProjectDetails[] = [
     url: 'www.github.com/AmericanAirlines/VeryLargePlane',
     name: 'VeryLargePlane',
     stargazer_count: 12345,
+    description: 'large plane',
+    primaryLanguage: {
+      name: 'HTML',
+    },
+    
   },
   {
     url: 'www.github.com/AmericanAirlines/EvenBiggerPlane',
     name: 'EvenBiggerPlane',
     stargazer_count: 54321,
+    primaryLanguage: {
+      name: "CSS",
+    },
+    description: 'bigger plane',
   },
 ];
 
@@ -183,6 +196,7 @@ describe('Project GET route', () => {
     fetchMock.post('https://api.github.com/graphql', MockProjectResults);
 
     const { body } = await handler.get('/').expect(200);
+
     expect(body).toEqual(MockProjectResults);
     expect(fetchMock).toHaveLastFetched('https://api.github.com/graphql', 'post');
     expect(fetchMock).toHaveFetchedTimes(1);
