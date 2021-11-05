@@ -10,7 +10,7 @@ const repo1: RepoList = {
   url: 'github.com/test1',
   stargazerCount: 123,
   primaryLanguage: {
-    name: 'HTML'
+    name: 'HTML',
   },
   description: 'simple app',
 };

@@ -124,8 +124,8 @@ interface MockProjectDetails {
   name: string;
   stargazer_count: number;
   primaryLanguage: {
-    name: string,
-  }
+    name: string;
+  };
   description: string;
 }
 
@@ -143,14 +143,13 @@ const MockProjectResults: MockProjectDetails[] = [
     primaryLanguage: {
       name: 'HTML',
     },
-    
   },
   {
     url: 'www.github.com/AmericanAirlines/EvenBiggerPlane',
     name: 'EvenBiggerPlane',
     stargazer_count: 54321,
     primaryLanguage: {
-      name: "CSS",
+      name: 'CSS',
     },
     description: 'bigger plane',
   },

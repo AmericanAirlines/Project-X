@@ -11,7 +11,7 @@ export interface RepoList {
   stargazerCount: Number;
   primaryLanguage: {
     name: string;
-  }
+  };
   description: string | null;
 }
 

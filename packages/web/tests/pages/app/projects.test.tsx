@@ -19,7 +19,7 @@ const repo1: RepoList = {
   url: 'github.com/test1',
   stargazerCount: 123,
   primaryLanguage: {
-    name: 'HTML'
+    name: 'HTML',
   },
   description: 'simple app',
 };
@@ -30,7 +30,7 @@ const repo2: RepoList = {
   url: 'github.com/test2',
   stargazerCount: 456,
   primaryLanguage: {
-    name: 'CSS'
+    name: 'CSS',
   },
   description: 'simple css file',
 };

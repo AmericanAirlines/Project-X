@@ -9,7 +9,7 @@ export interface RepoBoxProps {
     stargazerCount: Number;
     primaryLanguage: {
       name: string;
-    }
+    };
     description: string | null;
   };
 }
