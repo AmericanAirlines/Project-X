@@ -38,18 +38,16 @@ const UserProfilePage: NextPage = () => {
 
     fetchUser();
   }, [uid]);
-  
+
   React.useEffect(() => {
-    const checkUser = async() => {
+    const checkUser = async () => {
       const res = await fetch('/api/users/me');
-      if(res.status === 200)
-      {
+      if (res.status === 200) {
         const data = await res.json();
 
-        if(user && data.id == user.id)
-          setIsCurrentUser(true); 
+        if (user && data.id == user.id) setIsCurrentUser(true);
       }
-    }
+    };
 
     checkUser();
   }, [user]);

@@ -54,7 +54,7 @@ describe('users API GET route for currently logged in user', () => {
     expect(loggerSpy).toBeCalledTimes(1);
     expect(handler.entityManager.findOne).toBeCalledTimes(1);
     expect(handler.entityManager.findOne).toHaveBeenCalledWith(User, { githubId: 'aaa' });
-    expect(text).toEqual("There was an issue getting the currently logged in user");
+    expect(text).toEqual('There was an issue getting the currently logged in user');
   });
 
   it("Successfully send current user's information", async () => {

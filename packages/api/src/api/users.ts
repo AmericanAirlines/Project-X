@@ -14,25 +14,19 @@ const stripSensitiveFields = (user: User): Partial<User> => ({
   isAdmin: user.isAdmin,
 });
 
-users.get("/me", async (req, res) => {
-  if(req.user)
-  {
-    try{
+users.get('/me', async (req, res) => {
+  if (req.user) {
+    try {
       const user = await req.entityManager.findOne(User, { githubId: req.user.profile.id });
 
-      if(user)
-        res.send(user);
-      else
-        res.sendStatus(404); 
-    }
-    catch (error) {
-      const errorMessage = "There was an issue getting the currently logged in user"
+      if (user) res.send(user);
+      else res.sendStatus(404);
+    } catch (error) {
+      const errorMessage = 'There was an issue getting the currently logged in user';
       logger.error(errorMessage, error);
       res.status(500).send(errorMessage);
     }
-  }
-  else
-    res.status(401).send("You must be logged in.");
+  } else res.status(401).send('You must be logged in.');
 });
 
 users.get('/:userId', async (req, res) => {
