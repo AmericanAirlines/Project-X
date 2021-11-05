@@ -15,11 +15,11 @@ github.get('/github/logout', logout, (req, res) => {
   res.redirect('/');
 });
 
-github.get('/github/login', passport.authenticate('github', { scope: ['user:email'] }));
+github.get('/github/login', passport.authenticate('github'));
 
 github.get(
   '/github/callback',
-  passport.authenticate('github', { failureRedirect: '/github/login' }),
+  passport.authenticate('github', { failureRedirect: '/errorPage' }),
   (req, res) => {
     // Successful authentication, redirect to app.
     res.redirect('/app');

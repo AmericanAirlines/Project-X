@@ -5,7 +5,6 @@ import { EntityManager } from '@mikro-orm/core';
 import { PostgreSqlDriver } from '@mikro-orm/postgresql';
 import session from 'express-session';
 import passport from 'passport';
-// import fetch from 'node-fetch';
 import { env } from './env';
 import { api } from './api';
 import { initDatabase } from './database';
@@ -62,34 +61,40 @@ passport.use(
       callbackURL: `${env.appUrl}/api/auth/github/callback`,
     },
     async (accessToken: any, refreshToken: any, profile: any, done: any) => {
-      const regex = new RegExp(/^[a-zA-Z0-9]+[@][a-zA-Z0-9]+[.][e][d][u]$/g);
+      const regex = new RegExp(/^[a-zA-Z0-9]+[@][a-zA-Z0-9]+[.][e][d][u]$/);
+      let emailValue;
 
       const currentUser = await authEm?.findOne(User, {
         githubId: profile.id,
       });
 
       if (!currentUser) {
-        if (profile.emails.length > 0) {
-          if (regex.exec(profile.emails[0].value)) {
-            console.log(accessToken);
+        const response = await fetch('https://api.github.com/user/emails', {
+          method: 'GET',
+          headers: {
+            Authorization: `token ${accessToken}`,
+          },
+        });
+        const responseData = await response.json();
+
+        for (let x = 0; x < responseData.length; x += 1) {
+          // for loop to go through the emails and find one to match to, otherwise save null.
+          if (responseData[x].email.match(regex) && responseData[x].verified) {
+            emailValue = responseData[x].email;
             logger.info('Creating new user.');
             const newUser = new User({
               name: profile.username,
               githubId: profile.id,
               hireable: false,
               purpose: '',
-              email: profile.emails[0].value, // send the .edu email here
+              email: emailValue, // send the .edu email here
             });
             await authEm?.persistAndFlush(newUser);
             done(null, profile);
-          } else {
-            console.log('regex mismatch');
           }
-        } else {
-          console.log('email not found');
         }
+        done(null, null);
       } else {
-        console.log(accessToken);
         done(null, profile);
       }
     },
