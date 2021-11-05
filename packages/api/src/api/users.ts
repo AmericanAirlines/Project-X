@@ -6,6 +6,7 @@ export const users = Router();
 users.use(express.json());
 
 const stripSensitiveFields = (user: User): Partial<User> => ({
+  id: user.id,
   name: user.name,
   pronouns: user.pronouns,
   schoolName: user.schoolName,
