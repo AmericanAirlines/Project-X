@@ -15,7 +15,7 @@ import {
   Input,
 } from '@chakra-ui/react';
 import { useFormik } from 'formik';
-import { User } from '../../pages/user/[uid]'
+import { User } from '../../pages/user/[uid]';
 
 export interface UserProfileProps {
   isCurrentUser: boolean;
@@ -25,7 +25,7 @@ export interface UserProfileProps {
     name: string;
     pronouns?: string;
     schoolName?: string;
-  }
+  };
 }
 
 export const UserProfile: React.FC<UserProfileProps> = (props: UserProfileProps) => {
@@ -102,9 +102,12 @@ export const UserProfile: React.FC<UserProfileProps> = (props: UserProfileProps)
         </form>
       </Box>
     );
-  else
-  {
-    const editButton = props.isCurrentUser ? <Button colorScheme="blue" onClick={() => setEditToggle(!editToggle)}>Edit</Button> : null;
+  else {
+    const editButton = props.isCurrentUser ? (
+      <Button colorScheme="blue" onClick={() => setEditToggle(!editToggle)}>
+        Edit
+      </Button>
+    ) : null;
     return (
       <Box border="1px" borderColor="gray.200" boxShadow="base" p={3}>
         <Text fontSize="6xl">{props.user.name}</Text>
