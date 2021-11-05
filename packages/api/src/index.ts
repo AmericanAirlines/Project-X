@@ -61,7 +61,7 @@ passport.use(
       callbackURL: `${env.appUrl}/api/auth/github/callback`,
     },
     async (accessToken: any, refreshToken: any, profile: any, done: any) => {
-      const regex = new RegExp(/^[a-zA-Z0-9]+[@][a-zA-Z0-9]+[.][e][d][u]$/);
+      const eduEmailRegex = new RegExp(/^[a-zA-Z0-9]+[@][a-zA-Z0-9]+[.][e][d][u]$/);
       let emailValue;
 
       const currentUser = await authEm?.findOne(User, {
@@ -79,7 +79,7 @@ passport.use(
 
         for (let x = 0; x < responseData.length; x += 1) {
           // for loop to go through the emails and find one to match to, otherwise save null.
-          if (responseData[x].email.match(regex) && responseData[x].verified) {
+          if (responseData[x].email.match(eduEmailRegex) && responseData[x].verified) {
             emailValue = responseData[x].email;
             logger.info('Creating new user.');
             const newUser = new User({
