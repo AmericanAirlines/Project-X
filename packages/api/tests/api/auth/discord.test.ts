@@ -4,6 +4,7 @@ import { discord, DiscordAccessTokenResponse } from '../../../src/api/auth/disco
 import { testHandler } from '../../testUtils/testHandler';
 import logger from '../../../src/logger';
 import { env } from '../../../src/env';
+import { User } from '../../../src/entities/User';
 
 const testResponse: DiscordAccessTokenResponse = {
   access_token: 'token',
@@ -15,6 +16,17 @@ const testResponse: DiscordAccessTokenResponse = {
 
 const testDiscordUser = {
   id: '12344',
+};
+
+const testUser: Partial<User> = {
+  githubId: 'githubId',
+  discordId: '',
+};
+
+const mockSession = {
+  passport: {
+    user: '12345',
+  },
 };
 
 const loggerSpy = jest.spyOn(logger, 'error').mockImplementation();
@@ -65,10 +77,24 @@ describe('Discord', () => {
       redirect_uri: 'http://localhost:3000/api/auth/discord/callback',
     };
 
-    fetchMock.mock().postOnce('https://discord.com/api/v9/oauth2/token', { body: testDiscordUser });
-    fetchMock.mock().getOnce('https://discord.com/api/v8/users/@me', {}, { body: testResponse });
+    const handler = testHandler(discord, (req, _res, next) => {
+      req.session = mockSession as any;
+      req.user = {
+        profile: {
+          id: mockSession.passport.user,
+        },
+        githubToken: 'testToken',
+      };
+      next();
+    });
 
-    await testHandler(discord).get('/discord/callback?code=testCod');
+    fetchMock.mock().postOnce('https://discord.com/api/v9/oauth2/token', { body: testResponse });
+    fetchMock.mock().getOnce('https://discord.com/api/v8/users/@me', {}, { body: testDiscordUser });
+    handler.entityManager.findOne.mockResolvedValueOnce(testUser);
+    await handler
+      .get('/discord/callback?code=testCod')
+      .expect(302)
+      .expect('Location', '/app/community');
 
     expect(fetchMock).toHaveFetched(
       'https://discord.com/api/v9/oauth2/token',
@@ -84,5 +110,26 @@ describe('Discord', () => {
         headers: expect.objectContaining(expectedGetHeaders),
       }),
     );
+
+    expect(handler.entityManager.flush).toBeCalledTimes(1);
+  });
+
+  it('/discord/callback handles a database user fetch error', async () => {
+    const handler = testHandler(discord, (req, _res, next) => {
+      req.session = mockSession as any;
+      req.user = undefined;
+      next();
+    });
+
+    fetchMock.mock().postOnce('https://discord.com/api/v9/oauth2/token', { body: testDiscordUser });
+    fetchMock.mock().getOnce('https://discord.com/api/v8/users/@me', {}, { body: testResponse });
+    handler.entityManager.findOne.mockResolvedValueOnce(null);
+
+    await handler
+      .get('/discord/callback?code=testCode')
+      .expect(302)
+      .expect('Location', '/app/community');
+
+    expect(handler.entityManager.flush).toBeCalledTimes(0);
   });
 });

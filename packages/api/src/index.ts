@@ -45,11 +45,11 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 passport.serializeUser((user: any, done) => {
-  done(null, user.id);
+  done(null, user);
 });
 
-passport.deserializeUser((id: string, done) => {
-  done(null, id);
+passport.deserializeUser((user: any, done) => {
+  done(null, user);
 });
 
 passport.use(
@@ -90,12 +90,12 @@ passport.use(
               email: emailValue, // send the .edu email here
             });
             await authEm?.persistAndFlush(newUser);
-            done(null, profile);
+            done(null, { profile, githubToken: accessToken });
           }
         }
         done(null, null);
       } else {
-        done(null, profile);
+        done(null, { profile, githubToken: accessToken });
       }
     },
   ),
