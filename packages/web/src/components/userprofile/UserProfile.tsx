@@ -15,31 +15,37 @@ import {
   Input,
 } from '@chakra-ui/react';
 import { useFormik } from 'formik';
+import { User } from '../../pages/user/[uid]'
 
 export interface UserProfileProps {
-  id: string;
-  name: string;
-  pronouns?: string;
-  schoolName?: string;
+  isCurrentUser: boolean;
+  setUser: React.Dispatch<React.SetStateAction<User | undefined>>;
+  user: {
+    id: string;
+    name: string;
+    pronouns?: string;
+    schoolName?: string;
+  }
 }
 
-export const UserProfile: React.FC<UserProfileProps> = (user: UserProfileProps) => {
+export const UserProfile: React.FC<UserProfileProps> = (props: UserProfileProps) => {
   const formik = useFormik({
     initialValues: {
-      name: user.name,
-      pronouns: user.pronouns,
-      schoolName: user.schoolName,
+      name: props.user.name,
+      pronouns: props.user.pronouns,
+      schoolName: props.user.schoolName,
     },
     onSubmit: async (data) => {
       console.log(data);
-      const res = await fetch(`/api/users/${user.id}`, {
+      const res = await fetch(`/api/users/${props.user.id}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(data),
       });
-      console.log(await res.json());
+      props.setUser(await res.json());
+      setEditToggle(!editToggle);
     },
   });
 
@@ -49,7 +55,7 @@ export const UserProfile: React.FC<UserProfileProps> = (user: UserProfileProps) 
     return (
       <Box border="1px" borderColor="gray.200" boxShadow="base" p={3}>
         <form onSubmit={formik.handleSubmit}>
-          <FormControl id="editUser">
+          <FormControl id="name" isRequired>
             <FormLabel htmlFor="name">Name</FormLabel>
             <Input
               id="name"
@@ -58,7 +64,8 @@ export const UserProfile: React.FC<UserProfileProps> = (user: UserProfileProps) 
               value={formik.values.name}
               onChange={formik.handleChange}
             />
-
+          </FormControl>
+          <FormControl id="pronouns">
             <FormLabel htmlFor="pronouns">Pronouns</FormLabel>
             <Input
               id="pronouns"
@@ -67,7 +74,8 @@ export const UserProfile: React.FC<UserProfileProps> = (user: UserProfileProps) 
               value={formik.values.pronouns}
               onChange={formik.handleChange}
             />
-
+          </FormControl>
+          <FormControl id="schoolName">
             <FormLabel htmlFor="schoolName">School Name</FormLabel>
             <Input
               id="schoolName"
@@ -95,14 +103,15 @@ export const UserProfile: React.FC<UserProfileProps> = (user: UserProfileProps) 
       </Box>
     );
   else
+  {
+    const editButton = props.isCurrentUser ? <Button colorScheme="blue" onClick={() => setEditToggle(!editToggle)}>Edit</Button> : null;
     return (
       <Box border="1px" borderColor="gray.200" boxShadow="base" p={3}>
-        <Text fontSize="6xl">{user.name}</Text>
-        <Text fontSize="xl">{user.pronouns}</Text>
-        <Text fontSize="xl">{user.schoolName}</Text>
-        <Button colorScheme="blue" onClick={() => setEditToggle(!editToggle)}>
-          Edit
-        </Button>
+        <Text fontSize="6xl">{props.user.name}</Text>
+        <Text fontSize="xl">{props.user.pronouns}</Text>
+        <Text fontSize="xl">{props.user.schoolName}</Text>
+        {editButton}
       </Box>
     );
+  }
 };

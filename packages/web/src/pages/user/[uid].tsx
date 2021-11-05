@@ -66,7 +66,7 @@ const UserProfilePage: NextPage = () => {
   } else {
     return (
       <MarketingLayout>
-        <UserProfile {...user} />
+        <UserProfile isCurrentUser={isCurrentUser} setUser={setUser} user={user} />
       </MarketingLayout>
     );
   }
