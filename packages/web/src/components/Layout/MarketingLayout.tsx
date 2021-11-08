@@ -1,10 +1,8 @@
 import React from 'react';
-import { Button, Link, Heading, HStack, Spacer, useTheme, VStack } from '@chakra-ui/react';
+import { Button, Link, Heading, HStack, Spacer, VStack } from '@chakra-ui/react';
 import { GiCrossFlare } from 'react-icons/gi';
 
 export const MarketingLayout: React.FC = ({ children }) => {
-  const theme = useTheme();
-
   return (
     <VStack alignItems="stretch" paddingTop={8} w="100%" maxW="1200px" marginX="auto">
       <HStack paddingX={4}>
