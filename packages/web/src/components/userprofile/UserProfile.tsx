@@ -16,10 +16,12 @@ import {
 } from '@chakra-ui/react';
 import { useFormik } from 'formik';
 import { User } from '../../pages/user/[uid]';
+import * as yup from 'yup';
+import { EditUserForm } from './EditUserForm';
 
 export interface UserProfileProps {
   isCurrentUser: boolean;
-  setUser: React.Dispatch<React.SetStateAction<User | undefined>>;
+  // setUser: React.Dispatch<React.SetStateAction<User | undefined>>;
   user: {
     id: string;
     name: string;
@@ -29,82 +31,17 @@ export interface UserProfileProps {
 }
 
 export const UserProfile: React.FC<UserProfileProps> = (props: UserProfileProps) => {
-  const formik = useFormik({
-    initialValues: {
-      name: props.user.name,
-      pronouns: props.user.pronouns,
-      schoolName: props.user.schoolName,
-    },
-    onSubmit: async (data) => {
-      console.log(data);
-      const res = await fetch(`/api/users/${props.user.id}`, {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
-      });
-      props.setUser(await res.json());
-      setEditToggle(!editToggle);
-    },
-  });
-
   const [editToggle, setEditToggle] = React.useState<boolean>(false);
 
   if (editToggle)
     return (
       <Box border="1px" borderColor="gray.200" boxShadow="base" p={3}>
-        <form onSubmit={formik.handleSubmit}>
-          <FormControl id="name" isRequired>
-            <FormLabel htmlFor="name">Name</FormLabel>
-            <Input
-              id="name"
-              name="name"
-              type="text"
-              value={formik.values.name}
-              onChange={formik.handleChange}
-            />
-          </FormControl>
-          <FormControl id="pronouns">
-            <FormLabel htmlFor="pronouns">Pronouns</FormLabel>
-            <Input
-              id="pronouns"
-              name="pronouns"
-              type="text"
-              value={formik.values.pronouns}
-              onChange={formik.handleChange}
-            />
-          </FormControl>
-          <FormControl id="schoolName">
-            <FormLabel htmlFor="schoolName">School Name</FormLabel>
-            <Input
-              id="schoolName"
-              name="schoolName"
-              type="text"
-              value={formik.values.schoolName}
-              onChange={formik.handleChange}
-            />
-          </FormControl>
-          <ButtonGroup>
-            <Button type="submit" colorScheme="green">
-              Submit
-            </Button>
-            <Button
-              type="reset"
-              onClick={() => {
-                formik.resetForm();
-                setEditToggle(!editToggle);
-              }}
-            >
-              Cancel
-            </Button>
-          </ButtonGroup>
-        </form>
+        <EditUserForm setEditToggle={setEditToggle} /* setUser={props.setUser} */ user={props.user}/>
       </Box>
     );
   else {
     const editButton = props.isCurrentUser ? (
-      <Button colorScheme="blue" onClick={() => setEditToggle(!editToggle)}>
+      <Button colorScheme="blue" onClick={() => setEditToggle(true)}>
         Edit
       </Button>
     ) : null;

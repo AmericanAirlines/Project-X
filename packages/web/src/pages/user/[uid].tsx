@@ -1,6 +1,6 @@
 import React from 'react';
 import { NextPage } from 'next';
-import { MarketingLayout } from '../../components/Layout';
+import { AppLayout } from '../../components/Layout';
 import { useRouter } from 'next/router';
 import { UserProfile } from '../../components/userprofile/UserProfile';
 import { Alert, AlertIcon } from '@chakra-ui/alert';
@@ -45,7 +45,10 @@ const UserProfilePage: NextPage = () => {
       if (res.status === 200) {
         const data = await res.json();
 
-        if (user && data.id == user.id) setIsCurrentUser(true);
+        if (user && data.id == user.id) 
+        { 
+          setIsCurrentUser(true);
+        }
       }
     };
 
@@ -56,18 +59,18 @@ const UserProfilePage: NextPage = () => {
     if (errorMessage == '') return null;
     else
       return (
-        <MarketingLayout>
+        <AppLayout>
           <Alert status="error">
             <AlertIcon />
             {errorMessage}
           </Alert>
-        </MarketingLayout>
+        </AppLayout>
       );
   } else {
     return (
-      <MarketingLayout>
-        <UserProfile isCurrentUser={isCurrentUser} setUser={setUser} user={user} />
-      </MarketingLayout>
+      <AppLayout>
+        <UserProfile isCurrentUser={isCurrentUser} /*setUser={setUser}*/ user={user} />
+      </AppLayout>
     );
   }
 };

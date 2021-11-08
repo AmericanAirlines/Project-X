@@ -1,0 +1,117 @@
+import React from 'react';
+import {
+  Heading,
+  HStack,
+  Spacer,
+  useTheme,
+  VStack,
+  Text,
+  Box,
+  Button,
+  ButtonGroup,
+  FormControl,
+  FormLabel,
+  FormHelperText,
+  Input,
+} from '@chakra-ui/react';
+import { useFormik } from 'formik';
+import * as yup from 'yup';
+import { User } from '../../pages/user/[uid]';
+
+type EditFormValues = yup.InferType<typeof editFormSchema>;
+const editFormSchema = yup.object({
+  name: yup.string().trim().required('Name is required.'),
+  pronouns: yup.string(),
+  schoolName: yup.string(),
+});
+
+export interface EditUserProps {
+  setEditToggle: React.Dispatch<React.SetStateAction<boolean>>;
+  // setUser: React.Dispatch<React.SetStateAction<User | undefined>>;
+  user: {
+    id: string;
+    name: string;
+    pronouns?: string;
+    schoolName?: string;
+  };
+}
+
+export const EditUserForm: React.FC<EditUserProps> = (props: EditUserProps) => {
+    const formik = useFormik<EditFormValues>({
+        initialValues: {
+          name: props.user.name,
+          pronouns: props.user.pronouns,
+          schoolName: props.user.schoolName,
+        },
+        validationSchema: editFormSchema,
+        onSubmit: async (data) => {
+          console.log(data);
+          const res = await fetch(`/api/users/${props.user.id}`, {
+            method: 'PATCH',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+          });
+          if(res.status === 200)
+          {
+            // props.setUser(await res.json());
+            props.setEditToggle(false);
+          }
+          else
+          {
+    
+          }
+        },
+      });
+      
+    return (
+        <form onSubmit={formik.handleSubmit}>
+          <FormControl id="name">
+            <FormLabel htmlFor="name">Name</FormLabel>
+            <Input
+              id="name"
+              name="name"
+              type="text"
+              value={formik.values.name}
+              onChange={formik.handleChange}
+            />
+            <FormHelperText color="red.500">{formik.errors.name}</FormHelperText>
+          </FormControl>
+          <FormControl id="pronouns">
+            <FormLabel htmlFor="pronouns">Pronouns</FormLabel>
+            <Input
+              id="pronouns"
+              name="pronouns"
+              type="text"
+              value={formik.values.pronouns}
+              onChange={formik.handleChange}
+            />
+          </FormControl>
+          <FormControl id="schoolName">
+            <FormLabel htmlFor="schoolName">School Name</FormLabel>
+            <Input
+              id="schoolName"
+              name="schoolName"
+              type="text"
+              value={formik.values.schoolName}
+              onChange={formik.handleChange}
+            />
+          </FormControl>
+          <ButtonGroup>
+            <Button type="submit" colorScheme="green">
+              Submit
+            </Button>
+            <Button
+              type="reset"
+              onClick={() => {
+                formik.resetForm();
+                props.setEditToggle(false);
+              }}
+            >
+              Cancel
+            </Button>
+          </ButtonGroup>
+        </form>
+    );
+}
