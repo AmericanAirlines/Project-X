@@ -17,7 +17,7 @@ describe('NavBar', () => {
   it('renders correctly', async () => {
     expect(() => render(<NavBar />)).not.toThrowError();
 
-    expect(NavLink).toBeCalledTimes(3);
+    expect(NavLink).toBeCalledTimes(4);
     expect(NavProfileMenu).toBeCalledTimes(1);
   });
 });
