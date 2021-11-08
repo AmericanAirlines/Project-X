@@ -19,7 +19,5 @@ describe('RepoBox', () => {
     render(<RepoBox repolist={repo1} />);
 
     expect(screen.getByText('repo1')).toBeVisible();
-
-    // expect(screen.getByRole('link')).toHaveAttribute('href', 'github.com/test1');
   });
 });
