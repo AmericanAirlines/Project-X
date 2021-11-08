@@ -8,15 +8,14 @@ import { UserProfileProps } from '../../../src/components/userprofile/UserProfil
 import { render, screen, waitFor } from '../../testUtils/testTools';
 import { getMock } from '../../testUtils/getMock';
 
-
 jest.mock('next/router');
 getMock(useRouter).mockReturnValue({
-  query:{
+  query: {
     uid: '1',
-  }
-} as any); 
+  },
+} as any);
 
-const sampleUser: UserProfileProps = {
+const sampleUser: UserProfileProps['user'] = {
   name: 'Steve Job',
   pronouns: 'he/him',
   schoolName: 'Apple University',
@@ -24,7 +23,7 @@ const sampleUser: UserProfileProps = {
 
 describe('Mock UserProfileLayout component', () => {
   it('renders sampleUser', () => {
-    render(<UserProfile {...sampleUser} />);
+    render(<UserProfile user={sampleUser} setUser={jest.fn()} />);
 
     expect(screen.getByText('Steve Job')).toBeVisible();
     expect(screen.getByText('he/him')).toBeVisible();
@@ -33,57 +32,43 @@ describe('Mock UserProfileLayout component', () => {
 });
 
 describe('Discord Login Button Functionality', () => {
-
   it('renders login button when user has no discord id', () => {
-    render(<UserProfile {...sampleUser} />);
+    render(<UserProfile user={sampleUser} setUser={jest.fn()} />);
 
     expect(screen.queryByText('Login with Discord')).toBeVisible();
-    expect(screen.queryByText('Login with Discord')?.getAttribute('href')).toEqual('/api/auth/discord/login');
+    expect(screen.queryByText('Login with Discord')?.getAttribute('href')).toEqual(
+      '/api/auth/discord/login',
+    );
   });
 
   it('renders unlink button when user has discord id and unlinks account when clicked', async () => {
     fetchMock.patch('/api/users/1', sampleUser);
-    
-    render(<UserProfile {...sampleUser} discordId="12345" />);
+    const mockSetUser = jest.fn();
+    render(<UserProfile user={{ ...sampleUser, discordId: '12345' }} setUser={mockSetUser} />);
 
     expect(screen.queryByText('Unlink Discord Account')).toBeVisible();
-    
+
     const unlinkDiscordButton = screen.getByText('Unlink Discord Account');
     userEvent.click(unlinkDiscordButton);
 
-    await waitFor(()=>{
+    await waitFor(() => {
       expect(fetchMock).toHaveFetched('/api/users/1');
-    })
-    
+      expect(mockSetUser).toHaveBeenCalledWith(sampleUser);
+    });
   });
 
   it('renders error when unlink call fails', async () => {
     fetchMock.patch('/api/users/1', 500);
-    
-    render(<UserProfile {...sampleUser} discordId="12345" />);
+
+    render(<UserProfile user={{ ...sampleUser, discordId: '12345' }} setUser={jest.fn()} />);
 
     expect(screen.queryByText('Unlink Discord Account')).toBeVisible();
-    
+
     const unlinkDiscordButton = screen.getByText('Unlink Discord Account');
     userEvent.click(unlinkDiscordButton);
 
-    await waitFor(()=>{
+    await waitFor(() => {
       expect(screen.queryByText('Unable to unlink Discord Account')).toBeVisible();
-    })
-    
+    });
   });
-
-  it('adds discord id', () => {
-    const sampleDiscordUser: UserProfileProps = {
-      name: 'Steve Job',
-      pronouns: 'he/him',
-      schoolName: 'Apple University',
-
-    };    
-
-    render(<UserProfile {...sampleDiscordUser} />);
-
-
-    
-  })
 });
