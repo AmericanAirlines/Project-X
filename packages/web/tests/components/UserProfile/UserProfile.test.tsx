@@ -29,9 +29,7 @@ const sampleSameUser: UserProfileProps = {
 };
 
 jest.mock('../../../src/components/userprofile/EditUserForm');
-getMock(EditUserForm).mockImplementation(({ ...EditFormProps }) => (
-  <div>This is a form</div>
-));
+getMock(EditUserForm).mockImplementation(({ ...EditFormProps }) => <div>This is a form</div>);
 
 describe('Mock UserProfileLayout component', () => {
   it('renders sampleUser (is not current user) and do not show Edit button', async () => {

@@ -23,13 +23,12 @@ const useRouter = jest.spyOn(require('next/router'), 'useRouter');
 const sameSampleUser: UserProfileProps = {
   isCurrentUser: true,
   setUser: jest.fn(React.useState).mockImplementation(),
-  user:
-    {
-      id: '0',
-      name: 'Steve Job',
-      pronouns: 'he/him',
-      schoolName: 'Apple University',
-    }
+  user: {
+    id: '0',
+    name: 'Steve Job',
+    pronouns: 'he/him',
+    schoolName: 'Apple University',
+  },
 };
 
 const wait = () => new Promise<void>((resolve) => setTimeout(() => resolve(), 0));
@@ -76,8 +75,8 @@ describe('web /user/', () => {
     }));
 
     fetchMock.getOnce('/api/users/0', sameSampleUser.user);
-    fetchMock.get('/api/users/me', sameSampleUser.user); 
-    
+    fetchMock.get('/api/users/me', sameSampleUser.user);
+
     expect(() => render(<UserProfilePage />)).not.toThrow();
 
     await act(wait);

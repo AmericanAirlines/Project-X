@@ -1,9 +1,5 @@
 import React from 'react';
-import {
-  Text,
-  Box,
-  Button,
-} from '@chakra-ui/react';
+import { Text, Box, Button } from '@chakra-ui/react';
 import { User } from '../../pages/user/[uid]';
 import { EditUserForm } from './EditUserForm';
 
@@ -24,7 +20,7 @@ export const UserProfile: React.FC<UserProfileProps> = (props: UserProfileProps)
   if (editToggle)
     return (
       <Box border="1px" borderColor="gray.200" boxShadow="base" p={3}>
-        <EditUserForm setEditToggle={setEditToggle} setUser={props.setUser} user={props.user}/>
+        <EditUserForm setEditToggle={setEditToggle} setUser={props.setUser} user={props.user} />
       </Box>
     );
   else {

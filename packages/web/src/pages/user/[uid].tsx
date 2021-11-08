@@ -45,8 +45,7 @@ const UserProfilePage: NextPage = () => {
       if (res.status === 200) {
         const data = await res.json();
 
-        if (user && data.id == user.id) 
-        { 
+        if (user && data.id == user.id) {
           setIsCurrentUser(true);
         }
       }
