@@ -19,17 +19,10 @@ jest.mock('next/router', () => ({
 }));
 
 const useRouter = jest.spyOn(require('next/router'), 'useRouter');
-const realUseState = React.useState;
-const mockState: User = {
-  id: "123",
-  name: "Bill Sigh",
-  pronouns: "he/him",
-  schoolName: "School 5111019"
-};
 
 const sameSampleUser: UserProfileProps = {
   isCurrentUser: true,
-  // setUser: jest.spyOn(React, 'useState').mockImplementationOnce(() => realUseState(mockState)),
+  setUser: jest.fn(React.useState).mockImplementation(),
   user:
     {
       id: '0',

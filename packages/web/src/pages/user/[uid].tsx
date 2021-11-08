@@ -69,7 +69,7 @@ const UserProfilePage: NextPage = () => {
   } else {
     return (
       <AppLayout>
-        <UserProfile isCurrentUser={isCurrentUser} /*setUser={setUser}*/ user={user} />
+        <UserProfile isCurrentUser={isCurrentUser} setUser={setUser} user={user} />
       </AppLayout>
     );
   }

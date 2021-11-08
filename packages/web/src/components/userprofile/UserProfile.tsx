@@ -1,27 +1,15 @@
 import React from 'react';
 import {
-  Heading,
-  HStack,
-  Spacer,
-  useTheme,
-  VStack,
   Text,
   Box,
   Button,
-  ButtonGroup,
-  FormControl,
-  FormLabel,
-  FormHelperText,
-  Input,
 } from '@chakra-ui/react';
-import { useFormik } from 'formik';
 import { User } from '../../pages/user/[uid]';
-import * as yup from 'yup';
 import { EditUserForm } from './EditUserForm';
 
 export interface UserProfileProps {
   isCurrentUser: boolean;
-  // setUser: React.Dispatch<React.SetStateAction<User | undefined>>;
+  setUser: React.Dispatch<React.SetStateAction<User | undefined>>;
   user: {
     id: string;
     name: string;
@@ -36,7 +24,7 @@ export const UserProfile: React.FC<UserProfileProps> = (props: UserProfileProps)
   if (editToggle)
     return (
       <Box border="1px" borderColor="gray.200" boxShadow="base" p={3}>
-        <EditUserForm setEditToggle={setEditToggle} /* setUser={props.setUser} */ user={props.user}/>
+        <EditUserForm setEditToggle={setEditToggle} setUser={props.setUser} user={props.user}/>
       </Box>
     );
   else {

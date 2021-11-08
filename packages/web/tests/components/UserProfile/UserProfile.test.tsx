@@ -8,6 +8,7 @@ import { getMock } from '../../testUtils/getMock';
 
 const sampleDifferentUser: UserProfileProps = {
   isCurrentUser: false,
+  setUser: jest.fn(React.useState).mockImplementation(),
   user: {
     id: '123',
     name: 'Steve Job',
@@ -18,6 +19,7 @@ const sampleDifferentUser: UserProfileProps = {
 
 const sampleSameUser: UserProfileProps = {
   isCurrentUser: true,
+  setUser: jest.fn(React.useState).mockImplementation(),
   user: {
     id: '123',
     name: 'Steve Job',
@@ -49,7 +51,6 @@ describe('Mock UserProfileLayout component', () => {
     expect(screen.getByText('Apple University')).toBeVisible();
     expect(screen.queryByText('Edit')).toBeInTheDocument();
 
-    // Click on edit button to show edit form
     const editButton = screen.getByText('Edit');
     userEvent.click(editButton);
 

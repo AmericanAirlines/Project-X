@@ -1,18 +1,17 @@
 import React from 'react';
 import {
-  Heading,
-  HStack,
-  Spacer,
-  useTheme,
-  VStack,
-  Text,
-  Box,
   Button,
   ButtonGroup,
   FormControl,
   FormLabel,
   FormHelperText,
   Input,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalBody,
+  ModalCloseButton,
+  useDisclosure
 } from '@chakra-ui/react';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
@@ -27,7 +26,7 @@ const editFormSchema = yup.object({
 
 export interface EditUserProps {
   setEditToggle: React.Dispatch<React.SetStateAction<boolean>>;
-  // setUser: React.Dispatch<React.SetStateAction<User | undefined>>;
+  setUser: React.Dispatch<React.SetStateAction<User | undefined>>;
   user: {
     id: string;
     name: string;
@@ -37,6 +36,9 @@ export interface EditUserProps {
 }
 
 export const EditUserForm: React.FC<EditUserProps> = (props: EditUserProps) => {
+    const { isOpen, onOpen, onClose } = useDisclosure();
+    const [isModalShown, setIsModalShown] = React.useState<boolean>(false);
+
     const formik = useFormik<EditFormValues>({
         initialValues: {
           name: props.user.name,
@@ -55,17 +57,33 @@ export const EditUserForm: React.FC<EditUserProps> = (props: EditUserProps) => {
           });
           if(res.status === 200)
           {
-            // props.setUser(await res.json());
+            props.setUser(await res.json());
             props.setEditToggle(false);
           }
           else
           {
-    
+            onOpen();
+            setIsModalShown(true);
           }
         },
       });
       
+    const errorModal = isModalShown ? (
+      <Modal isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay>
+          <ModalContent>
+            <ModalCloseButton onClick={() => setIsModalShown(false)}/>
+            <ModalBody>
+              An error has occurred. Please try again later.
+            </ModalBody>
+          </ModalContent>
+        </ModalOverlay>
+      </Modal>
+    ) : null;
+
     return (
+      <div>
+        {errorModal}
         <form onSubmit={formik.handleSubmit}>
           <FormControl id="name">
             <FormLabel htmlFor="name">Name</FormLabel>
@@ -113,5 +131,6 @@ export const EditUserForm: React.FC<EditUserProps> = (props: EditUserProps) => {
             </Button>
           </ButtonGroup>
         </form>
+        </div>
     );
 }
