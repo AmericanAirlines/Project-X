@@ -1,7 +1,6 @@
 import React from 'react';
 import { render, screen } from '../../testUtils/testTools';
 import { RepoBox } from '../../../src/components/Repos';
-// import { RepoBoxProps } from '../../../src/components/Repos/RepoBox';
 import { RepoList } from '../../../src/pages/app/projects';
 // Mock repo objects
 const repo1: RepoList = {
