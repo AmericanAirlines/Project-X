@@ -19,7 +19,7 @@ github.get('/github/login', passport.authenticate('github', { scope: ['user:emai
 
 github.get(
   '/github/callback',
-  passport.authenticate('github', { failureRedirect: '/errorPage' }),
+  passport.authenticate('github', { failureRedirect: '/invalidEmail' }),
   (req, res) => {
     // Successful authentication, redirect to app.
     res.redirect('/app');

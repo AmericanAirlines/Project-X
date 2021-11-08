@@ -2,7 +2,7 @@ import { NextPage } from 'next';
 import { Button, Heading, HStack, Text, VStack } from '@chakra-ui/react';
 import { MarketingLayout } from '../components/Layout';
 
-const ErrorPage: NextPage = () => {
+const InvalidEmail: NextPage = () => {
   return (
     <MarketingLayout>
       <VStack alignItems="center" paddingTop={8} w="100%" maxW="1200px" marginX="auto">
@@ -31,5 +31,5 @@ const ErrorPage: NextPage = () => {
   );
 };
 
-export default ErrorPage;
+export default InvalidEmail;
 export { getServerSideProps } from '../components/Chakra';
