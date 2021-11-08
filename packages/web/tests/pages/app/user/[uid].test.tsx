@@ -6,9 +6,7 @@ import { UserProfile, UserProfileProps } from '../../../../src/components/userpr
 import { getMock } from '../../../testUtils/getMock';
 
 jest.mock('../../../../src/components/userprofile/UserProfile');
-getMock(UserProfile).mockImplementation(({ ...UserProfileData }) => (
-  <div>{UserProfileData.name}</div>
-));
+getMock(UserProfile).mockImplementation(({ user }) => <div>{user.name}</div>);
 
 jest.mock('next/router', () => ({
   useRouter() {
@@ -20,7 +18,7 @@ jest.mock('next/router', () => ({
 
 const useRouter = jest.spyOn(require('next/router'), 'useRouter');
 
-const sampleUser: UserProfileProps = {
+const sampleUser: UserProfileProps['user'] = {
   name: 'Steve Job',
   pronouns: 'he/him',
   schoolName: 'Apple University',
