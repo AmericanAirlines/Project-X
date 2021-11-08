@@ -30,6 +30,6 @@
     },
     "jest.disabledWorkspaceFolders": ["root"],
     "liveServer.settings.multiRootWorkspaceName": "root",
-    "typescript.tsdk": "root/node_modules/typescript/lib",
+    "typescript.tsdk": "root/node_modules/typescript/lib"
   }
 }

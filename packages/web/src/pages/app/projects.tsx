@@ -26,7 +26,6 @@ const Projects: NextPage = () => {
 
       // Set project list
       setProjects(projectsList);
-      console.log(projectsList);
     };
 
     fetchProjects();
