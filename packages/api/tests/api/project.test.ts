@@ -158,7 +158,7 @@ const MockProjectResults: MockProjectDetails[] = [
 describe('Project GET route', () => {
   beforeEach(async () => {
     jest.clearAllMocks();
-    fetchMock.reset();
+    fetchMock.mockReset();
   });
 
   it('error on find returns 500 status code', async () => {
@@ -190,9 +190,10 @@ describe('Project GET route', () => {
       req.user = { githubToken: 'abcd123', profile: { id: 'aaa' } };
       next();
     });
+
     handler.entityManager.find.mockResolvedValueOnce(MockProjectList);
 
-    fetchMock.post('https://api.github.com/graphql', MockProjectResults);
+    fetchMock.post('https://api.github.com/graphql', { data: { nodes: MockProjectResults } });
 
     const { body } = await handler.get('/').expect(200);
 
