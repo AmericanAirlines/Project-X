@@ -40,7 +40,7 @@ export class User extends Node<User> {
   @Property({ columnType: 'boolean' })
   isAdmin: boolean;
 
-  @Property({ columnType: 'timestamp', nullable: true})
+  @Property({ columnType: 'timestamp', nullable: true })
   contributionsLastCheckedAt?: Date;
 
   constructor({
