@@ -9,6 +9,7 @@ export interface User {
   name: string;
   pronouns?: string;
   schoolName?: string;
+  discordId?: string;
 }
 
 const UserProfilePage: NextPage = () => {
@@ -51,7 +52,7 @@ const UserProfilePage: NextPage = () => {
   } else {
     return (
       <MarketingLayout>
-        <UserProfile {...user} />
+        <UserProfile user={user} setUser={setUser} />
       </MarketingLayout>
     );
   }
