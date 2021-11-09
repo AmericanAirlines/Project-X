@@ -193,6 +193,25 @@ describe('users API PATCH route', () => {
     expect(handler.entityManager.findOne).toHaveBeenCalledWith(User, { id: '0' });
   });
 
+  it('returns 403 when user edits another user', async () => {
+    const handler = testHandler(users, (req, _res, next) => {
+      req.user = { githubToken: 'abcd123', profile: { id: 'aaa' } };
+      next();
+    });
+
+    const userToModify: Partial<User> = {
+      name: 'Bill Nye',
+      pronouns: 'he/him',
+      schoolName: 'Science School',
+      isAdmin: true,
+    };
+
+    handler.entityManager.findOne.mockResolvedValueOnce(userToModify);
+    handler.entityManager.findOne.mockResolvedValueOnce({});
+
+    await handler.patch('/0').expect(403);
+  });
+
   it('401 when not logged in', async () => {
     const handler = testHandler(users);
 

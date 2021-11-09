@@ -19,6 +19,7 @@
     "@chakra-ui/react": "^1.6.7",
     "@emotion/react": "^11.4.1",
     "@emotion/styled": "^11.3.0",
+    "cookie-parser": "^1.4.5",
     "framer-motion": "^4.1.17",
     "next": "^11.1.2",
     "passport": "^0.5.0",

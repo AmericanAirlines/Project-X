@@ -74,6 +74,9 @@ project.get('', async (req, res) => {
                   name
                   url
                   stargazerCount
+                  primaryLanguage {
+                    name
+                  }
                   description
                 }
               }
@@ -84,8 +87,7 @@ project.get('', async (req, res) => {
           },
         }),
       });
-
-      res.status(fetchRes.status).send(await fetchRes.json());
+      res.status(fetchRes.status).send((await fetchRes.json()).data.nodes);
     } catch (error) {
       const errorMessage = 'There was an issue getting the projects';
       logger.error(errorMessage, error);

@@ -9,6 +9,7 @@ export const NavBar: React.FC = () => {
       <NavLink label="Home" href="/app" />
       <NavLink label="Community" href="/app/community" />
       <NavLink label="Videos" href="/app/videos" />
+      <NavLink label="Projects" href="/app/projects" />
       <Spacer />
       <NavProfileMenu />
     </HStack>
