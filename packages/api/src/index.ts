@@ -103,6 +103,7 @@ void (async () => {
   .then(() => {
     app.listen(port, () => {
       logger.info(`🚀 Listening at http://localhost:${port}`);
+      // call setTimeout to start loop of geting contributions
     });
   })
   .catch((err) => {
