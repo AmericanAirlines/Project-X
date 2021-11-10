@@ -123,6 +123,10 @@ interface MockProjectDetails {
   url: string;
   name: string;
   stargazer_count: number;
+  primaryLanguage: {
+    name: string;
+  };
+  description: string;
 }
 
 const MockProjectList: MockProjectEntity[] = [
@@ -135,18 +139,26 @@ const MockProjectResults: MockProjectDetails[] = [
     url: 'www.github.com/AmericanAirlines/VeryLargePlane',
     name: 'VeryLargePlane',
     stargazer_count: 12345,
+    description: 'large plane',
+    primaryLanguage: {
+      name: 'HTML',
+    },
   },
   {
     url: 'www.github.com/AmericanAirlines/EvenBiggerPlane',
     name: 'EvenBiggerPlane',
     stargazer_count: 54321,
+    primaryLanguage: {
+      name: 'CSS',
+    },
+    description: 'bigger plane',
   },
 ];
 
 describe('Project GET route', () => {
   beforeEach(async () => {
     jest.clearAllMocks();
-    fetchMock.reset();
+    fetchMock.mockReset();
   });
 
   it('error on find returns 500 status code', async () => {
@@ -178,11 +190,13 @@ describe('Project GET route', () => {
       req.user = { githubToken: 'abcd123', profile: { id: 'aaa' } };
       next();
     });
+
     handler.entityManager.find.mockResolvedValueOnce(MockProjectList);
 
-    fetchMock.post('https://api.github.com/graphql', MockProjectResults);
+    fetchMock.post('https://api.github.com/graphql', { data: { nodes: MockProjectResults } });
 
     const { body } = await handler.get('/').expect(200);
+
     expect(body).toEqual(MockProjectResults);
     expect(fetchMock).toHaveLastFetched('https://api.github.com/graphql', 'post');
     expect(fetchMock).toHaveFetchedTimes(1);
