@@ -16,7 +16,7 @@ import {
 } from '@chakra-ui/react';
 import { NextPage } from 'next';
 import React from 'react';
-import { FaDiscord } from 'react-icons/fa';
+import { DiscordButtonCheck } from '../../components/DiscordCheck';
 import { AppLayout } from '../../components/Layout';
 
 const Community: NextPage = () => {
@@ -89,15 +89,8 @@ const Community: NextPage = () => {
           </AccordionPanel>
         </AccordionItem>
       </Accordion>
-      <HStack>
-        <Spacer />
-        <Button bg="discord.400" textColor="white" leftIcon={<FaDiscord color="white" />}>
-          <Link _hover={{ textDecoration: 'none' }} href="https://discord.gg">
-            Join our Discord
-          </Link>
-        </Button>
-        <Spacer />
-      </HStack>
+      <DiscordButtonCheck>
+      </DiscordButtonCheck>
     </AppLayout>
   );
 };
