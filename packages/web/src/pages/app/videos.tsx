@@ -27,6 +27,9 @@ const Videos: NextPage = () => {
     fetchVideos();
   }, []);
 
+  //function to filter visible rows based on search box input matching with title 
+
+  
   return (
     <AppLayout>
       <Heading>Videos</Heading>
