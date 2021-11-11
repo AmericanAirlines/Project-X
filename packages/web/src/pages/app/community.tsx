@@ -14,10 +14,12 @@ import {
   Spacer,
   Text,
 } from '@chakra-ui/react';
+import userEvent from '@testing-library/user-event';
 import { NextPage } from 'next';
 import React from 'react';
 import { DiscordButtonCheck } from '../../components/DiscordCheck';
 import { AppLayout } from '../../components/Layout';
+import { UserProfile } from '../../components/userprofile';
 
 const Community: NextPage = () => {
   return (
@@ -89,7 +91,7 @@ const Community: NextPage = () => {
           </AccordionPanel>
         </AccordionItem>
       </Accordion>
-      <DiscordButtonCheck>
+      <DiscordButtonCheck user={Request.arguments}>
       </DiscordButtonCheck>
     </AppLayout>
   );
