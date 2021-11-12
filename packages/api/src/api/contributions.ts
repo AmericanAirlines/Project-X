@@ -8,39 +8,40 @@ contributions.get('', async (req, res) => {
     if(req.user)
     {
         try {
-            /*
-            * Plan: 
-             - entityManager.find to get all entries in contribution table and store their node ids in an array
-             - query GraphQL for all contributions in our DB (use ^ array)
-             - store the node id's of the repos where the current user authored the PR in an array
-             - entityManager.find again for the ids in ^ array and return the result            
-            */
+            const allContributionsList = await req.entityManager.find(Contribution, {});
+            const contributionNodeIds = allContributionsList.map((contribution) => contribution.nodeID);
+    
+            const fetchAllContributionsRes = await fetch('https://api.github.com/graphql', {
+            method: 'POST',
+            headers: {
+            'Content-Type': 'application/json',
+            Authorization: `bearer ${req.user.githubToken}`,
+            },
+            body: JSON.stringify({
+                query: `
+                query ($contributionArray: [ID!]!){
+                    nodes(ids: $contributionArray){
+                    ...on PullRequest{
+                        id
+                        viewerDidAuthor
+                    }
+                    }
+                }
+                `,
+                variables: {
+                contributionArray: contributionNodeIds,
+                },
+              }),
+            });
 
-    // GraphQL to see which of the contributions are by the currently logged in user:
-    //
-    //         const fetchRes = await fetch('https://api.github.com/graphql', {
-    //     method: 'POST',
-    //     headers: {
-    //       'Content-Type': 'application/json',
-    //       Authorization: `bearer ${req.user.githubToken}`,
-    //     },
-    //     body: JSON.stringify({
-    //         query: `
-    //           query ($contributionArray: [ID!]!){
-    //             nodes(ids: $contributionArray){
-    //               ...on PullRequest{
-    //                 id
-    //                 viewerDidAuthor
-    //               }
-    //             }
-    //           }
-    //           `,
-    //         variables: {
-    //           contributionArray: listOfContributionIds,  <-- An array of all of the node ids from the contribution table in the DB
-    //         },
-    //       }),
-    //   });
+            const allContributions = await fetchAllContributionsRes.json();
 
+            const curUserContributionsJSON = (allContributions.data.nodes).filter((contribution: { viewerDidAuthor: boolean; }) => contribution.viewerDidAuthor === true);
+            const curUserContributionsNodeIds: string[] = curUserContributionsJSON.map((contribution: { id: string; }) => contribution.id);
+            
+            const allCurUserContributionsList = await req.entityManager.find(Contribution, {nodeID: curUserContributionsNodeIds});
+
+            res.send(allCurUserContributionsList);
         }
         catch (error)
         {
@@ -50,5 +51,5 @@ contributions.get('', async (req, res) => {
         }
     }
     else
-        res.status(401).send("You must be logged in.");
+        res.status(401).send("You must be logged in to view your contributions.");
 });
