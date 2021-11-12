@@ -4,9 +4,12 @@ import UserProfilePage, { User } from '../../../../src/pages/user/[uid]';
 import fetchMock from 'fetch-mock-jest';
 import { UserProfile, UserProfileProps } from '../../../../src/components/userprofile/UserProfile';
 import { getMock } from '../../../testUtils/getMock';
+import { NavProfileMenu } from '../../../../src/components/NavBar/NavProfileMenu'
 
 jest.mock('../../../../src/components/userprofile/UserProfile');
 getMock(UserProfile).mockImplementation(({ user }) => <div>{user.name}</div>);
+jest.mock('../../../../src/components/NavBar/NavProfileMenu')
+getMock(NavProfileMenu).mockImplementation(() => <div>Nav Bar Menu</div>)
 
 jest.mock('next/router', () => ({
   useRouter() {
@@ -39,7 +42,7 @@ describe('web /user/', () => {
     }));
 
     fetchMock.getOnce('/api/users/abc', 400);
-    fetchMock.get('/api/users/me', 401);
+    fetchMock.getOnce('/api/users/me', 401);
 
     expect(() => render(<UserProfilePage />)).not.toThrow();
 
@@ -54,7 +57,7 @@ describe('web /user/', () => {
     }));
 
     fetchMock.getOnce('/api/users/0', 404);
-    fetchMock.get('/api/users/me', 401);
+    fetchMock.getOnce('/api/users/me', 401);
 
     expect(() => render(<UserProfilePage />)).not.toThrow();
 

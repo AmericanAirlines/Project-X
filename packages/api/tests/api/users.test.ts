@@ -27,7 +27,6 @@ describe('users API GET route for currently logged in user', () => {
   });
 
   it('404 error current user not found in database', async () => {
-    jest.setTimeout(500000);
     const handler = testHandler(users, (req, _res, next) => {
       req.user = { githubToken: 'abcd123', profile: { id: 'aaa' } };
       next();
@@ -41,7 +40,6 @@ describe('users API GET route for currently logged in user', () => {
   });
 
   it('500 error during findOne', async () => {
-    jest.setTimeout(500000);
     const handler = testHandler(users, (req, _res, next) => {
       req.user = { githubToken: 'abcd123', profile: { id: 'aaa' } };
       next();
@@ -58,7 +56,6 @@ describe('users API GET route for currently logged in user', () => {
   });
 
   it("Successfully send current user's information", async () => {
-    jest.setTimeout(500000);
     const handler = testHandler(users, (req, _res, next) => {
       req.user = { githubToken: 'efgh4321', profile: { id: '234234' } };
       next();
