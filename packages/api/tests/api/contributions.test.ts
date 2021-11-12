@@ -1,6 +1,6 @@
 import fetchMock from 'fetch-mock-jest';
 import { contributions } from '../../src/api/contributions';
-import { Contribution } from '../../src/entities/Contribution'; 
+import { Contribution } from '../../src/entities/Contribution';
 import logger from '../../src/logger';
 import { testHandler } from '../testUtils/testHandler';
 
@@ -34,8 +34,8 @@ const mockAllContibutions = [
     type: 'OPEN',
     score: 123,
     contributedAt: '1962-03-22',
-  }
-]
+  },
+];
 
 const mockCurrentUserContibutions = [
   {
@@ -58,8 +58,8 @@ const mockCurrentUserContibutions = [
     type: 'OPEN',
     score: 123,
     contributedAt: '1962-03-22',
-  }
-]
+  },
+];
 
 const mockFetchRes = {
   data: {
@@ -79,55 +79,53 @@ const mockFetchRes = {
       {
         id: 'PR_T4C0B311',
         viewerDidAuthor: true,
-      }
+      },
     ],
-  }
-}
+  },
+};
 
 describe('Contributions API GET route', () => {
-    beforeEach(async () => {
-      jest.clearAllMocks();
-      fetchMock.reset();
+  beforeEach(async () => {
+    jest.clearAllMocks();
+    fetchMock.reset();
+  });
+
+  it('Error during find returns 500 error', async () => {
+    const handler = testHandler(contributions, (req, _res, next) => {
+      req.user = { githubToken: 'abcd123', profile: { id: 'aaa' } };
+      next();
     });
 
-    it('Error during find returns 500 error', async () => {
-      const handler = testHandler(contributions, (req, _res, next) => {
-        req.user = { githubToken: 'abcd123', profile: { id: 'aaa' } };
-        next();
-      });
+    handler.entityManager.find.mockRejectedValueOnce(new Error(''));
 
-      handler.entityManager.find.mockRejectedValueOnce(
-        new Error(''),
-      );
+    const { text } = await handler.get('/').expect(500);
+    expect(text).toEqual('There was an issue returning the contributions.');
+    expect(loggerSpy).toBeCalledTimes(1);
+  });
 
-      const { text } = await handler.get('/').expect(500);
-      expect(text).toEqual('There was an issue returning the contributions.');
-      expect(loggerSpy).toBeCalledTimes(1);
+  it("Successfully return list of current user's contributions", async () => {
+    const handler = testHandler(contributions, (req, _res, next) => {
+      req.user = { githubToken: 'abcd123', profile: { id: 'aaa' } };
+      next();
     });
 
-    it("Successfully return list of current user's contributions", async () => {
-      const handler = testHandler(contributions, (req, _res, next) => {
-        req.user = { githubToken: 'abcd123', profile: { id: 'aaa' } };
-        next();
-      });
+    handler.entityManager.find.mockResolvedValueOnce(mockAllContibutions);
+    fetchMock.post('https://api.github.com/graphql', JSON.stringify(mockFetchRes));
+    handler.entityManager.find.mockResolvedValueOnce(mockCurrentUserContibutions);
 
-      handler.entityManager.find.mockResolvedValueOnce(mockAllContibutions);
-      fetchMock.post('https://api.github.com/graphql', JSON.stringify(mockFetchRes));
-      handler.entityManager.find.mockResolvedValueOnce(mockCurrentUserContibutions);
+    const { body } = await handler.get('').expect(200);
+    expect(body).toEqual(mockCurrentUserContibutions);
+    expect(fetchMock).toHaveFetchedTimes(1);
+    expect(handler.entityManager.find).toHaveBeenCalledTimes(2);
+  });
 
-      const { body } = await handler.get('').expect(200);
-      expect(body).toEqual(mockCurrentUserContibutions);
-      expect(fetchMock).toHaveFetchedTimes(1);
-      expect(handler.entityManager.find).toHaveBeenCalledTimes(2);
-    });
+  it('401 Unauthorized Access', async () => {
+    const handler = testHandler(contributions);
 
-    it('401 Unauthorized Access', async () => {
-      const handler = testHandler(contributions);
-  
-      fetchMock.post('https://api.github.com/graphql', {});
-      const { text } = await handler.get('/').expect(401);
+    fetchMock.post('https://api.github.com/graphql', {});
+    const { text } = await handler.get('/').expect(401);
 
-      expect(text).toEqual('You must be logged in to view your contributions.');
-      expect(fetchMock).toHaveFetchedTimes(0);
-    });
-})
+    expect(text).toEqual('You must be logged in to view your contributions.');
+    expect(fetchMock).toHaveFetchedTimes(0);
+  });
+});
