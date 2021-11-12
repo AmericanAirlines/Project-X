@@ -16,7 +16,6 @@ getMock(useRouter).mockReturnValue({
   },
 } as any);
 
-
 const sampleUser: UserProfileProps['user'] = {
   id: '123',
   name: 'Steve Job',
@@ -28,9 +27,8 @@ jest.mock('../../../src/components/userprofile/EditUserForm');
 getMock(EditUserForm).mockImplementation(({ ...EditFormProps }) => <div>This is a form</div>);
 
 describe('Mock UserProfileLayout component', () => {
-
-it('renders sampleUser (is not current user) and do not show Edit button', async () => {
-    render(<UserProfile user={sampleUser} setUser={jest.fn()} isCurrentUser={false}/>);
+  it('renders sampleUser (is not current user) and do not show Edit button', async () => {
+    render(<UserProfile user={sampleUser} setUser={jest.fn()} isCurrentUser={false} />);
 
     expect(screen.getByText('Steve Job')).toBeVisible();
     expect(screen.getByText('he/him')).toBeVisible();
@@ -39,7 +37,7 @@ it('renders sampleUser (is not current user) and do not show Edit button', async
   });
 
   it('renders sampleUser (is current user) with edit button and click on edit button to show form', async () => {
-    render(<UserProfile user={sampleUser} setUser={jest.fn()} isCurrentUser={true}/>);
+    render(<UserProfile user={sampleUser} setUser={jest.fn()} isCurrentUser={true} />);
 
     expect(screen.getByText('Steve Job')).toBeVisible();
     expect(screen.getByText('he/him')).toBeVisible();
@@ -55,7 +53,7 @@ it('renders sampleUser (is not current user) and do not show Edit button', async
 
 describe('Discord Login Button Functionality', () => {
   it('renders login button when user has no discord id', () => {
-    render(<UserProfile user={sampleUser} setUser={jest.fn()} isCurrentUser={false}/>);
+    render(<UserProfile user={sampleUser} setUser={jest.fn()} isCurrentUser={false} />);
 
     expect(screen.queryByText('Login with Discord')).toBeVisible();
     expect(screen.queryByText('Login with Discord')?.getAttribute('href')).toEqual(
@@ -66,7 +64,13 @@ describe('Discord Login Button Functionality', () => {
   it('renders unlink button when user has discord id and unlinks account when clicked', async () => {
     fetchMock.patch('/api/users/1', sampleUser);
     const mockSetUser = jest.fn();
-    render(<UserProfile user={{ ...sampleUser, discordId: '12345' }} setUser={mockSetUser} isCurrentUser={false}/>);
+    render(
+      <UserProfile
+        user={{ ...sampleUser, discordId: '12345' }}
+        setUser={mockSetUser}
+        isCurrentUser={false}
+      />,
+    );
 
     expect(screen.queryByText('Unlink Discord Account')).toBeVisible();
 
@@ -82,7 +86,13 @@ describe('Discord Login Button Functionality', () => {
   it('renders error when unlink call fails', async () => {
     fetchMock.patch('/api/users/1', 500);
 
-    render(<UserProfile user={{ ...sampleUser, discordId: '12345' }} setUser={jest.fn()} isCurrentUser={false} />);
+    render(
+      <UserProfile
+        user={{ ...sampleUser, discordId: '12345' }}
+        setUser={jest.fn()}
+        isCurrentUser={false}
+      />,
+    );
 
     expect(screen.queryByText('Unlink Discord Account')).toBeVisible();
 

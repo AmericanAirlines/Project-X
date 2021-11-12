@@ -25,7 +25,7 @@ const editFormSchema = yup.object({
 });
 
 export interface EditUserProps {
-  setEditToggle(editToggle: boolean): void
+  setEditToggle(editToggle: boolean): void;
   setUser(user: User): void;
   user: {
     id: string;

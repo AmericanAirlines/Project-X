@@ -17,10 +17,14 @@ export interface UserProfileProps {
   isCurrentUser: boolean;
 }
 
-export const UserProfile: React.FC<UserProfileProps> = ({ user, setUser, isCurrentUser }: UserProfileProps) => {
+export const UserProfile: React.FC<UserProfileProps> = ({
+  user,
+  setUser,
+  isCurrentUser,
+}: UserProfileProps) => {
   const [editToggle, setEditToggle] = React.useState<boolean>(false);
   const [errorMessage, setErrorMessage] = React.useState<string>('');
-  
+
   //function makes patch call for discord = undefined
   const router = useRouter();
   const { uid } = router.query;
@@ -56,10 +60,10 @@ export const UserProfile: React.FC<UserProfileProps> = ({ user, setUser, isCurre
         Edit
       </Button>
     ) : null;
-    
+
     return (
       <Box border="1px" borderColor="gray.200" boxShadow="base" p={3}>
-          {user.discordId ? (
+        {user.discordId ? (
           <>
             <Text fontSize="xl"> Your discord account is linked with: {user.discordId} </Text>
             <Button size="md" colorScheme="blue" onClick={unlinkDiscordId}>
@@ -86,4 +90,4 @@ export const UserProfile: React.FC<UserProfileProps> = ({ user, setUser, isCurre
       </Box>
     );
   }
-}
+};
