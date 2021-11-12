@@ -4,12 +4,12 @@ import UserProfilePage, { User } from '../../../../src/pages/user/[uid]';
 import fetchMock from 'fetch-mock-jest';
 import { UserProfile, UserProfileProps } from '../../../../src/components/userprofile/UserProfile';
 import { getMock } from '../../../testUtils/getMock';
-import { NavProfileMenu } from '../../../../src/components/NavBar/NavProfileMenu'
+import { NavProfileMenu } from '../../../../src/components/NavBar/NavProfileMenu';
 
 jest.mock('../../../../src/components/userprofile/UserProfile');
 getMock(UserProfile).mockImplementation(({ user }) => <div>{user.name}</div>);
-jest.mock('../../../../src/components/NavBar/NavProfileMenu')
-getMock(NavProfileMenu).mockImplementation(() => <div>Nav Bar Menu</div>)
+jest.mock('../../../../src/components/NavBar/NavProfileMenu');
+getMock(NavProfileMenu).mockImplementation(() => <div>Nav Bar Menu</div>);
 
 jest.mock('next/router', () => ({
   useRouter() {
