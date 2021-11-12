@@ -39,7 +39,6 @@ describe('community page', () => {
     jest.clearAllMocks();
   });
 
-  
   it('outputs error given non-existant user', async () => {
     useRouter.mockImplementation(() => ({
       query: undefined,
@@ -53,7 +52,7 @@ describe('community page', () => {
 
   it('Community page renders', async () => {
     useRouter.mockImplementation(() => ({
-      query: { },
+      query: {},
     }));
 
     fetchMock.get('/api/currentUser', sampleUser);
@@ -72,7 +71,10 @@ describe('community page', () => {
     ).not.toBeVisible();
     expect(screen.queryByText('Should I change my Discord profile avatar?')).not.toBeVisible();
     expect(screen.queryByText('Join our Discord')).toBeVisible();
-    expect(screen.queryByText('Join our Discord')).toHaveAttribute('href', '/api/auth/discord/login');
+    expect(screen.queryByText('Join our Discord')).toHaveAttribute(
+      'href',
+      '/api/auth/discord/login',
+    );
     expect(screen.queryByText('here')).toHaveAttribute('href', '/api/auth/discord/login');
   });
 });

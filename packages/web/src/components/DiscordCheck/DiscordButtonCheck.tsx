@@ -15,32 +15,43 @@ export interface UserProfileProps {
 }
 
 export const DiscordButtonCheck: React.FC<UserProfileProps> = ({ user }: UserProfileProps) => {
-
   return (
     <Box border="1px" borderColor="gray.200" boxShadow="base" p={3}>
       {user.discordId ? (
         <>
           <HStack>
             <Spacer />
-                <Button as="a" href="https://discord.com/" bg="discord.400" textColor="white" leftIcon={<FaDiscord color="white"/>}>
-                    {/* <Link _hover={{ textDecoration: 'none' }} href="/api/auth/discord/login"> */}
-                      Go to Discord
-                     {/* </Link> */}
-                </Button>
-              <Spacer />
+            <Button
+              as="a"
+              href="https://discord.com/"
+              bg="discord.400"
+              textColor="white"
+              leftIcon={<FaDiscord color="white" />}
+            >
+              {/* <Link _hover={{ textDecoration: 'none' }} href="/api/auth/discord/login"> */}
+              Go to Discord
+              {/* </Link> */}
+            </Button>
+            <Spacer />
           </HStack>
         </>
       ) : (
         <>
-         <HStack>
-          <Spacer />
-              <Button as="a" href="/api/auth/discord/login" bg="discord.400" textColor="white" leftIcon={<FaDiscord color="white"/>}>
-                  {/* <Link _hover={{ textDecoration: 'none' }} href="/api/auth/discord/login"> */}
-                   Join our Discord
-                {/* </Link> */}
-              </Button>
-          <Spacer />
-        </HStack>
+          <HStack>
+            <Spacer />
+            <Button
+              as="a"
+              href="/api/auth/discord/login"
+              bg="discord.400"
+              textColor="white"
+              leftIcon={<FaDiscord color="white" />}
+            >
+              {/* <Link _hover={{ textDecoration: 'none' }} href="/api/auth/discord/login"> */}
+              Join our Discord
+              {/* </Link> */}
+            </Button>
+            <Spacer />
+          </HStack>
         </>
       )}
     </Box>
