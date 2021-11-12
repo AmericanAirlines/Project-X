@@ -11,15 +11,13 @@ import {
 } from '@chakra-ui/react';
 
 export const NavProfileMenu: React.FC = () => {
-
   const [currentUserId, setCurrentUserId] = React.useState<string>('');
 
   React.useEffect(() => {
     const fetchCurrentUserID = async () => {
       const res = await fetch(`/api/users/me`);
-      
-      if(res.status == 200)
-      {
+
+      if (res.status == 200) {
         const data = await res.json();
         setCurrentUserId(data.id);
       }
@@ -28,7 +26,7 @@ export const NavProfileMenu: React.FC = () => {
     fetchCurrentUserID();
   }, []);
 
-  return(
+  return (
     <Menu variant="navbar">
       <MenuButton as={Button}>
         <Avatar size={'sm'} />
@@ -52,4 +50,5 @@ export const NavProfileMenu: React.FC = () => {
         </MenuItem>
       </MenuList>
     </Menu>
-  )};
+  );
+};

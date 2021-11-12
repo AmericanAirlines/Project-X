@@ -4,8 +4,8 @@ import { NavProfileMenu } from '../../../src/components/NavBar/NavProfileMenu';
 import fetchMock from 'fetch-mock-jest';
 
 const mockCurrentUser = {
-  id: 123
-}
+  id: 123,
+};
 
 const wait = () => new Promise<void>((resolve) => setTimeout(() => resolve(), 0));
 
@@ -20,7 +20,7 @@ describe('NavLink Components', () => {
     render(<NavProfileMenu />);
 
     await act(wait);
-    
+
     expect(screen.getByRole('img')).toBeVisible();
 
     expect(screen.getByText('View Profile')).toHaveAttribute('href', `/user/`);
@@ -33,7 +33,7 @@ describe('NavLink Components', () => {
     render(<NavProfileMenu />);
 
     await act(wait);
-    
+
     expect(screen.getByRole('img')).toBeVisible();
 
     expect(screen.getByText('View Profile')).toHaveAttribute('href', `/user/${mockCurrentUser.id}`);
