@@ -25,8 +25,8 @@ const editFormSchema = yup.object({
 });
 
 export interface EditUserProps {
-  setEditToggle: React.Dispatch<React.SetStateAction<boolean>>;
-  setUser: React.Dispatch<React.SetStateAction<User | undefined>>;
+  setEditToggle(editToggle: boolean): void
+  setUser(user: User): void;
   user: {
     id: string;
     name: string;

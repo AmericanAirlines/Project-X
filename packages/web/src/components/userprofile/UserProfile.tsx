@@ -1,5 +1,4 @@
 import React from 'react';
-import { Text, Box, Button } from '@chakra-ui/react';
 import { EditUserForm } from './EditUserForm';
 import { useRouter } from 'next/router';
 import { Heading, HStack, Spacer, useTheme, VStack, Text, Box, Button } from '@chakra-ui/react';
@@ -80,10 +79,10 @@ export const UserProfile: React.FC<UserProfileProps> = ({ user, setUser, isCurre
             </Button>
           </>
         )}
-        {editButton}
         <Text fontSize="6xl">{user.name}</Text>
         <Text fontSize="xl">{user.pronouns}</Text>
         <Text fontSize="xl">{user.schoolName}</Text>
+        {editButton}
       </Box>
     );
   }
