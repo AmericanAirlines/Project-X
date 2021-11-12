@@ -14,4 +14,4 @@ api.use('/users', users);
 api.use('/videos', videos);
 api.use('/auth', auth);
 api.use('/project', project);
-api.use('/contributions', contributions)
+api.use('/contributions', contributions);
