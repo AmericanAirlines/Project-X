@@ -14,7 +14,6 @@ import {
   Spacer,
   Text,
 } from '@chakra-ui/react';
-import userEvent from '@testing-library/user-event';
 import { NextPage } from 'next';
 import React from 'react';
 import { DiscordButtonCheck } from '../../components/DiscordCheck';

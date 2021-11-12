@@ -1,20 +1,66 @@
 import React from 'react';
-
-import { render, screen, waitFor } from '../../testUtils/testTools';
+import fetchMock from 'fetch-mock-jest';
+import { render, screen, waitFor, act } from '../../testUtils/testTools';
 import { getMock } from '../../testUtils/getMock';
+import { UserProfileProps } from '../../../src/components/DiscordCheck/DiscordButtonCheck';
 import { AppLayout } from '../../../src/components/Layout';
 import Community from '../../../src/pages/app/community';
 
 jest.mock('../../../src/components/Layout/AppLayout.tsx');
 getMock(AppLayout).mockImplementation(({ children }) => <>{children}</>);
 
+jest.mock('next/router', () => ({
+  useRouter() {
+    return {
+      query: '',
+    };
+  },
+}));
+
+const useRouter = jest.spyOn(require('next/router'), 'useRouter');
+
+const sampleUser: UserProfileProps['user'] = {
+  name: 'Steve Job',
+  pronouns: 'he/him',
+  schoolName: 'Apple University',
+};
+
+const sampleUser2: UserProfileProps['user'] = {
+  name: 'Steve Job',
+  pronouns: undefined,
+  schoolName: undefined,
+  discordId: undefined,
+};
+
+const wait = () => new Promise<void>((resolve) => setTimeout(() => resolve(), 0));
+
 describe('community page', () => {
   beforeEach(async () => {
     jest.clearAllMocks();
   });
 
-  it('renders', async () => {
+  
+  it('outputs error given non-existant user', async () => {
+    useRouter.mockImplementation(() => ({
+      query: undefined,
+    }));
+
     expect(() => render(<Community />)).not.toThrow();
+
+    await act(wait);
+    expect(screen.getByText('User could not be found'));
+  });
+
+  it('Community page renders', async () => {
+    useRouter.mockImplementation(() => ({
+      query: { },
+    }));
+
+    fetchMock.get('/api/currentUser', sampleUser);
+
+    expect(() => render(<Community />)).not.toThrow();
+
+    await act(wait);
 
     expect(screen.getByText('Community')).toBeVisible();
 

@@ -22,9 +22,9 @@ export const DiscordButtonCheck: React.FC<UserProfileProps> = ({ user }: UserPro
         <>
           <HStack>
             <Spacer />
-                <Button as="a" href="/api/auth/discord/login" bg="discord.400" textColor="white" leftIcon={<FaDiscord color="white"/>}>
+                <Button as="a" href="https://discord.com/" bg="discord.400" textColor="white" leftIcon={<FaDiscord color="white"/>}>
                     {/* <Link _hover={{ textDecoration: 'none' }} href="/api/auth/discord/login"> */}
-                      You are logged in, redirect to somewhere else
+                      Go to Discord
                      {/* </Link> */}
                 </Button>
               <Spacer />

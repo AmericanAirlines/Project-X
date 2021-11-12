@@ -1,4 +1,3 @@
-import { sample } from 'lodash';
 import React from 'react';
 import userEvent from '@testing-library/user-event';
 import fetchMock from 'fetch-mock-jest';
