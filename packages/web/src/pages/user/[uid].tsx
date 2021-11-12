@@ -10,6 +10,7 @@ export interface User {
   name: string;
   pronouns?: string;
   schoolName?: string;
+  discordId?: string;
 }
 
 const UserProfilePage: NextPage = () => {

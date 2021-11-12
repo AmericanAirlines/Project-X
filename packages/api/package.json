@@ -20,6 +20,7 @@
     "@mikro-orm/postgresql": "^4.5.9",
     "@types/express-session": "^1.17.4",
     "@x/web": "*",
+    "cookie-parser": "^1.4.5",
     "dotenv-flow": "^3.2.0",
     "express": "^4.17.1",
     "fetch-mock-jest": "^1.5.1",

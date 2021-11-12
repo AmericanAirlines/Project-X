@@ -6,9 +6,7 @@ import { UserProfile, UserProfileProps } from '../../../../src/components/userpr
 import { getMock } from '../../../testUtils/getMock';
 
 jest.mock('../../../../src/components/userprofile/UserProfile');
-getMock(UserProfile).mockImplementation(({ ...UserProfileData }) => (
-  <div>{UserProfileData.user.name}</div>
-));
+getMock(UserProfile).mockImplementation(({ user }) => <div>{user.name}</div>);
 
 jest.mock('next/router', () => ({
   useRouter() {
@@ -20,15 +18,11 @@ jest.mock('next/router', () => ({
 
 const useRouter = jest.spyOn(require('next/router'), 'useRouter');
 
-const sameSampleUser: UserProfileProps = {
-  isCurrentUser: true,
-  setUser: jest.fn(React.useState).mockImplementation(),
-  user: {
-    id: '0',
-    name: 'Steve Job',
-    pronouns: 'he/him',
-    schoolName: 'Apple University',
-  },
+const sampleUser: UserProfileProps['user'] = {
+  id: '123',
+  name: 'Steve Job',
+  pronouns: 'he/him',
+  schoolName: 'Apple University',
 };
 
 const wait = () => new Promise<void>((resolve) => setTimeout(() => resolve(), 0));
@@ -74,8 +68,8 @@ describe('web /user/', () => {
       query: { uid: '0' },
     }));
 
-    fetchMock.getOnce('/api/users/0', sameSampleUser.user);
-    fetchMock.get('/api/users/me', sameSampleUser.user);
+    fetchMock.getOnce('/api/users/0', sampleUser);
+    fetchMock.get('/api/users/me', sampleUser);
 
     expect(() => render(<UserProfilePage />)).not.toThrow();
 
