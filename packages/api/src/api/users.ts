@@ -92,25 +92,3 @@ users.patch('/:userId', async (req, res) => {
     res.sendStatus(401);
   }
 });
-
-users.get('', async (req, res) => {
-  try {
-    if (req.user) {
-      const currentUser = await req.entityManager.findOne(User, { githubId: req.user.profile.id });
-
-      // Check if user exists
-      if (!currentUser) {
-        res.sendStatus(404);
-        return;
-      }
-
-      // Return stripped user information
-      res.status(200).send(stripSensitiveFields(currentUser));
-    } else {
-      res.sendStatus(401);
-    }
-  } catch (error) {
-    logger.error(`There was an issue getting user current user`, error);
-    res.status(500).send(`There was an issue getting current user`);
-  }
-});

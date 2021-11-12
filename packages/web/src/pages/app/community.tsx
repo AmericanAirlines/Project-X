@@ -36,7 +36,7 @@ const Community: NextPage = () => {
   React.useEffect(() => {
     const fetchUser = async () => {
         try {
-          const res = await fetch(`/api/users`);
+          const res = await fetch(`/api/currentUser`);
           const data = await res.json();
 
           setUser(data);
