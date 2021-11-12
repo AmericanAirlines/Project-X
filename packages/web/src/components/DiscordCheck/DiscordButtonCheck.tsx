@@ -28,9 +28,7 @@ export const DiscordButtonCheck: React.FC<UserProfileProps> = ({ user }: UserPro
               textColor="white"
               leftIcon={<FaDiscord color="white" />}
             >
-              {/* <Link _hover={{ textDecoration: 'none' }} href="/api/auth/discord/login"> */}
               Go to Discord
-              {/* </Link> */}
             </Button>
             <Spacer />
           </HStack>
@@ -46,9 +44,7 @@ export const DiscordButtonCheck: React.FC<UserProfileProps> = ({ user }: UserPro
               textColor="white"
               leftIcon={<FaDiscord color="white" />}
             >
-              {/* <Link _hover={{ textDecoration: 'none' }} href="/api/auth/discord/login"> */}
               Join our Discord
-              {/* </Link> */}
             </Button>
             <Spacer />
           </HStack>
