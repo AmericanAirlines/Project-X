@@ -18,6 +18,13 @@ app.use(express.json());
 
 const GitHubStrategy = require('passport-github2');
 
+const contributionPollTimer = () => {
+  setTimeout(() => {
+    // call /api/contributions
+    // set new timer
+  }, 3600000)
+}
+
 const authRequired: Handler = (req, res, next) => {
   if (req.user) {
     next();
@@ -103,7 +110,7 @@ void (async () => {
   .then(() => {
     app.listen(port, () => {
       logger.info(`🚀 Listening at http://localhost:${port}`);
-      // call setTimeout to start loop of geting contributions
+      // call contributionPollTimer()
     });
   })
   .catch((err) => {

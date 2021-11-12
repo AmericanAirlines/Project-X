@@ -13,6 +13,7 @@ export const env = setEnv({
     discordSecretId: 'DISCORD_SECRET_ID',
     githubClientId: 'GITHUB_CLIENT_ID',
     githubSecret: 'GITHUB_SECRET',
+    githubToken: 'GITHUB_TOKEN',
     appUrl: 'APP_URL',
   },
   optional: {
