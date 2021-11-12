@@ -19,9 +19,48 @@ import { NextPage } from 'next';
 import React from 'react';
 import { DiscordButtonCheck } from '../../components/DiscordCheck';
 import { AppLayout } from '../../components/Layout';
-import { UserProfile } from '../../components/userprofile';
+import { Alert, AlertIcon } from '@chakra-ui/alert';
+
+export interface User {
+  name: string;
+  pronouns: string;
+  schoolname: string;
+  discordId: string;
+}
 
 const Community: NextPage = () => {
+
+  const [user, setUser] = React.useState<User>();
+  const [errorMessage, setErrorMessage] = React.useState<string>('');
+  
+  React.useEffect(() => {
+    const fetchUser = async () => {
+        try {
+          const res = await fetch(`/api/users`);
+          const data = await res.json();
+
+          setUser(data);
+        } catch {
+          setErrorMessage('User could not be found');
+        }
+    };
+
+    fetchUser();
+  }, []);
+  
+
+  if (user === undefined) {
+    if (errorMessage == '') return null;
+    else
+      return (
+        <AppLayout>
+          <Alert status="error">
+            <AlertIcon />
+            {errorMessage}
+          </Alert>
+        </AppLayout>
+      );
+  } else {
   return (
     <AppLayout>
       <Heading>Community</Heading>
@@ -91,10 +130,11 @@ const Community: NextPage = () => {
           </AccordionPanel>
         </AccordionItem>
       </Accordion>
-      <DiscordButtonCheck user={Request.arguments}>
+      <DiscordButtonCheck user={user} >
       </DiscordButtonCheck>
     </AppLayout>
   );
+  }
 };
 
 export default Community;

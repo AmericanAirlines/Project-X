@@ -29,7 +29,7 @@ export const UserProfile: React.FC<UserProfileProps> = ({ user, setUser }: UserP
         'content-type': 'application/json',
       },
       body: JSON.stringify({
-        discordId: undefined,
+        discordId: null,
       }),
     });
     if (!res.ok) {
