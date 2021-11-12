@@ -39,7 +39,7 @@ describe('web /user/', () => {
     }));
 
     fetchMock.getOnce('/api/users/abc', 400);
-    fetchMock.getOnce('/api/users/me', 401);
+    fetchMock.get('/api/users/me', 401);
 
     expect(() => render(<UserProfilePage />)).not.toThrow();
 
@@ -54,7 +54,7 @@ describe('web /user/', () => {
     }));
 
     fetchMock.getOnce('/api/users/0', 404);
-    fetchMock.getOnce('/api/users/me', 401);
+    fetchMock.get('/api/users/me', 401);
 
     expect(() => render(<UserProfilePage />)).not.toThrow();
 

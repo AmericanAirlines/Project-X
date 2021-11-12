@@ -47,7 +47,6 @@ export const EditUserForm: React.FC<EditUserProps> = (props: EditUserProps) => {
     },
     validationSchema: editFormSchema,
     onSubmit: async (data) => {
-      console.log(data);
       const res = await fetch(`/api/users/${props.user.id}`, {
         method: 'PATCH',
         headers: {
