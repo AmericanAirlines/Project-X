@@ -14,7 +14,66 @@ const sampleUser: Partial<User> = {
 
 const loggerSpy = jest.spyOn(logger, 'error').mockImplementation();
 
-describe('users API GET route', () => {
+describe('users API GET route for currently logged in user', () => {
+  beforeEach(async () => {
+    jest.clearAllMocks();
+  });
+  it('401 error when not logged in', async () => {
+    const handler = testHandler(users);
+
+    const { text } = await handler.get('/me').expect(401);
+    expect(text).toEqual('You must be logged in.');
+    expect(handler.entityManager.findOne).toBeCalledTimes(0);
+  });
+
+  it('404 error current user not found in database', async () => {
+    const handler = testHandler(users, (req, _res, next) => {
+      req.user = { githubToken: 'abcd123', profile: { id: 'aaa' } };
+      next();
+    });
+
+    handler.entityManager.findOne.mockResolvedValueOnce(null);
+
+    await handler.get('/me').expect(404);
+    expect(handler.entityManager.findOne).toBeCalledTimes(1);
+    expect(handler.entityManager.findOne).toHaveBeenCalledWith(User, { githubId: 'aaa' });
+  });
+
+  it('500 error during findOne', async () => {
+    const handler = testHandler(users, (req, _res, next) => {
+      req.user = { githubToken: 'abcd123', profile: { id: 'aaa' } };
+      next();
+    });
+
+    handler.entityManager.findOne.mockRejectedValueOnce(new Error());
+
+    const { text } = await handler.get('/me').expect(500);
+
+    expect(loggerSpy).toBeCalledTimes(1);
+    expect(handler.entityManager.findOne).toBeCalledTimes(1);
+    expect(handler.entityManager.findOne).toHaveBeenCalledWith(User, { githubId: 'aaa' });
+    expect(text).toEqual('There was an issue getting the currently logged in user');
+  });
+
+  it("Successfully send current user's information", async () => {
+    const handler = testHandler(users, (req, _res, next) => {
+      req.user = { githubToken: 'efgh4321', profile: { id: '234234' } };
+      next();
+    });
+
+    handler.entityManager.findOne.mockResolvedValueOnce(sampleUser);
+
+    const { body } = await handler.get('/me').expect(200);
+
+    const { assign, ...retrievedUser } = sampleUser;
+
+    expect(handler.entityManager.findOne).toBeCalledTimes(1);
+    expect(handler.entityManager.findOne).toHaveBeenCalledWith(User, { githubId: '234234' });
+    expect(body).toEqual(retrievedUser);
+  });
+});
+
+describe('users API GET route (for specific user id)', () => {
   beforeEach(async () => {
     jest.clearAllMocks();
   });
