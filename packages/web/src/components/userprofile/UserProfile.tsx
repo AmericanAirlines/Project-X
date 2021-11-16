@@ -22,8 +22,8 @@ export const UserProfile: React.FC<UserProfileProps> = ({
   setUser,
   isCurrentUser,
 }: UserProfileProps) => {
-  const [editToggle, setEditToggle] = React.useState<boolean>(false);
-  const [errorMessage, setErrorMessage] = React.useState<string>('');
+  const [editToggle, setEditToggle] = React.useState(false);
+  const [errorMessage, setErrorMessage] = React.useState('');
 
   //function makes patch call for discord = undefined
   const router = useRouter();
