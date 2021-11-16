@@ -82,9 +82,9 @@ export const UserProfile: React.FC<UserProfileProps> = ({
             </Button>
           </>
         )}
-        <Text fontSize="6xl">{user.name}</Text>
-        <Text fontSize="xl">{user.pronouns}</Text>
-        <Text fontSize="xl">{user.schoolName}</Text>
+        <Heading>{user.name}</Heading>
+        <Text>{user.pronouns}</Text>
+        <Text>{user.schoolName}</Text>
         {editButton}
       </Box>
     );
