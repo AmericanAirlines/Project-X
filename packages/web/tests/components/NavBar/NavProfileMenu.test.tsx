@@ -7,7 +7,6 @@ const mockCurrentUser = {
   id: 123,
 };
 
-const wait = () => new Promise<void>((resolve) => setTimeout(() => resolve(), 0));
 
 describe('NavLink Components', () => {
   beforeEach(async () => {
