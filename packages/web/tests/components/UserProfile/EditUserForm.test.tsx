@@ -28,7 +28,7 @@ describe('', () => {
     jest.clearAllMocks();
   });
 
-  it('Error message when try to enter no name', async () => {
+  it('displays an error when the user tries to submit without a name', async () => {
     fetchMock.patch(`api/users/${mockEditFormProps.user.id}`, mockReturnedUser);
     render(<EditUserForm {...mockEditFormProps} />);
 
