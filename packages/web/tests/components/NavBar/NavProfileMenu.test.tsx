@@ -11,7 +11,6 @@ const mockCurrentUser = {
 describe('NavLink Components', () => {
   beforeEach(async () => {
     jest.clearAllMocks();
-    fetchMock.reset();
   });
 
   it('renders correctly and without logged in user', async () => {
