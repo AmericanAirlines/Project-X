@@ -44,7 +44,7 @@ describe('', () => {
     });
   });
 
-  it('Test if close button resets form values', async () => {
+  it('resets form values when the user clicks the reset button', async () => {
     render(<EditUserForm {...mockEditFormProps} />);
 
     const nameInput = screen.getByLabelText('Name');
