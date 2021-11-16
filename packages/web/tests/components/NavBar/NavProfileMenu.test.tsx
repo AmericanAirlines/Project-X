@@ -17,7 +17,6 @@ describe('NavLink Components', () => {
     fetchMock.get('/api/users/me', 401);
     render(<NavProfileMenu />);
 
-    await act(wait);
 
     expect(screen.getByRole('img')).toBeVisible();
 
