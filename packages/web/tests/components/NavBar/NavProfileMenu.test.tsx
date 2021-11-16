@@ -18,7 +18,6 @@ describe('NavLink Components', () => {
     render(<NavProfileMenu />);
 
 
-    expect(screen.getByRole('img')).toBeVisible();
 
     expect(screen.getByText('View Profile')).toHaveAttribute('href', `/user/`);
     expect(screen.getByText('View Contributions')).toHaveAttribute('href', '/app/contributions');
