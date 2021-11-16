@@ -26,7 +26,6 @@ const mockReturnedUser = {
 describe('', () => {
   beforeEach(async () => {
     jest.clearAllMocks();
-    fetchMock.reset();
   });
 
   it('Error message when try to enter no name', async () => {
