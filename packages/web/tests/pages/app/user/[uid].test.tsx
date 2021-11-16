@@ -33,7 +33,6 @@ const wait = () => new Promise<void>((resolve) => setTimeout(() => resolve(), 0)
 describe('web /user/', () => {
   beforeEach(async () => {
     jest.clearAllMocks();
-    fetchMock.reset();
   });
 
   it('outputs error given non-numeric or no uid', async () => {
