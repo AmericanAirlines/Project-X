@@ -66,7 +66,7 @@ describe('', () => {
     });
   });
 
-  it('Error modal popups because of non-200 response from patch request and close modal', async () => {
+  it('shows an error modal on error which can be closed by the user', async () => {
     render(<EditUserForm {...mockEditFormProps} />);
 
     fetchMock.patch(`api/users/${mockEditFormProps.user.id}`, 404);
