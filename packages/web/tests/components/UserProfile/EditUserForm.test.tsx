@@ -88,7 +88,7 @@ describe('', () => {
     });
   });
 
-  it('Successful edit (clear all forms and enter values)', async () => {
+  it('sets the edit toggle and sets the user on successful submission', async () => {
     render(<EditUserForm {...mockEditFormProps} />);
 
     fetchMock.patch(`api/users/${mockEditFormProps.user.id}`, mockReturnedUser);
