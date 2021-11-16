@@ -14,10 +14,11 @@ const sampleUser: Partial<User> = {
 
 const loggerSpy = jest.spyOn(logger, 'error').mockImplementation();
 
-describe('users API GET route for currently logged in user', () => {
+describe('GET users/me', () => {
   beforeEach(async () => {
     jest.clearAllMocks();
   });
+  
   it('401 error when not logged in', async () => {
     const handler = testHandler(users);
 
@@ -73,7 +74,7 @@ describe('users API GET route for currently logged in user', () => {
   });
 });
 
-describe('users API GET route (for specific user id)', () => {
+describe('GET /users/:id', () => {
   beforeEach(async () => {
     jest.clearAllMocks();
   });
