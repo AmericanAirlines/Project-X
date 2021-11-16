@@ -18,6 +18,7 @@ describe('users API GET route for currently logged in user', () => {
   beforeEach(async () => {
     jest.clearAllMocks();
   });
+
   it('401 error when not logged in', async () => {
     const handler = testHandler(users);
 
