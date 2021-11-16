@@ -23,7 +23,7 @@ const mockReturnedUser = {
   schoolName: 'School of Hill',
 };
 
-describe('', () => {
+describe('EditUserForm', () => {
   beforeEach(async () => {
     jest.clearAllMocks();
   });
