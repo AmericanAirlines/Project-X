@@ -37,7 +37,7 @@ export interface EditUserProps {
 
 export const EditUserForm: React.FC<EditUserProps> = (props: EditUserProps) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [isModalShown, setIsModalShown] = React.useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = React.useState<boolean>(false);
 
   const formik = useFormik<EditFormValues>({
     initialValues: {
@@ -59,16 +59,16 @@ export const EditUserForm: React.FC<EditUserProps> = (props: EditUserProps) => {
         props.setEditToggle(false);
       } else {
         onOpen();
-        setIsModalShown(true);
+        setErrorMessage(true);
       }
     },
   });
 
-  const errorModal = isModalShown ? (
+  const errorModal = errorMessage ? (
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay>
         <ModalContent>
-          <ModalCloseButton onClick={() => setIsModalShown(false)} />
+          <ModalCloseButton onClick={() => setErrorMessage(false)} />
           <ModalBody>An error has occurred. Please try again later.</ModalBody>
         </ModalContent>
       </ModalOverlay>
