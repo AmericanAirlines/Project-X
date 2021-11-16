@@ -18,8 +18,8 @@ const UserProfilePage: NextPage = () => {
   const { uid } = router.query;
 
   const [user, setUser] = React.useState<User>();
-  const [errorMessage, setErrorMessage] = React.useState<string>('');
-  const [isCurrentUser, setIsCurrentUser] = React.useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = React.useState('');
+  const [isCurrentUser, setIsCurrentUser] = React.useState(false);
 
   React.useEffect(() => {
     const fetchUser = async () => {
