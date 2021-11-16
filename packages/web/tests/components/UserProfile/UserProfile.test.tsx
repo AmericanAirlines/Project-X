@@ -27,7 +27,7 @@ jest.mock('../../../src/components/userprofile/EditUserForm');
 getMock(EditUserForm).mockImplementation(({ ...EditFormProps }) => <div>This is a form</div>);
 
 describe('Mock UserProfileLayout component', () => {
-  it('renders sampleUser (is not current user) and do not show Edit button', async () => {
+  it('does not display an edit button when viewing the profile of someone else', async () => {
     render(<UserProfile user={sampleUser} setUser={jest.fn()} isCurrentUser={false} />);
 
     expect(screen.getByText('Steve Job')).toBeVisible();
