@@ -3,7 +3,6 @@ import { User, UserConstructorValues } from '../entities/User';
 import logger from '../logger';
 
 export const users = Router();
-users.use(express.json());
 
 const stripSensitiveFields = (user: User): Partial<User> => ({
   id: user.id,
