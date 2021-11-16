@@ -36,7 +36,7 @@ describe('Mock UserProfileLayout component', () => {
     expect(screen.queryByText('Edit')).not.toBeInTheDocument();
   });
 
-  it('renders sampleUser (is current user) with edit button and click on edit button to show form', async () => {
+  it('allows the user to edit their profile', async () => {
     render(<UserProfile user={sampleUser} setUser={jest.fn()} isCurrentUser={true} />);
 
     expect(screen.getByText('Steve Job')).toBeVisible();
