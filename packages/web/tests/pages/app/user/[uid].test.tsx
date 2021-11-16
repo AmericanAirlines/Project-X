@@ -9,7 +9,7 @@ import { NavProfileMenu } from '../../../../src/components/NavBar/NavProfileMenu
 jest.mock('../../../../src/components/userprofile/UserProfile');
 getMock(UserProfile).mockImplementation(({ user }) => <div>{user.name}</div>);
 jest.mock('../../../../src/components/NavBar/NavProfileMenu');
-getMock(NavProfileMenu).mockImplementation(() => <div>Nav Bar Menu</div>);
+getMock(NavProfileMenu).mockImplementation(() => <div>Navbar Menu</div>);
 
 jest.mock('next/router', () => ({
   useRouter() {
