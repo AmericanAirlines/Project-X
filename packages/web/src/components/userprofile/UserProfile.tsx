@@ -74,7 +74,6 @@ export const UserProfile: React.FC<UserProfileProps> = ({
         ) : (
           <>
             <Text fontSize="xl">
-              {' '}
               After linking you&apos;ll be able to join our community and talk with others from
               Project X on a variety of topics.{' '}
             </Text>
