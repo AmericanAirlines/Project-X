@@ -11,7 +11,7 @@ import {
 } from '@chakra-ui/react';
 
 export const NavProfileMenu: React.FC = () => {
-  const [currentUserId, setCurrentUserId] = React.useState<string>('');
+  const [currentUserId, setCurrentUserId] = React.useState('');
 
   React.useEffect(() => {
     const fetchCurrentUserID = async () => {
