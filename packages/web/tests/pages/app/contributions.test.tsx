@@ -11,9 +11,9 @@ jest.mock('../../../src/components/Layout/AppLayout.tsx');
 getMock(AppLayout).mockImplementation(({ children }) => <>{children}</>);
 
 jest.mock('../../../src/components/Contributions/ContributionsBox.tsx');
-getMock(ContributionsBox).mockImplementation(({ cbox }) => <p>Box Row</p>);
+getMock(ContributionsBox).mockImplementation(() => <p>Box Row</p>);
 
-const repo1: ContributionsList = {
+const clist1: ContributionsList = {
   id: '1',
   nodeID: 'PR_00000',
   description: 'Pizza but a construct of the mind',
@@ -23,7 +23,7 @@ const repo1: ContributionsList = {
   url: 'abc.com',
 };
 
-const repo2: ContributionsList = {
+const clist2: ContributionsList = {
   id: '2',
   nodeID: 'PR_54321',
   description: 'Count 5 to 1',
@@ -36,13 +36,13 @@ const repo2: ContributionsList = {
 // Wait utility
 const wait = () => new Promise<void>((resolve) => setTimeout(() => resolve(), 0));
 
-describe('repo page', () => {
+describe('contribution page', () => {
   beforeEach(async () => {
     jest.clearAllMocks();
     fetchMock.reset();
   });
 
-  it('renders the table properly when no repo are returned', async () => {
+  it('renders the table properly when no contribution are returned', async () => {
     fetchMock.get(`/api/contributions`, []);
 
     expect(() => render(<Contributions />)).not.toThrow();
@@ -54,8 +54,8 @@ describe('repo page', () => {
     expect(screen.getByText('No Projects Found')).toBeVisible();
   });
 
-  it('renders the table properly when repo are returned', async () => {
-    fetchMock.mock().getOnce(`/api/contributions`, [repo1, repo2]);
+  it('renders the table properly when contribution are returned', async () => {
+    fetchMock.mock().getOnce(`/api/contributions`, [clist1, clist2]);
     expect(() => render(<Contributions />)).not.toThrow();
 
     // Wait for fetch
