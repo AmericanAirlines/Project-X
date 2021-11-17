@@ -4,13 +4,13 @@ import { ContributionsBox } from '../../../src/components/Contributions';
 import { ContributionsList } from '../../../src/pages/app/contributions';
 // Mock repo objects
 const clist1: ContributionsList = {
-    id: '1',
-    nodeID: 'PR_00000',
-    description: 'clist1',
-    type: 'CLOSED',
-    score: 1,
-    contributedAt: new Date('1612-04-20'),
-    url: 'abc.com',
+  id: '1',
+  nodeID: 'PR_00000',
+  description: 'clist1',
+  type: 'CLOSED',
+  score: 1,
+  contributedAt: new Date('1612-04-20'),
+  url: 'abc.com',
 };
 
 describe('Contributions Box', () => {

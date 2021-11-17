@@ -14,23 +14,23 @@ jest.mock('../../../src/components/Contributions/ContributionsBox.tsx');
 getMock(ContributionsBox).mockImplementation(({ cbox }) => <p>Box Row</p>);
 
 const repo1: ContributionsList = {
-    id: '1',
-    nodeID: 'PR_00000',
-    description: 'Pizza but a construct of the mind',
-    type: 'CLOSED',
-    score: 1,
-    contributedAt: new Date('1612-04-20'),
-    url: 'abc.com',
+  id: '1',
+  nodeID: 'PR_00000',
+  description: 'Pizza but a construct of the mind',
+  type: 'CLOSED',
+  score: 1,
+  contributedAt: new Date('1612-04-20'),
+  url: 'abc.com',
 };
 
 const repo2: ContributionsList = {
-    id: '2',
-    nodeID: 'PR_54321',
-    description: 'Count 5 to 1',
-    type: 'OPEN',
-    score: 1,
-    contributedAt: new Date('2022-09-12'),
-    url: 'onetofive.com',
+  id: '2',
+  nodeID: 'PR_54321',
+  description: 'Count 5 to 1',
+  type: 'OPEN',
+  score: 1,
+  contributedAt: new Date('2022-09-12'),
+  url: 'onetofive.com',
 };
 
 // Wait utility

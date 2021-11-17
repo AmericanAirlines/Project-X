@@ -42,7 +42,7 @@ export const ContributionsBox: React.FC<ContributionsBoxProps> = ({ cbox }) => {
         </Box>
         <Box mt="1">Score: {cbox.score}</Box>
         <Box mt="1" color="gray" fontSize="xs">
-          {cbox.contributedAt.toString().slice(0,10)}
+          {cbox.contributedAt.toString().slice(0, 10)}
         </Box>
       </Box>
     </Box>
