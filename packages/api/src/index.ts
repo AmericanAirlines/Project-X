@@ -75,14 +75,16 @@ passport.use(
         const newUser = new User({
           name: profile.username,
           githubId: profile.id,
+          githubUsername: profile.username,
           hireable: false,
           purpose: '',
         });
-        await authEm?.persistAndFlush(newUser);
-        done(null, { profile, githubToken: accessToken });
+        authEm?.persist(newUser);
       } else {
-        done(null, { profile, githubToken: accessToken });
+        currentUser.githubUsername = profile.username;
       }
+      await authEm?.flush();
+      done(null, { profile, githubToken: accessToken });
     },
   ),
 );
