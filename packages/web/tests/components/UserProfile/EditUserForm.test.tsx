@@ -78,13 +78,28 @@ describe('EditUserForm', () => {
       expect(screen.queryByText('An error has occurred. Please try again later.')).toBeVisible();
     });
 
-    const closeModalButton = screen.getByLabelText('Close');
-    userEvent.click(closeModalButton);
+    const closeAlertButton = screen.getByLabelText('Close');
+    userEvent.click(closeAlertButton);
 
     await waitFor(() => {
       expect(
         screen.queryByText('An error has occurred. Please try again later.'),
       ).not.toBeInTheDocument();
+    });
+  });
+
+  it('shows the error modal when exception caught in try catch block' , async () => {
+    render(<EditUserForm {...mockEditFormProps} />);
+
+    fetchMock.patch(`api/users/${mockEditFormProps.user.id}`, () => {
+      throw new Error("");
+    });
+
+    const submitButton = screen.getByText('Submit');
+    userEvent.click(submitButton);
+
+    await waitFor(() => {
+      expect(screen.queryByText('An error has occurred. Please try again later.')).toBeVisible();
     });
   });
 

@@ -6,12 +6,11 @@ import {
   FormLabel,
   FormHelperText,
   Input,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalBody,
-  ModalCloseButton,
   useDisclosure,
+  Alert,
+  AlertIcon,
+  AlertDescription,
+  CloseButton,
 } from '@chakra-ui/react';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
@@ -36,8 +35,7 @@ export interface EditUserProps {
 }
 
 export const EditUserForm: React.FC<EditUserProps> = (props: EditUserProps) => {
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const [errorMessage, setErrorMessage] = React.useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = React.useState(false);
 
   const formik = useFormik<EditFormValues>({
     initialValues: {
@@ -47,43 +45,33 @@ export const EditUserForm: React.FC<EditUserProps> = (props: EditUserProps) => {
     },
     validationSchema: editFormSchema,
     onSubmit: async (data) => {
-      const res = await fetch(`/api/users/${props.user.id}`, {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
-      });
-      if (res.status === 200) {
-        props.setUser(await res.json());
-        props.setEditToggle(false);
-      } else {
-        onOpen();
+      try {
+        const res = await fetch(`/api/users/${props.user.id}`, {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data),
+        });
+        if (res.ok) {
+          props.setUser(await res.json());
+          props.setEditToggle(false);
+        } else {
+          setErrorMessage(true);
+        }
+      }
+      catch {
         setErrorMessage(true);
       }
     },
   });
 
-  const errorModal = errorMessage ? (
-    <Modal isOpen={isOpen} onClose={onClose}>
-      <ModalOverlay>
-        <ModalContent>
-          <ModalCloseButton onClick={() => setErrorMessage(false)} />
-          <ModalBody>An error has occurred. Please try again later.</ModalBody>
-        </ModalContent>
-      </ModalOverlay>
-    </Modal>
-  ) : null;
-
   return (
     <div>
-      {errorModal}
       <form onSubmit={formik.handleSubmit}>
         <FormControl id="name">
           <FormLabel htmlFor="name">Name</FormLabel>
           <Input
-            id="name"
-            name="name"
             type="text"
             value={formik.values.name}
             onChange={formik.handleChange}
@@ -93,8 +81,6 @@ export const EditUserForm: React.FC<EditUserProps> = (props: EditUserProps) => {
         <FormControl id="pronouns">
           <FormLabel htmlFor="pronouns">Pronouns</FormLabel>
           <Input
-            id="pronouns"
-            name="pronouns"
             type="text"
             value={formik.values.pronouns}
             onChange={formik.handleChange}
@@ -103,8 +89,6 @@ export const EditUserForm: React.FC<EditUserProps> = (props: EditUserProps) => {
         <FormControl id="schoolName">
           <FormLabel htmlFor="schoolName">School Name</FormLabel>
           <Input
-            id="schoolName"
-            name="schoolName"
             type="text"
             value={formik.values.schoolName}
             onChange={formik.handleChange}
@@ -125,6 +109,13 @@ export const EditUserForm: React.FC<EditUserProps> = (props: EditUserProps) => {
           </Button>
         </ButtonGroup>
       </form>
+      {errorMessage ? (
+        <Alert status="error">
+        <AlertIcon />
+        <AlertDescription>An error has occurred. Please try again later.</AlertDescription>
+        <CloseButton position="absolute" right="8px" onClick={() => setErrorMessage(false)}></CloseButton>
+        </Alert>
+      ): undefined}
     </div>
   );
 };
