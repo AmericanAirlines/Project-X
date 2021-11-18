@@ -31,6 +31,7 @@ export const NavProfileMenu: React.FC = () => {
       <MenuButton as={Button}>
         <Avatar size={'sm'} />
       </MenuButton>
+      { currentUserId ? (
       <MenuList>
         <MenuItem>
           <Link variant="navbarMenuItem" href={`/user/${String(currentUserId)}`}>
@@ -49,6 +50,15 @@ export const NavProfileMenu: React.FC = () => {
           </Link>
         </MenuItem>
       </MenuList>
+      ) : (
+      <MenuList>
+        <MenuItem>
+        <Link variant="navbarMenuItem" href="/api/auth/github/login">
+            Log In
+          </Link>
+        </MenuItem>
+      </MenuList>
+      )}
     </Menu>
   );
 };
