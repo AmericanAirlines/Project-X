@@ -90,7 +90,11 @@ const Community: NextPage = () => {
           </AccordionPanel>
         </AccordionItem>
       </Accordion>
-      <DiscordButtonCheck></DiscordButtonCheck>
+      <HStack>
+        <Spacer />
+        <DiscordButtonCheck></DiscordButtonCheck>
+        <Spacer />
+      </HStack>
     </AppLayout>
   );
 };

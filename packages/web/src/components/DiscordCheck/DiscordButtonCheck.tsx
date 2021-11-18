@@ -46,35 +46,27 @@ export const DiscordButtonCheck: React.FC = () => {
       <Box border="1px" borderColor="gray.200" boxShadow="base" p={3}>
         {user.discordId ? (
           <>
-            <HStack>
-              <Spacer />
-              <Button
-                as="a"
-                href="https://discord.com/"
-                bg="discord.400"
-                textColor="white"
-                leftIcon={<FaDiscord color="white" />}
-              >
-                Go to Discord
-              </Button>
-              <Spacer />
-            </HStack>
+            <Button
+              as="a"
+              href="https://discord.com/"
+              bg="discord.400"
+              textColor="white"
+              leftIcon={<FaDiscord color="white" />}
+            >
+              Go to Discord
+            </Button>
           </>
         ) : (
           <>
-            <HStack>
-              <Spacer />
-              <Button
-                as="a"
-                href="/api/auth/discord/login"
-                bg="discord.400"
-                textColor="white"
-                leftIcon={<FaDiscord color="white" />}
-              >
-                Join our Discord
-              </Button>
-              <Spacer />
-            </HStack>
+            <Button
+              as="a"
+              href="/api/auth/discord/login"
+              bg="discord.400"
+              textColor="white"
+              leftIcon={<FaDiscord color="white" />}
+            >
+              Join our Discord
+            </Button>
           </>
         )}
       </Box>
