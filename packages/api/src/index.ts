@@ -23,8 +23,8 @@ const contributionPollTimer = (milliseconds: number) => {
   setTimeout(async () => {
     await fetch(`${env.appUrl}/api/contributions`);
     contributionPollTimer(milliseconds);
-  }, milliseconds)
-}
+  }, milliseconds);
+};
 
 const authRequired: Handler = (req, res, next) => {
   if (req.user) {

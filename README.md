@@ -76,7 +76,6 @@
 
 - Next, copy the token and replace the value of `GITHUB_TOKEN` within your `.env.local`
 
-
 ## Setting up Discord OAuth
 
 - Go to the [Discord Develop Portal](https://discord.com/developers/applications) and log in.
