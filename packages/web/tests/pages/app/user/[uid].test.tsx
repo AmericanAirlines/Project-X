@@ -69,17 +69,21 @@ describe('web /user/', () => {
     useRouter.mockImplementation(() => ({
       query: { uid: sampleUser.id },
     }));
-    
+
     fetchMock.getOnce('api/users/123', sampleUser);
     fetchMock.get('/api/users/me', () => {
-      throw new Error("");
+      throw new Error('');
     });
 
     expect(() => render(<UserProfilePage />)).not.toThrow();
 
     await waitFor(() => {
       expect(UserProfile).toBeCalledTimes(1);
-      expect(screen.getByText("An error has occurred checking the currently logged in user. Please try again later."));
+      expect(
+        screen.getByText(
+          'An error has occurred checking the currently logged in user. Please try again later.',
+        ),
+      );
     });
   });
 

@@ -17,7 +17,7 @@ const sampleSignedInUser: Express.User = {
     id: 'aaa',
   },
   githubToken: 'abcd123',
-}
+};
 
 const loggerSpy = jest.spyOn(logger, 'error').mockImplementation();
 
@@ -43,7 +43,9 @@ describe('users API GET route for currently logged in user', () => {
 
     await handler.get('/me').expect(404);
     expect(handler.entityManager.findOne).toBeCalledTimes(1);
-    expect(handler.entityManager.findOne).toHaveBeenCalledWith(User, { githubId: sampleSignedInUser.profile.id });
+    expect(handler.entityManager.findOne).toHaveBeenCalledWith(User, {
+      githubId: sampleSignedInUser.profile.id,
+    });
   });
 
   it('500 error during findOne', async () => {
@@ -58,7 +60,9 @@ describe('users API GET route for currently logged in user', () => {
 
     expect(loggerSpy).toBeCalledTimes(1);
     expect(handler.entityManager.findOne).toBeCalledTimes(1);
-    expect(handler.entityManager.findOne).toHaveBeenCalledWith(User, { githubId: sampleSignedInUser.profile.id });
+    expect(handler.entityManager.findOne).toHaveBeenCalledWith(User, {
+      githubId: sampleSignedInUser.profile.id,
+    });
     expect(text).toEqual('There was an issue getting the currently logged in user');
   });
 
@@ -75,7 +79,9 @@ describe('users API GET route for currently logged in user', () => {
     const { assign, ...retrievedUser } = sampleUser;
 
     expect(handler.entityManager.findOne).toBeCalledTimes(1);
-    expect(handler.entityManager.findOne).toHaveBeenCalledWith(User, { githubId: sampleSignedInUser.profile.id });
+    expect(handler.entityManager.findOne).toHaveBeenCalledWith(User, {
+      githubId: sampleSignedInUser.profile.id,
+    });
     expect(body).toEqual(retrievedUser);
   });
 });

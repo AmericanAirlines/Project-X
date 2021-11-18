@@ -54,8 +54,7 @@ const UserProfilePage: NextPage = () => {
           }
         }
         setDidCheckCurrentUser(true);
-      }
-      catch {}
+      } catch {}
     };
 
     checkUser();
@@ -75,12 +74,12 @@ const UserProfilePage: NextPage = () => {
   } else {
     return (
       <AppLayout>
-        { !didCheckCurrentUser ? (
+        {!didCheckCurrentUser ? (
           <Alert status="error">
             <AlertIcon />
             An error has occurred checking the currently logged in user. Please try again later.
           </Alert>
-        ) : undefined }
+        ) : undefined}
         <UserProfile isCurrentUser={isCurrentUser} setUser={setUser} user={user} />
       </AppLayout>
     );

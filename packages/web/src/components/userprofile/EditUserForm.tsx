@@ -59,8 +59,7 @@ export const EditUserForm: React.FC<EditUserProps> = (props: EditUserProps) => {
         } else {
           setErrorMessage(true);
         }
-      }
-      catch {
+      } catch {
         setErrorMessage(true);
       }
     },
@@ -71,28 +70,16 @@ export const EditUserForm: React.FC<EditUserProps> = (props: EditUserProps) => {
       <form onSubmit={formik.handleSubmit}>
         <FormControl id="name">
           <FormLabel htmlFor="name">Name</FormLabel>
-          <Input
-            type="text"
-            value={formik.values.name}
-            onChange={formik.handleChange}
-          />
+          <Input type="text" value={formik.values.name} onChange={formik.handleChange} />
           <FormHelperText color="red.500">{formik.errors.name}</FormHelperText>
         </FormControl>
         <FormControl id="pronouns">
           <FormLabel htmlFor="pronouns">Pronouns</FormLabel>
-          <Input
-            type="text"
-            value={formik.values.pronouns}
-            onChange={formik.handleChange}
-          />
+          <Input type="text" value={formik.values.pronouns} onChange={formik.handleChange} />
         </FormControl>
         <FormControl id="schoolName">
           <FormLabel htmlFor="schoolName">School Name</FormLabel>
-          <Input
-            type="text"
-            value={formik.values.schoolName}
-            onChange={formik.handleChange}
-          />
+          <Input type="text" value={formik.values.schoolName} onChange={formik.handleChange} />
         </FormControl>
         <ButtonGroup>
           <Button type="submit" colorScheme="green">
@@ -111,11 +98,15 @@ export const EditUserForm: React.FC<EditUserProps> = (props: EditUserProps) => {
       </form>
       {errorMessage ? (
         <Alert status="error">
-        <AlertIcon />
-        <AlertDescription>An error has occurred. Please try again later.</AlertDescription>
-        <CloseButton position="absolute" right="8px" onClick={() => setErrorMessage(false)}></CloseButton>
+          <AlertIcon />
+          <AlertDescription>An error has occurred. Please try again later.</AlertDescription>
+          <CloseButton
+            position="absolute"
+            right="8px"
+            onClick={() => setErrorMessage(false)}
+          ></CloseButton>
         </Alert>
-      ): undefined}
+      ) : undefined}
     </div>
   );
 };

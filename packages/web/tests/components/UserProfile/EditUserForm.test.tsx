@@ -88,11 +88,11 @@ describe('EditUserForm', () => {
     });
   });
 
-  it('shows the error modal when exception caught in try catch block' , async () => {
+  it('shows the error modal when exception caught in try catch block', async () => {
     render(<EditUserForm {...mockEditFormProps} />);
 
     fetchMock.patch(`api/users/${mockEditFormProps.user.id}`, () => {
-      throw new Error("");
+      throw new Error('');
     });
 
     const submitButton = screen.getByText('Submit');
