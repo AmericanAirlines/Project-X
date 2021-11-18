@@ -3,9 +3,13 @@ import { render, screen, waitFor } from '../../testUtils/testTools';
 import { getMock } from '../../testUtils/getMock';
 import { AppLayout } from '../../../src/components/Layout';
 import Community from '../../../src/pages/app/community';
+import { DiscordButtonCheck } from '../../../src/components/DiscordCheck';
 
 jest.mock('../../../src/components/Layout/AppLayout.tsx');
 getMock(AppLayout).mockImplementation(({ children }) => <>{children}</>);
+jest.mock('../../../src/components/DiscordCheck/DiscordButtonCheck.tsx');
+const discordText = 'discordButton';
+getMock(DiscordButtonCheck).mockImplementation(() => <p>{discordText}</p>);
 
 describe('community page', () => {
   beforeEach(async () => {
@@ -24,5 +28,6 @@ describe('community page', () => {
       screen.queryByText('Remember to follow the Community Guidelines listed above.'),
     ).not.toBeVisible();
     expect(screen.queryByText('Should I change my Discord profile avatar?')).not.toBeVisible();
+    expect(screen.queryByText(discordText)).toBeVisible();
   });
 });

@@ -2,7 +2,7 @@ import React from 'react';
 import fetchMock from 'fetch-mock-jest';
 import userEvent from '@testing-library/user-event';
 import { DiscordButtonCheck } from '../../../src/components/DiscordCheck';
-import { UserProfileProps } from '../../../src/components/userprofile/UserProfile';
+import { UserProfileProps } from '../../../src/components/DiscordCheck/DiscordButtonCheck';
 import { act, render, screen } from '../../testUtils/testTools';
 
 jest.mock('next/router', () => ({
@@ -31,7 +31,7 @@ const sampleUser2: UserProfileProps['user'] = {
 
 const wait = () => new Promise<void>((resolve) => setTimeout(() => resolve(), 0));
 
-describe('Discord Login Button Functionality', () => {
+describe('check for discordId to change button', () => {
   beforeEach(async () => {
     jest.clearAllMocks();
   });

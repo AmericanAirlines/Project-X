@@ -1,7 +1,5 @@
 import React from 'react';
-// import { useRouter } from 'next/router';
 import { Button, HStack, Spacer, Box, Alert, AlertIcon } from '@chakra-ui/react';
-import { AppLayout } from '../../components/Layout';
 import { FaDiscord } from 'react-icons/fa';
 
 interface User {
