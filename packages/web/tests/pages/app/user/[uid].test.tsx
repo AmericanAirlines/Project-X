@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, act } from '../../../testUtils/testTools';
+import { render, screen, act, waitFor } from '../../../testUtils/testTools';
 import UserProfilePage, { User } from '../../../../src/pages/user/[uid]';
 import fetchMock from 'fetch-mock-jest';
 import { UserProfile, UserProfileProps } from '../../../../src/components/userprofile/UserProfile';
@@ -28,8 +28,6 @@ const sampleUser: UserProfileProps['user'] = {
   schoolName: 'Apple University',
 };
 
-const wait = () => new Promise<void>((resolve) => setTimeout(() => resolve(), 0));
-
 describe('web /user/', () => {
   beforeEach(async () => {
     jest.clearAllMocks();
@@ -45,39 +43,59 @@ describe('web /user/', () => {
 
     expect(() => render(<UserProfilePage />)).not.toThrow();
 
-    await act(wait);
-    expect(UserProfile).toBeCalledTimes(0);
-    expect(screen.getByText('User id malformed'));
+    await waitFor(() => {
+      expect(UserProfile).toBeCalledTimes(0);
+      expect(screen.getByText('User id malformed'));
+    });
   });
 
   it('outputs error given non-existant user id', async () => {
     useRouter.mockImplementation(() => ({
-      query: { uid: '0' },
+      query: { uid: sampleUser.id },
     }));
 
-    fetchMock.getOnce('/api/users/0', 404);
+    fetchMock.getOnce('/api/users/123', 404);
     fetchMock.getOnce('/api/users/me', 401);
 
     expect(() => render(<UserProfilePage />)).not.toThrow();
 
-    await act(wait);
-    expect(UserProfile).toBeCalledTimes(0);
-    expect(screen.getByText('User could not be found'));
+    await waitFor(() => {
+      expect(UserProfile).toBeCalledTimes(0);
+      expect(screen.getByText('User could not be found'));
+    });
+  });
+
+  it('outputs error when error thrown checking current user', async () => {
+    useRouter.mockImplementation(() => ({
+      query: { uid: sampleUser.id },
+    }));
+    
+    fetchMock.getOnce('api/users/123', sampleUser);
+    fetchMock.get('/api/users/me', () => {
+      throw new Error("");
+    });
+
+    expect(() => render(<UserProfilePage />)).not.toThrow();
+
+    await waitFor(() => {
+      expect(UserProfile).toBeCalledTimes(1);
+      expect(screen.getByText("An error has occurred checking the currently logged in user. Please try again later."));
+    });
   });
 
   it('outputs user profile info given valid user id', async () => {
     useRouter.mockImplementation(() => ({
-      query: { uid: '0' },
+      query: { uid: sampleUser.id },
     }));
 
-    fetchMock.getOnce('/api/users/0', sampleUser);
+    fetchMock.getOnce('/api/users/123', sampleUser);
     fetchMock.get('/api/users/me', sampleUser);
 
     expect(() => render(<UserProfilePage />)).not.toThrow();
 
-    await act(wait);
-
-    expect(UserProfile).toBeCalledTimes(2);
-    expect(screen.getByText('Steve Job')).toBeVisible();
+    await waitFor(() => {
+      expect(UserProfile).toBeCalledTimes(2);
+      expect(screen.getByText('Steve Job')).toBeVisible();
+    });
   });
 });

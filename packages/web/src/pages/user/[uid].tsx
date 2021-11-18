@@ -20,6 +20,7 @@ const UserProfilePage: NextPage = () => {
   const [user, setUser] = React.useState<User>();
   const [errorMessage, setErrorMessage] = React.useState('');
   const [isCurrentUser, setIsCurrentUser] = React.useState(false);
+  const [didCheckCurrentUser, setDidCheckCurrentUser] = React.useState(false);
 
   React.useEffect(() => {
     const fetchUser = async () => {
@@ -42,14 +43,19 @@ const UserProfilePage: NextPage = () => {
 
   React.useEffect(() => {
     const checkUser = async () => {
-      const res = await fetch('/api/users/me');
-      if (res.status === 200) {
-        const data = await res.json();
+      try {
+        const res = await fetch('/api/users/me');
 
-        if (user && data.id == user.id) {
-          setIsCurrentUser(true);
+        if (res.ok) {
+          const data = await res.json();
+
+          if (user && data.id == user.id) {
+            setIsCurrentUser(true);
+          }
         }
+        setDidCheckCurrentUser(true);
       }
+      catch {}
     };
 
     checkUser();
@@ -69,6 +75,12 @@ const UserProfilePage: NextPage = () => {
   } else {
     return (
       <AppLayout>
+        { !didCheckCurrentUser ? (
+          <Alert status="error">
+            <AlertIcon />
+            An error has occurred checking the currently logged in user. Please try again later.
+          </Alert>
+        ) : undefined }
         <UserProfile isCurrentUser={isCurrentUser} setUser={setUser} user={user} />
       </AppLayout>
     );
