@@ -50,19 +50,13 @@ export const UserProfile: React.FC<UserProfileProps> = ({
 
   if (editToggle)
     return (
-      <Box border="1px" borderColor="gray.200" boxShadow="base" p={3}>
+      <VStack border="1px" borderColor="gray.200" boxShadow="base" p={3}>
         <EditUserForm setEditToggle={setEditToggle} setUser={setUser} user={user} />
-      </Box>
+      </VStack>
     );
   else {
-    const editButton = isCurrentUser ? (
-      <Button colorScheme="blue" onClick={() => setEditToggle(true)}>
-        Edit
-      </Button>
-    ) : null;
-
     return (
-      <Box border="1px" borderColor="gray.200" boxShadow="base" p={3}>
+      <VStack border="1px" borderColor="gray.200" boxShadow="base" p={3}>
         {user.discordId ? (
           <>
             <Text fontSize="xl"> Your discord account is linked with: {user.discordId} </Text>
@@ -85,8 +79,12 @@ export const UserProfile: React.FC<UserProfileProps> = ({
         <Heading>{user.name}</Heading>
         <Text>{user.pronouns}</Text>
         <Text>{user.schoolName}</Text>
-        {editButton}
-      </Box>
+        {isCurrentUser ? (
+          <Button colorScheme="blue" onClick={() => setEditToggle(true)}>
+            Edit
+          </Button>
+        ) : null}
+      </VStack>
     );
   }
 };
