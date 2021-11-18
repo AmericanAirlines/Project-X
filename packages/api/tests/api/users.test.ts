@@ -12,12 +12,20 @@ const sampleUser: Partial<User> = {
   githubId: '234234',
 };
 
+const sampleSignedInUser: Express.User = {
+  profile: {
+    id: 'aaa',
+  },
+  githubToken: 'abcd123',
+};
+
 const loggerSpy = jest.spyOn(logger, 'error').mockImplementation();
 
-describe('users API GET route for currently logged in user', () => {
+describe('GET users/me', () => {
   beforeEach(async () => {
     jest.clearAllMocks();
   });
+
   it('401 error when not logged in', async () => {
     const handler = testHandler(users);
 
@@ -28,7 +36,7 @@ describe('users API GET route for currently logged in user', () => {
 
   it('404 error current user not found in database', async () => {
     const handler = testHandler(users, (req, _res, next) => {
-      req.user = { githubToken: 'abcd123', profile: { id: 'aaa' } };
+      req.user = sampleSignedInUser;
       next();
     });
 
@@ -36,12 +44,14 @@ describe('users API GET route for currently logged in user', () => {
 
     await handler.get('/me').expect(404);
     expect(handler.entityManager.findOne).toBeCalledTimes(1);
-    expect(handler.entityManager.findOne).toHaveBeenCalledWith(User, { githubId: 'aaa' });
+    expect(handler.entityManager.findOne).toHaveBeenCalledWith(User, {
+      githubId: sampleSignedInUser.profile.id,
+    });
   });
 
   it('500 error during findOne', async () => {
     const handler = testHandler(users, (req, _res, next) => {
-      req.user = { githubToken: 'abcd123', profile: { id: 'aaa' } };
+      req.user = sampleSignedInUser;
       next();
     });
 
@@ -51,13 +61,15 @@ describe('users API GET route for currently logged in user', () => {
 
     expect(loggerSpy).toBeCalledTimes(1);
     expect(handler.entityManager.findOne).toBeCalledTimes(1);
-    expect(handler.entityManager.findOne).toHaveBeenCalledWith(User, { githubId: 'aaa' });
+    expect(handler.entityManager.findOne).toHaveBeenCalledWith(User, {
+      githubId: sampleSignedInUser.profile.id,
+    });
     expect(text).toEqual('There was an issue getting the currently logged in user');
   });
 
   it("Successfully send current user's information", async () => {
     const handler = testHandler(users, (req, _res, next) => {
-      req.user = { githubToken: 'efgh4321', profile: { id: '234234' } };
+      req.user = sampleSignedInUser;
       next();
     });
 
@@ -68,12 +80,14 @@ describe('users API GET route for currently logged in user', () => {
     const { assign, ...retrievedUser } = sampleUser;
 
     expect(handler.entityManager.findOne).toBeCalledTimes(1);
-    expect(handler.entityManager.findOne).toHaveBeenCalledWith(User, { githubId: '234234' });
+    expect(handler.entityManager.findOne).toHaveBeenCalledWith(User, {
+      githubId: sampleSignedInUser.profile.id,
+    });
     expect(body).toEqual(retrievedUser);
   });
 });
 
-describe('users API GET route (for specific user id)', () => {
+describe('GET /users/:id', () => {
   beforeEach(async () => {
     jest.clearAllMocks();
   });

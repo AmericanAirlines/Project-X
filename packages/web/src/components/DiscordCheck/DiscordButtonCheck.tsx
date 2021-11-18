@@ -6,6 +6,10 @@ interface User {
   discordId?: string;
 }
 
+export interface UserProfileProps {
+  user: User;
+}
+
 export const DiscordButtonCheck: React.FC = () => {
   const [user, setUser] = React.useState<User>();
   const [errorMessage, setErrorMessage] = React.useState<string>('');

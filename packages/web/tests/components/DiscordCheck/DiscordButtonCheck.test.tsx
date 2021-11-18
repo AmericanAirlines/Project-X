@@ -16,16 +16,10 @@ jest.mock('next/router', () => ({
 const useRouter = jest.spyOn(require('next/router'), 'useRouter');
 
 const sampleUser: UserProfileProps['user'] = {
-  name: 'Steve Job',
-  pronouns: 'he/him',
-  schoolName: 'Apple University',
   discordId: undefined,
 };
 
 const sampleUser2: UserProfileProps['user'] = {
-  name: 'Steve Job',
-  pronouns: undefined,
-  schoolName: undefined,
   discordId: '34523452345',
 };
 
