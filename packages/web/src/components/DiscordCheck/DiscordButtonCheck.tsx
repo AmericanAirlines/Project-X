@@ -1,16 +1,9 @@
 import React from 'react';
-import { Button, HStack, Spacer, Box, Alert, AlertIcon } from '@chakra-ui/react';
+import { Button, Box, Alert, AlertIcon } from '@chakra-ui/react';
 import { FaDiscord } from 'react-icons/fa';
 
 interface User {
-  name: string;
-  pronouns?: string;
-  schoolName?: string;
   discordId?: string;
-}
-
-export interface UserProfileProps {
-  user: User;
 }
 
 export const DiscordButtonCheck: React.FC = () => {
