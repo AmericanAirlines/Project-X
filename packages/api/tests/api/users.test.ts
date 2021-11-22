@@ -26,7 +26,7 @@ describe('GET users/me', () => {
     jest.clearAllMocks();
   });
 
-  it('401 error when not logged in', async () => {
+  it('returns a 401 error when not logged in', async () => {
     const handler = testHandler(users);
 
     const { text } = await handler.get('/me').expect(401);
@@ -34,7 +34,7 @@ describe('GET users/me', () => {
     expect(handler.entityManager.findOne).toBeCalledTimes(0);
   });
 
-  it('404 error current user not found in database', async () => {
+  it('returns a 404 error when the current user is not found in database', async () => {
     const handler = testHandler(users, (req, _res, next) => {
       req.user = sampleSignedInUser;
       next();
@@ -49,7 +49,7 @@ describe('GET users/me', () => {
     });
   });
 
-  it('500 error during findOne', async () => {
+  it('returns a 500 error when a database query fails during findOne', async () => {
     const handler = testHandler(users, (req, _res, next) => {
       req.user = sampleSignedInUser;
       next();
@@ -67,7 +67,7 @@ describe('GET users/me', () => {
     expect(text).toEqual('There was an issue getting the currently logged in user');
   });
 
-  it("Successfully send current user's information", async () => {
+  it('successfully sends the data for the user when the user is logged in', async () => {
     const handler = testHandler(users, (req, _res, next) => {
       req.user = sampleSignedInUser;
       next();
