@@ -106,7 +106,7 @@ export const EditUserForm: React.FC<EditUserProps> = (props: EditUserProps) => {
             onClick={() => setErrorMessage(false)}
           ></CloseButton>
         </Alert>
-      ) : undefined}
+      ) : null}
     </div>
   );
 };
