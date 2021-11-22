@@ -18,15 +18,12 @@ interface User {
   discordId?: string;
 }
 
-export interface UserProfileProps {
-  user: User;
-}
 
-const sampleUser: UserProfileProps['user'] = {
+const sampleUser: User = {
   discordId: undefined,
 };
 
-const sampleUser2: UserProfileProps['user'] = {
+const sampleUser2: User = {
   discordId: '34523452345',
 };
 
