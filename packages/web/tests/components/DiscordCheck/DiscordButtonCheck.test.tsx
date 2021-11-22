@@ -18,7 +18,6 @@ interface User {
   discordId?: string;
 }
 
-
 const sampleUser: User = {
   discordId: undefined,
 };
