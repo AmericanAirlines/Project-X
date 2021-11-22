@@ -92,7 +92,7 @@ const Community: NextPage = () => {
       </Accordion>
       <HStack>
         <Spacer />
-        <DiscordButtonCheck></DiscordButtonCheck>
+        <DiscordButtonCheck />
         <Spacer />
       </HStack>
     </AppLayout>

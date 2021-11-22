@@ -2,7 +2,6 @@ import React from 'react';
 import fetchMock from 'fetch-mock-jest';
 import userEvent from '@testing-library/user-event';
 import { DiscordButtonCheck } from '../../../src/components/DiscordCheck';
-import { UserProfileProps } from '../../../src/components/DiscordCheck/DiscordButtonCheck';
 import { act, render, screen } from '../../testUtils/testTools';
 
 jest.mock('next/router', () => ({
@@ -14,6 +13,14 @@ jest.mock('next/router', () => ({
 }));
 
 const useRouter = jest.spyOn(require('next/router'), 'useRouter');
+
+interface User {
+  discordId?: string;
+}
+
+export interface UserProfileProps {
+  user: User;
+}
 
 const sampleUser: UserProfileProps['user'] = {
   discordId: undefined,
