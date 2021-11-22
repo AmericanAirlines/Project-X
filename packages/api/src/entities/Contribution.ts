@@ -11,6 +11,9 @@ export class Contribution extends Node<Contribution> {
   nodeID: string;
 
   @Property({ columnType: 'text' })
+  authorGithubId: string;
+
+  @Property({ columnType: 'text' })
   description: string;
 
   @Property({ columnType: 'text' })
@@ -21,13 +24,14 @@ export class Contribution extends Node<Contribution> {
 
   @Property({ columnType: 'timestamp' })
   contributedAt: Date;
-
+  
   constructor({
     nodeID,
     description,
     type,
     score,
     contributedAt,
+    authorGithubId,
     ...extraValues
   }: ContributionConstructorValues) {
     super(extraValues);
@@ -36,5 +40,6 @@ export class Contribution extends Node<Contribution> {
     this.type = type;
     this.score = score;
     this.contributedAt = contributedAt;
+    this.authorGithubId = authorGithubId;
   }
 }
