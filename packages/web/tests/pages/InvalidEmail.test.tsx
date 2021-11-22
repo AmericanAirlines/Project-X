@@ -8,7 +8,7 @@ jest.mock('../../src/components/Layout/MarketingLayout.tsx');
 getMock(MarketingLayout).mockImplementation(({ children }) => <>{children}</>);
 
 describe('web /invalidEmail', () => {
-  it('renders', async () => {
+  it('renders page and makes sure buttons work as intended', async () => {
     expect(() => render(<InvalidEmail />)).not.toThrow();
 
     expect(

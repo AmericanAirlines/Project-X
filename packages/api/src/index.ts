@@ -75,18 +75,23 @@ passport.use(
           });
           const responseData = await response.json();
 
+          let eduEmailFound = false;
+
           for (const emailResponse of responseData) {
             // for loop to go through the emails and find one to match to, otherwise save null.
-            if (emailResponse.email.endsWith('.edu') && emailResponse.verified) {
+            const email = emailResponse.email.toLowerCase();
+
+            if (emailResponse.email.endsWith('.edu') && emailResponse.verified && !eduEmailFound) {
               logger.info('Creating new user.');
               const newUser = new User({
                 name: profile.username,
                 githubId: profile.id,
                 hireable: false,
                 purpose: '',
-                email: emailResponse.email, // send the .edu email here
+                email,
               });
               await authEm?.persistAndFlush(newUser);
+              eduEmailFound = true;
               return done(null, { profile, githubToken: accessToken });
             }
           }

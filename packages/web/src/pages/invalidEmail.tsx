@@ -5,21 +5,21 @@ import { MarketingLayout } from '../components/Layout';
 const InvalidEmail: NextPage = () => {
   return (
     <MarketingLayout>
-      <VStack alignItems="center" paddingTop={8} w="100%" maxW="1200px" marginX="auto">
-        <Heading size="lg" textAlign="center" lineHeight="1.4">
+      <VStack alignItems="strech" paddingTop={8} w="100%" maxW="1200px" marginX="auto">
+        <Heading size="lg" textAlign="center">
           Error: Make sure you have a verified &quot;.edu&quot; email linked with your GitHub
           account!
         </Heading>
-        <Text textAlign="center" maxWidth="60ch" fontSize="2xl" lineHeight="2">
+        <Text textAlign="center" maxWidth="60ch" alignSelf="center" fontSize="2xl">
           Try again once you&apos;ve verified your student email address 👇
         </Text>
-        <Button as="a" size="lg" colorScheme="gray" href="/api/auth/github/login">
+        <Button as="a" size="lg" colorScheme="gray" w="60%" alignSelf="center" href="/api/auth/github/login">
           Login with GitHub
         </Button>
-        <Text textAlign="center" maxWidth="60ch" fontSize="2xl" lineHeight="2">
+        <Text textAlign="center" maxWidth="60ch" alignSelf="center" fontSize="2xl">
           Click this button if you want to go back to the homepage 👇
         </Text>
-        <Button as="a" size="lg" colorScheme="blue" href="/">
+        <Button as="a" size="lg" colorScheme="blue" w="60%" alignSelf="center" href="/">
           Home Page
         </Button>
       </VStack>
