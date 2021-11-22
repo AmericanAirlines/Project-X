@@ -75,13 +75,11 @@ passport.use(
           });
           const responseData = await response.json();
 
-          let eduEmailFound = false;
-
           for (const emailResponse of responseData) {
             // for loop to go through the emails and find one to match to, otherwise save null.
             const email = emailResponse.email.toLowerCase();
 
-            if (emailResponse.email.endsWith('.edu') && emailResponse.verified && !eduEmailFound) {
+            if (emailResponse.email.endsWith('.edu') && emailResponse.verified) {
               logger.info('Creating new user.');
               const newUser = new User({
                 name: profile.username,
@@ -91,7 +89,7 @@ passport.use(
                 email,
               });
               await authEm?.persistAndFlush(newUser);
-              eduEmailFound = true;
+              logger.info(`added ${newUser} to the databse`);
               return done(null, { profile, githubToken: accessToken });
             }
           }
