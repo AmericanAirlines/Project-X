@@ -37,7 +37,7 @@ contributions.get('', async (req, res) => {
 
     res.send(userContributions);
   } catch (error) {
-    const errorMessage = "An error has occurred retriving the user's contributions.";
+    const errorMessage = 'There was an issue retrieving contributions';;
     logger.error(errorMessage, error);
     res.status(500).send(errorMessage);
   }

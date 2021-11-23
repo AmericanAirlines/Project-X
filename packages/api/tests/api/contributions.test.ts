@@ -63,7 +63,7 @@ describe('Contributions API GET route', () => {
     handler.entityManager.find.mockRejectedValueOnce(new Error(''));
 
     const { text } = await handler.get('').expect(500);
-    expect(text).toEqual("An error has occurred retriving the user's contributions.");
+    expect(text).toEqual('There was an issue retrieving contributions');
     expect(handler.entityManager.findOne).toBeCalledTimes(1);
     expect(loggerSpy).toBeCalledTimes(1);
   });
