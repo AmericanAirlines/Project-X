@@ -24,7 +24,7 @@ export class Contribution extends Node<Contribution> {
 
   @Property({ columnType: 'timestamp' })
   contributedAt: Date;
-  
+
   constructor({
     nodeID,
     description,

@@ -90,7 +90,7 @@ describe('Contributions API GET route', () => {
     });
 
     const { text } = await handler.get('').expect(400);
-    expect(text).toEqual('No user id was given.')
+    expect(text).toEqual('No user id was given.');
   });
 
   it('returns a 400 error when non-numeric userId passed in query parameters', async () => {
@@ -103,7 +103,7 @@ describe('Contributions API GET route', () => {
     });
 
     const { text } = await handler.get('').expect(400);
-    expect(text).toEqual(`"${mockQueryId}" is not a valid id, it must be a number.`)
+    expect(text).toEqual(`"${mockQueryId}" is not a valid id, it must be a number.`);
   });
 
   it("successfully returns the current user's contributions", async () => {
