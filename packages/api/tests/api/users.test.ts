@@ -12,9 +12,82 @@ const sampleUser: Partial<User> = {
   githubId: '234234',
 };
 
+const sampleSignedInUser: Express.User = {
+  profile: {
+    id: 'aaa',
+  },
+  githubToken: 'abcd123',
+};
+
 const loggerSpy = jest.spyOn(logger, 'error').mockImplementation();
 
-describe('users API GET route', () => {
+describe('GET users/me', () => {
+  beforeEach(async () => {
+    jest.clearAllMocks();
+  });
+
+  it('returns a 401 error when not logged in', async () => {
+    const handler = testHandler(users);
+
+    const { text } = await handler.get('/me').expect(401);
+    expect(text).toEqual('You must be logged in.');
+    expect(handler.entityManager.findOne).toBeCalledTimes(0);
+  });
+
+  it('returns a 404 error when the current user is not found in database', async () => {
+    const handler = testHandler(users, (req, _res, next) => {
+      req.user = sampleSignedInUser;
+      next();
+    });
+
+    handler.entityManager.findOne.mockResolvedValueOnce(null);
+
+    await handler.get('/me').expect(404);
+    expect(handler.entityManager.findOne).toBeCalledTimes(1);
+    expect(handler.entityManager.findOne).toHaveBeenCalledWith(User, {
+      githubId: sampleSignedInUser.profile.id,
+    });
+  });
+
+  it('returns a 500 error when a database query fails during findOne', async () => {
+    const handler = testHandler(users, (req, _res, next) => {
+      req.user = sampleSignedInUser;
+      next();
+    });
+
+    handler.entityManager.findOne.mockRejectedValueOnce(new Error());
+
+    const { text } = await handler.get('/me').expect(500);
+
+    expect(loggerSpy).toBeCalledTimes(1);
+    expect(handler.entityManager.findOne).toBeCalledTimes(1);
+    expect(handler.entityManager.findOne).toHaveBeenCalledWith(User, {
+      githubId: sampleSignedInUser.profile.id,
+    });
+    expect(text).toEqual('There was an issue getting the currently logged in user');
+  });
+
+  it('successfully sends the data for the user when the user is logged in', async () => {
+    const handler = testHandler(users, (req, _res, next) => {
+      req.user = sampleSignedInUser;
+      next();
+    });
+
+    handler.entityManager.findOne.mockResolvedValueOnce(sampleUser);
+
+    const { body } = await handler.get('/me').expect(200);
+
+    const { assign, ...retrievedUser } = sampleUser;
+
+    expect(handler.entityManager.findOne).toBeCalledTimes(1);
+    expect(handler.entityManager.findOne).toHaveBeenCalledWith(User, {
+      githubId: sampleSignedInUser.profile.id,
+    });
+    expect(body).toEqual(retrievedUser);
+  });
+});
+
+describe('GET /users/:id', () => {
   beforeEach(async () => {
     jest.clearAllMocks();
   });
