@@ -1,19 +1,12 @@
-import fetchMock from 'fetch-mock-jest';
 import { contributions } from '../../src/api/contributions';
 import { Contribution } from '../../src/entities/Contribution';
+import { User } from '../../src/entities/User';
 import logger from '../../src/logger';
 import { testHandler } from '../testUtils/testHandler';
 
 const loggerSpy = jest.spyOn(logger, 'error').mockImplementation();
 
-const mockAllContibutions = [
-  {
-    nodeID: 'PR_00000',
-    description: 'Pizza but a construct of the mind',
-    type: 'CLOSED',
-    score: 1,
-    contributedAt: '1612-04-20',
-  },
+const mockQueriedUserContibutions = [
   {
     nodeID: 'PR_12345',
     description: 'Count from 1 to 5',
@@ -37,95 +30,100 @@ const mockAllContibutions = [
   },
 ];
 
-const mockCurrentUserContibutions = [
-  {
-    nodeID: 'PR_12345',
-    description: 'Count from 1 to 5',
-    type: 'OPEN',
-    score: 1,
-    contributedAt: '2011-01-01',
-  },
-  {
-    nodeID: 'PR_54321',
-    description: 'Count from 5 to 1',
-    type: 'CLOSED',
-    score: 1,
-    contributedAt: '2022-12-1',
-  },
-  {
-    nodeID: 'PR_T4C0B311',
-    description: 'yum',
-    type: 'OPEN',
-    score: 123,
-    contributedAt: '1962-03-22',
-  },
-];
+const sampleUser: Partial<User> = {
+  name: 'Bill Nye',
+  pronouns: 'he/him',
+  schoolName: 'Science School',
+  assign: jest.fn(),
+  isAdmin: false,
+  githubId: '234234',
+  id: '1',
+};
 
-const mockFetchRes = {
-  data: {
-    nodes: [
-      {
-        id: 'PR_00000',
-        viewerDidAuthor: false,
-      },
-      {
-        id: 'PR_12345',
-        viewerDidAuthor: true,
-      },
-      {
-        id: 'PR_54321',
-        viewerDidAuthor: true,
-      },
-      {
-        id: 'PR_T4C0B311',
-        viewerDidAuthor: true,
-      },
-    ],
+const sampleSignedInUser: Express.User = {
+  profile: {
+    id: 'aaa',
   },
+  githubToken: 'abcd123',
 };
 
 describe('Contributions API GET route', () => {
   beforeEach(async () => {
     jest.clearAllMocks();
-    fetchMock.reset();
   });
 
-  it('Error during find returns 500 error', async () => {
+  it('returns a 500 error when find throws an error', async () => {
     const handler = testHandler(contributions, (req, _res, next) => {
-      req.user = { githubToken: 'abcd123', profile: { id: 'aaa' } };
+      req.user = sampleSignedInUser;
+      req.query = { userId: sampleUser.id };
       next();
     });
 
+    handler.entityManager.findOne.mockResolvedValueOnce(sampleUser);
     handler.entityManager.find.mockRejectedValueOnce(new Error(''));
 
-    const { text } = await handler.get('/').expect(500);
-    expect(text).toEqual('There was an issue returning the contributions.');
+    const { text } = await handler.get('').expect(500);
+    expect(text).toEqual("An error has occurred retriving the user's contributions.");
+    expect(handler.entityManager.findOne).toBeCalledTimes(1);
     expect(loggerSpy).toBeCalledTimes(1);
   });
 
-  it("Successfully return list of current user's contributions", async () => {
+  it('returns a 404 error when queried user cannot be found', async () => {
     const handler = testHandler(contributions, (req, _res, next) => {
-      req.user = { githubToken: 'abcd123', profile: { id: 'aaa' } };
+      req.user = sampleSignedInUser;
+      req.query = { userId: sampleUser.id };
       next();
     });
 
-    handler.entityManager.find.mockResolvedValueOnce(mockAllContibutions);
-    fetchMock.post('https://api.github.com/graphql', JSON.stringify(mockFetchRes));
-    handler.entityManager.find.mockResolvedValueOnce(mockCurrentUserContibutions);
+    handler.entityManager.findOne.mockResolvedValueOnce(null);
+    handler.entityManager.find.mockResolvedValueOnce(mockQueriedUserContibutions);
 
-    const { body } = await handler.get('').expect(200);
-    expect(body).toEqual(mockCurrentUserContibutions);
-    expect(fetchMock).toHaveFetchedTimes(1);
-    expect(handler.entityManager.find).toHaveBeenCalledTimes(2);
+    await handler.get('').expect(404);
+    expect(handler.entityManager.findOne).toHaveBeenCalledTimes(1);
+    expect(handler.entityManager.find).toHaveBeenCalledTimes(0);
   });
 
-  it('401 Unauthorized Access', async () => {
+  it('returns a 400 error when no id is entered in query parameters', async () => {
+    const handler = testHandler(contributions, (req, _res, next) => {
+      req.user = sampleSignedInUser;
+      next();
+    });
+
+    const { text } = await handler.get('').expect(400);
+    expect(text).toEqual('No user id was given.')
+  });
+
+  it('returns a 400 error when non-numeric userId passed in query parameters', async () => {
+    const mockQueryId = 'abc';
+
+    const handler = testHandler(contributions, (req, _res, next) => {
+      req.user = sampleSignedInUser;
+      req.query = { userId: mockQueryId };
+      next();
+    });
+
+    const { text } = await handler.get('').expect(400);
+    expect(text).toEqual(`"${mockQueryId}" is not a valid id, it must be a number.`)
+  });
+
+  it("successfully returns the current user's contributions", async () => {
+    const handler = testHandler(contributions, (req, _res, next) => {
+      req.user = sampleSignedInUser;
+      req.query = { userId: sampleUser.id };
+      next();
+    });
+
+    handler.entityManager.findOne.mockResolvedValueOnce(sampleUser);
+    handler.entityManager.find.mockResolvedValueOnce(mockQueriedUserContibutions);
+
+    const { body } = await handler.get('').expect(200);
+    expect(body).toEqual(mockQueriedUserContibutions);
+    expect(handler.entityManager.findOne).toHaveBeenCalledTimes(1);
+    expect(handler.entityManager.find).toHaveBeenCalledTimes(1);
+  });
+
+  it('returns a 401 error when no logged in user', async () => {
     const handler = testHandler(contributions);
-
-    fetchMock.post('https://api.github.com/graphql', {});
-    const { text } = await handler.get('/').expect(401);
-
-    expect(text).toEqual('You must be logged in to view your contributions.');
-    expect(fetchMock).toHaveFetchedTimes(0);
+    await handler.get('').expect(401);
   });
 });

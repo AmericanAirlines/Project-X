@@ -8,21 +8,30 @@ export const contributions = Router();
 contributions.get('', async (req, res) => {
   if(!req.user) {
     res.sendStatus(401);
+    return;
   }
 
   const { userId } = req.query;
+  
   if(!userId) {
     res.status(400).send('No user id was given.');
+    return;
   }
 
   if (Number.isNaN(Number(userId))) {
     res.status(400).send(`"${userId}" is not a valid id, it must be a number.`);
+    return;
   }
 
   try {
     const queriedUser = await req.entityManager.findOne(User, { id: userId as string });
 
-    const userContributions = await req.entityManager.find(Contribution, {authorGithubId: queriedUser?.githubId})
+    if(!queriedUser) {
+      res.sendStatus(404);
+      return;
+    }
+
+    const userContributions = await req.entityManager.find(Contribution, {authorGithubId: queriedUser.githubId})
 
     res.send(userContributions);
   }
