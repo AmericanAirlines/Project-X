@@ -175,7 +175,7 @@ contributions.get('', async (req, res) => {
     const usersString = buildUsersQuery(userList);
     let cursor = null;
     let hasNextPage = true;
-    console.log('here')
+
     while (hasNextPage) {
       const queryString = buildQueryString(projectsString, dateString, usersString, cursor);
 
@@ -191,7 +191,6 @@ contributions.get('', async (req, res) => {
       });
 
       const { data: responseData }: ContributionResponse = await fetchRes.json();
-      console.log(responseData)
       for (const pr of responseData.search.nodes.entries()) {
         // Only Add new contributions
         if (
@@ -200,8 +199,6 @@ contributions.get('', async (req, res) => {
           const user = await req.entityManager.findOne(User, {
             githubUsername: { $eq: pr[1].author.login },
           });
-          console.log(user?.name)
-          console.log(pr[1].id)
           if (user) {
             const newContribution = new Contribution({
               nodeID: pr[1].id,
@@ -211,22 +208,22 @@ contributions.get('', async (req, res) => {
               contributedAt: new Date(Date.parse(pr[1].mergedAt)),
               score: 100,
             });
-            user.contributionsLastCheckedAt = new Date();
-            req.entityManager.persist(user);
             req.entityManager.persist(newContribution);
-            console.log('here')
           }
         }
       }
-      console.log('here')
       hasNextPage = responseData.search.pageInfo.hasNextPage;
       cursor = responseData.search.pageInfo.endCursor;
-      console.log('here')
+    }
+
+    for (const user of userList) {
+      user.contributionsLastCheckedAt = new Date();
+      req.entityManager.persist(user);
     }
 
     // Save new info in the db
-    console.log('here')
     void req.entityManager.flush();
+
     res.sendStatus(200);
   } catch (error) {
     res.sendStatus(500);
