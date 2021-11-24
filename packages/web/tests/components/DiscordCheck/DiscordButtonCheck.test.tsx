@@ -1,18 +1,8 @@
 import React from 'react';
 import fetchMock from 'fetch-mock-jest';
 import userEvent from '@testing-library/user-event';
-import { DiscordButtonCheck } from '../../../src/components/DiscordCheck';
-import { act, render, screen } from '../../testUtils/testTools';
-
-jest.mock('next/router', () => ({
-  useRouter() {
-    return {
-      query: '',
-    };
-  },
-}));
-
-const useRouter = jest.spyOn(require('next/router'), 'useRouter');
+import { DiscordButton } from '../../../src/components/DiscordCheck';
+import { render, screen, waitFor } from '../../testUtils/testTools';
 
 interface User {
   discordId?: string;
@@ -26,67 +16,47 @@ const sampleUser2: User = {
   discordId: '34523452345',
 };
 
-const wait = () => new Promise<void>((resolve) => setTimeout(() => resolve(), 0));
-
-describe('check for discordId to change button', () => {
+describe('DiscordButton component', () => {
   beforeEach(async () => {
     jest.clearAllMocks();
   });
 
-  it('undefined user', async () => {
-    jest.isolateModules(async () => {
-      useRouter.mockImplementation(() => ({
-        query: undefined,
-      }));
+  it('shows an error message when the user is not found', async () => {
+    fetchMock.get('/api/users/me', 500);
 
-      expect(() => render(<DiscordButtonCheck />)).not.toThrow();
+    render(<DiscordButton />);
 
-      await act(wait);
-      expect(screen.getByText('User could not be found'));
+    await waitFor(() => {
+      expect(fetchMock).toHaveFetched('/api/users/me');
+      expect(screen.getByText('User could not be found')).toBeVisible();
     });
   });
 
-  it('renders join discord button when user has no discord id', async () => {
-    jest.isolateModules(async () => {
-      useRouter.mockImplementation(() => ({
-        query: {},
-      }));
+  it('renders the Join Discord button when user has no discord id', async () => {
+    fetchMock.get('/api/users/me', sampleUser);
 
-      fetchMock.get('/api/users/me', sampleUser);
+    render(<DiscordButton />);
 
-      expect(() => render(<DiscordButtonCheck />)).not.toThrow();
-      await act(wait);
+    await waitFor(() => {
+      const JoinDiscord = screen.queryByText('Join our Discord');
+      expect(fetchMock).toHaveFetched('/api/users/me');
 
-      expect(screen.queryByText('Join our Discord')).toBeVisible();
-
-      const goToDiscord = screen.getByText('Join our Discord');
-      userEvent.click(goToDiscord);
-
-      expect(screen.queryByText('Join our Discord')).toBeVisible();
-      expect(screen.queryByText('Join our Discord')?.getAttribute('href')).toEqual(
-        '/api/auth/discord/login',
-      );
+      expect(JoinDiscord).toBeVisible();
+      expect(JoinDiscord).toHaveAttribute('href', '/api/auth/discord/login');
     });
   });
 
   it('renders Go to Discord button when user has a discordId', async () => {
-    jest.isolateModules(async () => {
-      useRouter.mockImplementation(() => ({
-        query: {},
-      }));
+    fetchMock.get('/api/users/me', sampleUser2);
 
-      fetchMock.get('/api/users/me', sampleUser2);
+    render(<DiscordButton />);
 
-      expect(() => render(<DiscordButtonCheck />)).not.toThrow();
-      await act(wait);
+    await waitFor(() => {
+      const GoToDiscord = screen.queryByText('Go to Discord');
+      expect(fetchMock).toHaveFetched('/api/users/me');
 
-      expect(screen.queryByText('Go to Discord')).toBeVisible();
-
-      const goToDiscord = screen.getByText('Go to Discord');
-      userEvent.click(goToDiscord);
-
-      expect(screen.queryByText('Go to Discord')).toBeVisible();
-      expect(screen.queryByText('Go to Discord')).toHaveAttribute('href', 'https://discord.com/');
+      expect(GoToDiscord).toBeVisible();
+      expect(GoToDiscord).toHaveAttribute('href', 'https://discord.com/');
     });
   });
 });

@@ -1,1 +1,1 @@
-export * from './DiscordButtonCheck';
+export * from './DiscordButton';

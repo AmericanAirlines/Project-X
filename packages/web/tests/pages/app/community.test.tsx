@@ -3,13 +3,14 @@ import { render, screen, waitFor } from '../../testUtils/testTools';
 import { getMock } from '../../testUtils/getMock';
 import { AppLayout } from '../../../src/components/Layout';
 import Community from '../../../src/pages/app/community';
-import { DiscordButtonCheck } from '../../../src/components/DiscordCheck';
+import { DiscordButton } from '../../../src/components/DiscordCheck/DiscordButton';
 
 jest.mock('../../../src/components/Layout/AppLayout.tsx');
 getMock(AppLayout).mockImplementation(({ children }) => <>{children}</>);
-jest.mock('../../../src/components/DiscordCheck/DiscordButtonCheck.tsx');
+
+jest.mock('../../../src/components/DiscordCheck/DiscordButton.tsx');
 const discordText = 'discordButton';
-getMock(DiscordButtonCheck).mockImplementation(() => <p>{discordText}</p>);
+getMock(DiscordButton).mockImplementation(() => <p>{discordText}</p>);
 
 describe('community page', () => {
   beforeEach(async () => {
