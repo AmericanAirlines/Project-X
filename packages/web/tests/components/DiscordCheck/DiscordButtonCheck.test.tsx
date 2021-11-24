@@ -1,6 +1,5 @@
 import React from 'react';
 import fetchMock from 'fetch-mock-jest';
-import userEvent from '@testing-library/user-event';
 import { DiscordButton } from '../../../src/components/DiscordCheck';
 import { render, screen, waitFor } from '../../testUtils/testTools';
 
