@@ -14,7 +14,7 @@ contributions.get('', async (req, res) => {
   const { userId } = req.query;
 
   if (!userId) {
-    res.status(400).send('No user id was given.');
+    res.status(400).send("Query parameter 'userId' is required and must be a positive integer");
     return;
   }
 
