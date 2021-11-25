@@ -18,10 +18,6 @@ contributions.get('', async (req, res) => {
     return;
   }
 
-  if (Number.isNaN(Number(userId))) {
-    res.status(400).send(`"${userId}" is not a valid id, it must be a number.`);
-    return;
-  }
 
   try {
     const queriedUser = await req.entityManager.findOne(User, { id: userId as string });
