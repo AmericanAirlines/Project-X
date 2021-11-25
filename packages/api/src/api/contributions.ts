@@ -13,7 +13,7 @@ contributions.get('', async (req, res) => {
 
   const { userId } = req.query;
 
-  if (!userId) {
+  if (Number.isNaN(Number(userId)) || Number(userId) < 0) {
     res.status(400).send("Query parameter 'userId' is required and must be a positive integer");
     return;
   }
