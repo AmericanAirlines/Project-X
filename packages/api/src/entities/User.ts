@@ -40,6 +40,9 @@ export class User extends Node<User> {
   @Property({ columnType: 'boolean' })
   isAdmin: boolean;
 
+  @Property({ columnType: 'text' })
+  email: string;
+
   @Property({ columnType: 'timestamp', nullable: true })
   contributionsLastCheckedAt?: Date;
 
@@ -49,6 +52,7 @@ export class User extends Node<User> {
     hireable,
     purpose,
     isAdmin,
+    email,
     ...extraValues
   }: UserConstructorValues) {
     super(extraValues);
@@ -58,5 +62,6 @@ export class User extends Node<User> {
     this.purpose = purpose;
     this.githubId = githubId;
     this.isAdmin = isAdmin ?? false;
+    this.email = email;
   }
 }
