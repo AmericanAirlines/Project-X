@@ -4,7 +4,7 @@ import { Heading, SimpleGrid, Text, VStack } from '@chakra-ui/react';
 import { AppLayout } from '../../components/Layout';
 import { ContributionsBox } from '../../components/Contributions';
 
-export interface ContributionsList {
+export interface Contribution {
   id: string;
   nodeID: string;
   type: string;
@@ -15,16 +15,16 @@ export interface ContributionsList {
 }
 
 const Contributions: NextPage = () => {
-  const [Contributions, setContributions] = React.useState<ContributionsList[]>([]);
+  const [contributions, setContributions] = React.useState<Contribution[]>([]);
 
   React.useEffect(() => {
     const fetchContributions = async () => {
       // Get all Contributions
       const res = await fetch('/api/contributions');
-      const ContributionsList = await res.json();
+      const contributionsList = await res.json();
 
       // Set contribution list
-      setContributions(ContributionsList);
+      setContributions(contributionsList);
     };
 
     fetchContributions();
@@ -35,12 +35,12 @@ const Contributions: NextPage = () => {
       <VStack spacing={3}>
         <Heading>Contributions</Heading>
       </VStack>
-      {Contributions.length <= 0 ? (
+      {contributions.length <= 0 ? (
         <Text>No Projects Found</Text>
       ) : (
         <SimpleGrid padding="4px" minChildWidth="250px" spacing="15px">
-          {Contributions.map((contribute) => (
-            <ContributionsBox key={contribute.id} cbox={contribute} />
+          {contributions.map((contribution) => (
+            <ContributionsBox key={contribution.id} {...contribution} />
           ))}
         </SimpleGrid>
       )}

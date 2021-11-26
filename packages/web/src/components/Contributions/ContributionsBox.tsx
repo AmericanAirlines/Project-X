@@ -2,20 +2,26 @@ import React from 'react';
 import { Box, Link } from '@chakra-ui/react';
 
 export interface ContributionsBoxProps {
-  cbox: {
-    id: string;
-    nodeID: string;
-    type: string;
-    score: number;
-    contributedAt: Date;
-    description: string | null;
-    url: string;
-  };
+  id: string;
+  nodeID: string;
+  type: string;
+  score: number;
+  contributedAt: Date;
+  description: string | null;
+  url: string;
 }
 
-export const ContributionsBox: React.FC<ContributionsBoxProps> = ({ cbox }) => {
+export const ContributionsBox: React.FC<ContributionsBoxProps> = ({
+  id,
+  nodeID,
+  type,
+  score,
+  contributedAt,
+  description,
+  url,
+}) => {
   return (
-    <Box maxW="sm" borderWidth="1px" borderRadius="lg" overflow="hidden" key={cbox.id}>
+    <Box maxW="sm" borderWidth="1px" borderRadius="lg" overflow="hidden" key={id}>
       <Box p="6">
         <Box
           color="gray.500"
@@ -24,7 +30,7 @@ export const ContributionsBox: React.FC<ContributionsBoxProps> = ({ cbox }) => {
           fontSize="xs"
           textTransform="uppercase"
         >
-          {cbox.type}
+          {type}
         </Box>
 
         <Box
@@ -36,13 +42,13 @@ export const ContributionsBox: React.FC<ContributionsBoxProps> = ({ cbox }) => {
           isTruncated
           color="cyan.500"
         >
-          <Link href={cbox.url} isExternal>
-            {cbox.description}
+          <Link href={url} isExternal>
+            {description}
           </Link>
         </Box>
-        <Box mt="1">Score: {cbox.score}</Box>
+        <Box mt="1">Score: {score}</Box>
         <Box mt="1" color="gray" fontSize="xs">
-          {cbox.contributedAt.toString().slice(0, 10)}
+          {contributedAt.toString().slice(0, 10)}
         </Box>
       </Box>
     </Box>
