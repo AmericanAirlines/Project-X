@@ -1,4 +1,3 @@
-
 export const buildQueryBodyString = (
   projectsString: string,
   dateString: string,
@@ -29,11 +28,11 @@ export const buildQueryBodyString = (
       }
     }
         `,
-        variables: {
-          queryParams: queryParamString,
-          cursor,
-        }
-      });
+    variables: {
+      queryParams: queryParamString,
+      cursor,
+    },
+  });
 
   return queryBodyString;
 };

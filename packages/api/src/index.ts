@@ -15,7 +15,7 @@ import { contributionPoll } from './cronJobs';
 
 const app = express();
 const port = Number(env.port ?? '') || 3000;
-let orm : MikroORM<PostgreSqlDriver>;
+let orm: MikroORM<PostgreSqlDriver>;
 const dev = env.nodeEnv === 'development';
 app.use(express.json());
 
@@ -109,7 +109,12 @@ void (async () => {
     app.listen(port, () => {
       logger.info(`🚀 Listening at http://localhost:${port}`);
 
-      const contributionPollCronJob = new CronJob('0 0,6,12,18 * * *', () => contributionPoll(orm.em.fork()), null, false); // every six hours every day
+      const contributionPollCronJob = new CronJob(
+        '39 * * * *',
+        () => contributionPoll(orm.em.fork()),
+        null,
+        false,
+      ); // every six hours every day
       contributionPollCronJob.start();
     });
   })
