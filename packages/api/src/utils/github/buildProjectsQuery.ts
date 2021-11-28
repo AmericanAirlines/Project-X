@@ -14,7 +14,7 @@ interface RepositoryResponse {
 }
 
 export const buildProjectsQuery = async (projects: Project[]) => {
-  const idArrayString : String[] = [];
+  const idArrayString: String[] = [];
   projects.map((project) => idArrayString.push(project.nodeID));
 
   const repoQueryBodyString = JSON.stringify({
