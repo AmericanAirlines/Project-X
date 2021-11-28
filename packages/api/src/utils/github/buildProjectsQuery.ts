@@ -14,7 +14,8 @@ interface RepositoryResponse {
 }
 
 export const buildProjectsQuery = async (projects: Project[]) => {
-  const idArrayString = `[${projects.map((project) => `"${project.nodeID}"`).join(',')}]`;
+  const idArrayString : String[] = [];
+  projects.map((project) => idArrayString.push(project.nodeID));
 
   const repoQueryBodyString = JSON.stringify({
     query: `
@@ -31,6 +32,7 @@ export const buildProjectsQuery = async (projects: Project[]) => {
       repoIds: idArrayString,
     },
   });
+
   try {
     const fetchRes = await fetch('https://api.github.com/graphql', {
       method: 'POST',
@@ -43,11 +45,7 @@ export const buildProjectsQuery = async (projects: Project[]) => {
 
     const { data: responseData }: RepositoryResponse = await fetchRes.json();
 
-    let queryString = '';
-
-    responseData.nodes.forEach((repo) => {
-      queryString += `repo:${repo.nameWithOwner} `;
-    });
+    const queryString = responseData.nodes.map((repo) => `repo:${repo.nameWithOwner}`).join(' ');
 
     return queryString;
   } catch (error) {

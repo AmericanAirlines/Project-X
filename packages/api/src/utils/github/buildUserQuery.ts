@@ -1,11 +1,7 @@
 import { User } from '../../entities/User';
 
 export const buildUsersQuery = (users: User[]) => {
-  let queryString = '';
-
-  users.forEach((u) => {
-    queryString += `author:${u.githubUsername} `;
-  });
+  const queryString = users.map((user) => `author:${user.githubUsername}`).join(' ');
 
   return queryString;
 };
