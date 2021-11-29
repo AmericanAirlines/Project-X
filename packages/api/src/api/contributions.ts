@@ -18,7 +18,7 @@ contributions.get('', async (req, res) => {
   }
 
   try {
-    const queriedUser = await req.entityManager.findOne(User, { id: userId as string });
+    const queriedUser = await req.entityManager.findOne(User, { id: userId as string }, ['contributionList']);
 
     if (!queriedUser) {
       res.sendStatus(404);
