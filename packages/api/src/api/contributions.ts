@@ -24,7 +24,7 @@ contributions.get('', async (req, res) => {
       res.sendStatus(404);
       return;
     }
-    
+
     await req.entityManager.populate(queriedUser, ['contributionList']);
     await queriedUser.contributionList?.init();
 
