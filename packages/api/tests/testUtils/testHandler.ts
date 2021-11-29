@@ -8,7 +8,10 @@ import { PostgreSqlDriver } from '@mikro-orm/postgresql';
 type TestRequestHandler = RequestHandler<ParamsDictionary, any, any, ParsedQs, Record<string, any>>;
 
 type MockEntityManager = jest.Mocked<
-  Pick<EntityManager<PostgreSqlDriver>, 'find' | 'findOne' | 'flush' | 'persistAndFlush'>
+  Pick<
+    EntityManager<PostgreSqlDriver>,
+    'find' | 'findOne' | 'flush' | 'persistAndFlush' | 'populate'
+  >
 >;
 
 type SuperTestWithEntityManager = SuperTest<Test> & { entityManager: MockEntityManager };
@@ -20,6 +23,7 @@ const createTestApp = (handler: TestRequestHandler, middleware?: Handler) => {
     findOne: jest.fn(),
     flush: jest.fn(),
     persistAndFlush: jest.fn(),
+    populate: jest.fn(),
   };
 
   const app = express();

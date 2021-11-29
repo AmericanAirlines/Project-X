@@ -1,34 +1,9 @@
+import { Collection } from '@mikro-orm/core';
 import { contributions } from '../../src/api/contributions';
 import { Contribution } from '../../src/entities/Contribution';
 import { User } from '../../src/entities/User';
 import logger from '../../src/logger';
 import { testHandler } from '../testUtils/testHandler';
-
-const loggerSpy = jest.spyOn(logger, 'error').mockImplementation();
-
-const mockQueriedUserContibutions = [
-  {
-    nodeID: 'PR_12345',
-    description: 'Count from 1 to 5',
-    type: 'OPEN',
-    score: 1,
-    contributedAt: '2011-01-01',
-  },
-  {
-    nodeID: 'PR_54321',
-    description: 'Count from 5 to 1',
-    type: 'CLOSED',
-    score: 1,
-    contributedAt: '2022-12-1',
-  },
-  {
-    nodeID: 'PR_T4C0B311',
-    description: 'yum',
-    type: 'OPEN',
-    score: 123,
-    contributedAt: '1962-03-22',
-  },
-];
 
 const sampleUser: Partial<User> = {
   name: 'Bill Nye',
@@ -47,6 +22,33 @@ const sampleSignedInUser: Express.User = {
   githubToken: 'abcd123',
 };
 
+const mockQueriedUserContibutions: Partial<Contribution>[] = [
+  {
+    nodeID: 'PR_12345',
+    description: 'Count from 1 to 5',
+    type: 'OPEN',
+    score: 1,
+    contributedAt: new Date('2011-01-01'),
+  },
+  {
+    nodeID: 'PR_54321',
+    description: 'Count from 5 to 1',
+    type: 'CLOSED',
+    score: 1,
+    contributedAt: new Date('2011-01-01'),
+  },
+  {
+    nodeID: 'PR_T4C0B311',
+    description: 'yum',
+    type: 'OPEN',
+    score: 123,
+    contributedAt: new Date('2011-01-01'),
+  },
+];
+
+const loggerSpy = jest.spyOn(logger, 'error').mockImplementation();
+const mockGetItems = jest.spyOn(Collection.prototype as Collection<Contribution>, 'getItems');
+
 describe('Contributions API GET route', () => {
   beforeEach(async () => {
     jest.clearAllMocks();
@@ -59,8 +61,7 @@ describe('Contributions API GET route', () => {
       next();
     });
 
-    handler.entityManager.findOne.mockResolvedValueOnce(sampleUser);
-    handler.entityManager.find.mockRejectedValueOnce(new Error(''));
+    handler.entityManager.findOne.mockRejectedValueOnce(new Error(''));
 
     const { text } = await handler.get('').expect(500);
     expect(text).toEqual('There was an issue retrieving contributions');
@@ -114,12 +115,13 @@ describe('Contributions API GET route', () => {
     });
 
     handler.entityManager.findOne.mockResolvedValueOnce(sampleUser);
-    handler.entityManager.find.mockResolvedValueOnce(mockQueriedUserContibutions);
+    mockGetItems.mockReturnValue(mockQueriedUserContibutions as Contribution[]);
+    // handler.entityManager.find.mockResolvedValueOnce(mockQueriedUserContibutions);
+    // handler.entityManager.populate.mockResolvedValueOnce(mockQueriedUserContibutions);
 
     const { body } = await handler.get('').expect(200);
-    expect(body).toEqual(mockQueriedUserContibutions);
+    expect(body).toEqual(mockQueriedUserContibutions as Contribution[]);
     expect(handler.entityManager.findOne).toHaveBeenCalledTimes(1);
-    expect(handler.entityManager.find).toHaveBeenCalledTimes(1);
   });
 
   it('returns a 401 error when no logged in user', async () => {
