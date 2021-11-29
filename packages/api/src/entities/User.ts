@@ -1,6 +1,7 @@
 /* istanbul ignore file */
-import { Entity, Property } from '@mikro-orm/core';
+import { Collection, Entity, OneToMany, Property } from '@mikro-orm/core';
 import { ConstructorValues } from '../utils/types';
+import { Contribution } from './Contribution';
 import { Node } from './Node';
 
 export type UserConstructorValues = ConstructorValues<User, never, 'isAdmin'>;
@@ -42,6 +43,9 @@ export class User extends Node<User> {
 
   @Property({ columnType: 'timestamp', nullable: true })
   contributionsLastCheckedAt?: Date;
+
+  @OneToMany({ entity: () => Contribution, mappedBy: 'author' })
+  contributionList? = new Collection<Contribution>(this);
 
   constructor({
     name,

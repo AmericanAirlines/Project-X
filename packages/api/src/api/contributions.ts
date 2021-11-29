@@ -1,5 +1,4 @@
 import { Router } from 'express';
-import { Contribution } from '../entities/Contribution';
 import { User } from '../entities/User';
 import logger from '../logger';
 
@@ -18,7 +17,6 @@ contributions.get('', async (req, res) => {
     return;
   }
 
-
   try {
     const queriedUser = await req.entityManager.findOne(User, { id: userId as string });
 
@@ -26,12 +24,11 @@ contributions.get('', async (req, res) => {
       res.sendStatus(404);
       return;
     }
+    
+    await req.entityManager.populate(queriedUser, ['contributionList']);
+    await queriedUser.contributionList?.init();
 
-    const userContributions = await req.entityManager.find(Contribution, {
-      authorGithubId: queriedUser.githubId,
-    });
-
-    res.send(userContributions);
+    res.send(queriedUser.contributionList?.getItems());
   } catch (error) {
     const errorMessage = 'There was an issue retrieving contributions';
     logger.error(errorMessage, error);
