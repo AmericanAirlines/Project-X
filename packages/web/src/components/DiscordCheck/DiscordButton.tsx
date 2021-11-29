@@ -36,7 +36,7 @@ export const DiscordButton: React.FC = () => {
       );
   } else {
     return (
-      <Box border="1px" borderColor="gray.200" boxShadow="base" p={3}>
+      <Box>
         {user.discordId ? (
           <>
             <Button
