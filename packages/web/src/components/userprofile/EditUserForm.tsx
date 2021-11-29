@@ -100,9 +100,7 @@ export const EditUserForm: React.FC<EditUserProps> = (props: EditUserProps) => {
         <Alert status="error">
           <AlertIcon />
           <AlertDescription>An error has occurred. Please try again later.</AlertDescription>
-          <CloseButton
-            onClick={() => setErrorMessage(false)}
-          ></CloseButton>
+          <CloseButton onClick={() => setErrorMessage(false)}></CloseButton>
         </Alert>
       ) : null}
     </Stack>

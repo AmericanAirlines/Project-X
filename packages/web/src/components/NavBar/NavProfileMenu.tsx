@@ -31,8 +31,8 @@ export const NavProfileMenu: React.FC = () => {
       <MenuButton as={Button}>
         <Avatar size={'sm'} />
       </MenuButton>
-<MenuList>
-   {currentUserId ? (
+      <MenuList>
+        {currentUserId ? (
           <>
             <MenuItem>
               <Link variant="navbarMenuItem" href={`/user/${String(currentUserId)}`}>
@@ -58,7 +58,7 @@ export const NavProfileMenu: React.FC = () => {
             </Link>
           </MenuItem>
         )}
-    </MenuList>
+      </MenuList>
     </Menu>
   );
 };

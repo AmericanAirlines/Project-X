@@ -54,8 +54,7 @@ export const UserProfile: React.FC<UserProfileProps> = ({
         <EditUserForm setEditToggle={setEditToggle} setUser={setUser} user={user} />
       </VStack>
     );
-  }
-  else {
+  } else {
     return (
       <VStack border="1px" borderColor="gray.200" boxShadow="base" p={3}>
         {user.discordId ? (
