@@ -35,7 +35,7 @@ describe('/github endpoints', () => {
       const { github } = require('../../../src/api/auth/github');
       await testHandler(github).get('/github/callback').expect(302);
       expect(passportAuthenticateMock).toHaveBeenCalledWith('github', {
-        failureRedirect: '/github/login',
+        failureRedirect: '/invalidEmail',
       });
       done();
     });
