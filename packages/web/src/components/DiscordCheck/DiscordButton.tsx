@@ -7,7 +7,7 @@ interface User {
 }
 
 export const DiscordButton: React.FC = () => {
-  const [user, setUser] = React.useState<User>();
+  const [user, setUser] = React.useState<User | undefined>();
   const [errorMessage, setErrorMessage] = React.useState<string>('');
 
   React.useEffect(() => {
@@ -25,7 +25,7 @@ export const DiscordButton: React.FC = () => {
     fetchUser();
   }, []);
 
-  if (user === undefined) {
+  if (!user) {
     if (errorMessage == '') return null;
     else
       return (
