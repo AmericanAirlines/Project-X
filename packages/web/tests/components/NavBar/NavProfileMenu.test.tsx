@@ -1,15 +1,40 @@
 import React from 'react';
-import { render, screen } from '../../testUtils/testTools';
+import { render, screen, waitFor } from '../../testUtils/testTools';
 import { NavProfileMenu } from '../../../src/components/NavBar/NavProfileMenu';
+import fetchMock from 'fetch-mock-jest';
+
+const mockCurrentUser = {
+  id: 123,
+};
 
 describe('NavLink Components', () => {
-  it('renders correctly', async () => {
+  beforeEach(async () => {
+    jest.clearAllMocks();
+    fetchMock.resetHistory();
+  });
+
+  it('renders correctly without logged in user', async () => {
+    fetchMock.get('/api/users/me', 401);
     render(<NavProfileMenu />);
 
-    expect(screen.getByRole('img')).toBeVisible();
+    await waitFor(() => {
+      expect(screen.getByText('Log In')).toHaveAttribute('href', '/api/auth/github/login');
+      expect(fetchMock).toHaveFetchedTimes(1);
+    });
+  });
 
-    expect(screen.getByText('Edit Profile')).toHaveAttribute('href', '/app/profile');
-    expect(screen.getByText('View Contributions')).toHaveAttribute('href', '/app/contributions');
-    expect(screen.getByText('Log Out')).toHaveAttribute('href', '/api/auth/github/logout');
+  it('renders correctly with logged in user', async () => {
+    fetchMock.get('/api/users/me', mockCurrentUser);
+    render(<NavProfileMenu />);
+
+    await waitFor(() => {
+      expect(screen.getByText('View Profile')).toHaveAttribute(
+        'href',
+        `/user/${mockCurrentUser.id}`,
+      );
+      expect(screen.getByText('View Contributions')).toHaveAttribute('href', '/app/contributions');
+      expect(screen.getByText('Log Out')).toHaveAttribute('href', '/api/auth/github/logout');
+      expect(fetchMock).toHaveFetchedTimes(1);
+    });
   });
 });

@@ -1,11 +1,11 @@
-import express, { Router } from 'express';
+import { Router } from 'express';
 import { User, UserConstructorValues } from '../entities/User';
 import logger from '../logger';
 
 export const users = Router();
-users.use(express.json());
 
 const stripSensitiveFields = (user: User): Partial<User> => ({
+  id: user.id,
   name: user.name,
   pronouns: user.pronouns,
   schoolName: user.schoolName,
@@ -50,8 +50,9 @@ users.get('/:userId', async (req, res) => {
     // Return stripped user information
     res.status(200).send(stripSensitiveFields(user));
   } catch (error) {
-    logger.error(`There was an issue getting user "${userId}"`, error);
-    res.status(500).send(`There was an issue getting user "${userId}"`);
+    const errorMessage = `There was an issue getting user "${userId}"`;
+    logger.error(errorMessage, error);
+    res.status(500).send(errorMessage);
   }
 });
 
@@ -100,8 +101,9 @@ users.patch('/:userId', async (req, res) => {
       await req.entityManager.flush();
       res.send(user);
     } catch (error) {
-      logger.error(`There was an issue updating user "${userId}"`, error);
-      res.status(500).send(`There was an issue updating user "${userId}"`);
+      const errorMessage = `There was an issue updating user "${userId}"`;
+      logger.error(errorMessage, error);
+      res.status(500).send(errorMessage);
     }
   } else {
     res.sendStatus(401);

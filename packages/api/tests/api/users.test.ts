@@ -136,7 +136,7 @@ describe('users API PATCH route', () => {
 
   it('non-numeric input returns 400 error while editing user', async () => {
     const handler = testHandler(users, (req, _res, next) => {
-      req.user = { githubToken: 'abcd123', profile: { id: 'aaa' } };
+      req.user = sampleSignedInUser;
       next();
     });
     handler.entityManager.findOne.mockReset();
@@ -150,7 +150,7 @@ describe('users API PATCH route', () => {
 
   it('non-existant user returns 404 while editing user', async () => {
     const handler = testHandler(users, (req, _res, next) => {
-      req.user = { githubToken: 'abcd123', profile: { id: 'aaa' } };
+      req.user = sampleSignedInUser;
       next();
     });
     handler.entityManager.findOne.mockResolvedValueOnce(null);
@@ -160,7 +160,7 @@ describe('users API PATCH route', () => {
 
   it('returns 500 error while editing user', async () => {
     const handler = testHandler(users, (req, _res, next) => {
-      req.user = { githubToken: 'abcd123', profile: { id: 'aaa' } };
+      req.user = sampleSignedInUser;
       next();
     });
 
@@ -175,7 +175,7 @@ describe('users API PATCH route', () => {
 
   it('successfully edits a user as non admin', async () => {
     const handler = testHandler(users, (req, _res, next) => {
-      req.user = { githubToken: 'abcd123', profile: { id: 'aaa' } };
+      req.user = sampleSignedInUser;
       next();
     });
     let callIndex = 0;
@@ -221,7 +221,7 @@ describe('users API PATCH route', () => {
 
   it('successfully edits a user as admin', async () => {
     const handler = testHandler(users, (req, _res, next) => {
-      req.user = { githubToken: 'abcd123', profile: { id: 'aaa' } };
+      req.user = sampleSignedInUser;
       next();
     });
     let callIndex = 0;
@@ -268,7 +268,7 @@ describe('users API PATCH route', () => {
 
   it('returns 403 when user edits another user', async () => {
     const handler = testHandler(users, (req, _res, next) => {
-      req.user = { githubToken: 'abcd123', profile: { id: 'aaa' } };
+      req.user = sampleSignedInUser;
       next();
     });
 
