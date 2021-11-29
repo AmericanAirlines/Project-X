@@ -53,8 +53,8 @@ const UserProfilePage: NextPage = () => {
             setIsCurrentUser(true);
           }
         }
-        // If an error was thrown inside the users/me api route 
-        else if (res.status == 500) { 
+        // If an error was thrown inside the users/me api route
+        else if (res.status == 500) {
           setErrorCheckingCurrentUser(true);
           setErrorMessage('An error occurred getting the current user. Please try again.');
         }
