@@ -6,11 +6,11 @@ import {
   FormLabel,
   FormHelperText,
   Input,
-  useDisclosure,
   Alert,
   AlertIcon,
   AlertDescription,
   CloseButton,
+  Stack,
 } from '@chakra-ui/react';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
@@ -66,7 +66,7 @@ export const EditUserForm: React.FC<EditUserProps> = (props: EditUserProps) => {
   });
 
   return (
-    <div>
+    <Stack>
       <form onSubmit={formik.handleSubmit}>
         <FormControl id="name">
           <FormLabel htmlFor="name">Name</FormLabel>
@@ -101,12 +101,10 @@ export const EditUserForm: React.FC<EditUserProps> = (props: EditUserProps) => {
           <AlertIcon />
           <AlertDescription>An error has occurred. Please try again later.</AlertDescription>
           <CloseButton
-            position="absolute"
-            right="8px"
             onClick={() => setErrorMessage(false)}
           ></CloseButton>
         </Alert>
       ) : null}
-    </div>
+    </Stack>
   );
 };

@@ -54,7 +54,9 @@ const UserProfilePage: NextPage = () => {
           }
         }
         setDidCheckCurrentUser(true);
-      } catch {}
+      } catch {
+        setErrorMessage('An error occurred getting the current user. Please try again.');
+      }
     };
 
     checkUser();

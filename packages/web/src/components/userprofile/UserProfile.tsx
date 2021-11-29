@@ -48,18 +48,19 @@ export const UserProfile: React.FC<UserProfileProps> = ({
     setUser(newUser);
   };
 
-  if (editToggle)
+  if (editToggle) {
     return (
       <VStack border="1px" borderColor="gray.200" boxShadow="base" p={3}>
         <EditUserForm setEditToggle={setEditToggle} setUser={setUser} user={user} />
       </VStack>
     );
+  }
   else {
     return (
       <VStack border="1px" borderColor="gray.200" boxShadow="base" p={3}>
         {user.discordId ? (
           <>
-            <Text fontSize="xl"> Your discord account is linked with: {user.discordId} </Text>
+            <Text fontSize="xl">Your discord account is linked with:{user.discordId} </Text>
             <Button size="md" colorScheme="blue" onClick={unlinkDiscordId}>
               Unlink Discord Account
             </Button>
@@ -69,7 +70,7 @@ export const UserProfile: React.FC<UserProfileProps> = ({
           <>
             <Text fontSize="xl">
               After linking you&apos;ll be able to join our community and talk with others from
-              Project X on a variety of topics.{' '}
+              Project X on a variety of topics.
             </Text>
             <Button as="a" size="sm" colorScheme="blue" href="/api/auth/discord/login">
               Login with Discord
