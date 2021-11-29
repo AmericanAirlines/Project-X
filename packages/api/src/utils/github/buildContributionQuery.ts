@@ -6,7 +6,7 @@ export const buildQueryBodyString = (
 ) => {
   const queryParamString = `${projectsString} is:pr is:merged merged:${dateString} ${userString}`;
 
-  const queryBodyString = JSON.stringify({
+  const pullRequestQuery = JSON.stringify({
     query: `
   query FindPullRequests($queryParams: String!, $cursor: String){
       search (first: 2, after: $cursor, query: $queryParams, type: ISSUE) {
@@ -34,5 +34,5 @@ export const buildQueryBodyString = (
     },
   });
 
-  return queryBodyString;
+  return pullRequestQuery;
 };
