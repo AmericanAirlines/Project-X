@@ -20,7 +20,7 @@ const UserProfilePage: NextPage = () => {
   const [user, setUser] = React.useState<User>();
   const [errorMessage, setErrorMessage] = React.useState('');
   const [isCurrentUser, setIsCurrentUser] = React.useState(false);
-  const [didCheckCurrentUser, setDidCheckCurrentUser] = React.useState(false);
+  const [errorCheckingCurrentUser, setErrorCheckingCurrentUser] = React.useState(false);
 
   React.useEffect(() => {
     const fetchUser = async () => {
@@ -53,8 +53,13 @@ const UserProfilePage: NextPage = () => {
             setIsCurrentUser(true);
           }
         }
-        setDidCheckCurrentUser(true);
+        // If an error was thrown inside the users/me api route 
+        else if (res.status == 500) { 
+          setErrorCheckingCurrentUser(true);
+          setErrorMessage('An error occurred getting the current user. Please try again.');
+        }
       } catch {
+        setErrorCheckingCurrentUser(true);
         setErrorMessage('An error occurred getting the current user. Please try again.');
       }
     };
@@ -76,7 +81,7 @@ const UserProfilePage: NextPage = () => {
   } else {
     return (
       <AppLayout>
-        {!didCheckCurrentUser ? (
+        {errorCheckingCurrentUser ? (
           <Alert status="error">
             <AlertIcon />
             An error has occurred checking the currently logged in user. Please try again later.

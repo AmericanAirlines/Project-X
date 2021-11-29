@@ -65,7 +65,7 @@ describe('web /user/', () => {
     });
   });
 
-  it('outputs error when error thrown checking current user', async () => {
+  it('outputs error when error thrown in fetch checking current user', async () => {
     useRouter.mockImplementation(() => ({
       query: { uid: sampleUser.id },
     }));
@@ -74,6 +74,26 @@ describe('web /user/', () => {
     fetchMock.get('/api/users/me', () => {
       throw new Error('');
     });
+
+    expect(() => render(<UserProfilePage />)).not.toThrow();
+
+    await waitFor(() => {
+      expect(UserProfile).toBeCalledTimes(1);
+      expect(
+        screen.getByText(
+          'An error has occurred checking the currently logged in user. Please try again later.',
+        ),
+      );
+    });
+  });
+
+  it('outputs error when error is thrown in users/me api route', async () => {
+    useRouter.mockImplementation(() => ({
+      query: { uid: sampleUser.id },
+    }));
+
+    fetchMock.getOnce('api/users/123', sampleUser);
+    fetchMock.get('/api/users/me', 500);
 
     expect(() => render(<UserProfilePage />)).not.toThrow();
 
