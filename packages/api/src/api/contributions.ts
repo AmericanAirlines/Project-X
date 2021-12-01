@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import { Contribution } from '../entities/Contribution';
 import { User } from '../entities/User';
 import logger from '../logger';
 
@@ -24,10 +25,15 @@ contributions.get('', async (req, res) => {
       res.sendStatus(404);
       return;
     }
+    
+    const userContributions: Partial<Contribution>[] = (queriedUser.contributionList?.getItems() ?? []);
+    
+    userContributions.forEach((contribution) => {
+      // eslint-disable-next-line no-param-reassign
+      delete contribution.author;
+    });
 
-    await queriedUser.contributionList?.init();
-
-    res.send(queriedUser.contributionList?.getItems());
+    res.send(userContributions);
   } catch (error) {
     const errorMessage = 'There was an issue retrieving contributions';
     logger.error(errorMessage, error);
