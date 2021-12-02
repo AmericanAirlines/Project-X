@@ -33,7 +33,7 @@ const sampleSignedInUser: Express.User = {
   githubToken: 'abcd123',
 };
 
-const mockQueriedUserContibutions: Partial<Contribution>[] = [
+const mockQueriedUserContributions: Partial<Contribution>[] = [
   {
     nodeID: 'PR_12345',
     description: 'Count from 1 to 5',
@@ -91,7 +91,7 @@ describe('Contributions API GET route', () => {
     });
 
     handler.entityManager.findOne.mockResolvedValueOnce(null);
-    handler.entityManager.find.mockResolvedValueOnce(mockQueriedUserContibutions);
+    handler.entityManager.find.mockResolvedValueOnce(mockQueriedUserContributions);
 
     await handler.get('').expect(404);
     expect(handler.entityManager.findOne).toHaveBeenCalledTimes(1);
@@ -130,7 +130,7 @@ describe('Contributions API GET route', () => {
 
     // Deep copy made because the GET route will delete the author from each Contribution in the array
     const mockCopyQueriedUserContributions: Partial<Contribution>[] = JSON.parse(
-      JSON.stringify(mockQueriedUserContibutions),
+      JSON.stringify(mockQueriedUserContributions),
     );
 
     handler.entityManager.findOne.mockResolvedValueOnce(sampleUser);
