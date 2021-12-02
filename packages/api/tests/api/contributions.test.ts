@@ -13,7 +13,18 @@ const sampleUser: Partial<User> = {
   isAdmin: false,
   githubId: '234234',
   id: '1',
+  contributionList: new Collection<Contribution>(this),
 };
+
+const sampleUserNoContributionsList: Partial<User> = {
+  name: 'Bill Smith',
+  pronouns: 'he/him',
+  schoolName: 'School',
+  assign: jest.fn(),
+  isAdmin: false,
+  githubId: '0987654321',
+  id: '2',
+}
 
 const sampleSignedInUser: Express.User = {
   profile: {
@@ -26,6 +37,7 @@ const mockQueriedUserContibutions: Partial<Contribution>[] = [
   {
     nodeID: 'PR_12345',
     description: 'Count from 1 to 5',
+    author: sampleUser as User,
     type: 'OPEN',
     score: 1,
     contributedAt: new Date('2011-01-01'),
@@ -33,16 +45,18 @@ const mockQueriedUserContibutions: Partial<Contribution>[] = [
   {
     nodeID: 'PR_54321',
     description: 'Count from 5 to 1',
+    author: sampleUser as User,
     type: 'CLOSED',
     score: 1,
-    contributedAt: new Date('2011-01-01'),
+    contributedAt: new Date('2011-01-02'),
   },
   {
     nodeID: 'PR_T4C0B311',
     description: 'yum',
+    author: sampleUser as User,
     type: 'OPEN',
     score: 123,
-    contributedAt: new Date('2011-01-01'),
+    contributedAt: new Date('2011-01-03'),
   },
 ];
 
@@ -114,13 +128,29 @@ describe('Contributions API GET route', () => {
       next();
     });
 
+    // Deep copy made because the GET route will delete the author from each Contribution in the array
+    const mockCopyQueriedUserContributions: Partial<Contribution>[] = JSON.parse(JSON.stringify(mockQueriedUserContibutions));
+
     handler.entityManager.findOne.mockResolvedValueOnce(sampleUser);
-    mockGetItems.mockReturnValue(mockQueriedUserContibutions as Contribution[]);
-    // handler.entityManager.find.mockResolvedValueOnce(mockQueriedUserContibutions);
-    // handler.entityManager.populate.mockResolvedValueOnce(mockQueriedUserContibutions);
+    mockGetItems.mockReturnValue(mockCopyQueriedUserContributions as Contribution[]);
 
     const { body } = await handler.get('').expect(200);
-    expect(body).toEqual(mockQueriedUserContibutions as Contribution[]);
+    expect(body).toEqual(mockCopyQueriedUserContributions);
+    expect(handler.entityManager.findOne).toHaveBeenCalledTimes(1);
+    expect(mockGetItems).toHaveBeenCalledTimes(1);
+  });
+
+  it("returns an empty array if the user's contributions list is undefined", async () => {
+    const handler = testHandler(contributions, (req, _res, next) => {
+      req.user = sampleSignedInUser;
+      req.query = { userId: sampleUser.id };
+      next();
+    });
+
+    handler.entityManager.findOne.mockResolvedValueOnce(sampleUserNoContributionsList);
+
+    const { body } = await handler.get('').expect(200);
+    expect(body).toEqual([]);
     expect(handler.entityManager.findOne).toHaveBeenCalledTimes(1);
   });
 
