@@ -7,8 +7,11 @@ export type ContributionConstructorValues = ConstructorValues<Contribution>;
 
 @Entity()
 export class Contribution extends Node<Contribution> {
-  @Property({ columnType: 'text' })
+  @Property({ columnType: 'text', unique: true })
   nodeID: string;
+
+  @Property({ columnType: 'text' })
+  authorGithubId: string;
 
   @Property({ columnType: 'text' })
   description: string;
@@ -24,6 +27,7 @@ export class Contribution extends Node<Contribution> {
 
   constructor({
     nodeID,
+    authorGithubId,
     description,
     type,
     score,
@@ -32,6 +36,7 @@ export class Contribution extends Node<Contribution> {
   }: ContributionConstructorValues) {
     super(extraValues);
     this.nodeID = nodeID;
+    this.authorGithubId = authorGithubId;
     this.description = description;
     this.type = type;
     this.score = score;

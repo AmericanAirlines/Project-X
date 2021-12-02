@@ -64,6 +64,18 @@
 
 - Generate a Client Secret ID from GitHub and use it to replace the value of `GITHUB_SECRET` within your `.env.local`
 
+## Setting up the Github Access Token
+
+- Login to github, then at the top right click on the icon and go to settings.
+
+- Find the developer settings, then click on Personal access tokens, and create a new access token.
+
+- Name the token something descriptive, no additional options need to be selected.
+
+- Click the Generate token button.
+
+- Next, copy the token and replace the value of `GITHUB_TOKEN` within your `.env.local`
+
 ## Setting up Discord OAuth
 
 - Go to the [Discord Develop Portal](https://discord.com/developers/applications) and log in.

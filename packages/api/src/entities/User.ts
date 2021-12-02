@@ -13,6 +13,9 @@ export class User extends Node<User> {
   @Property({ columnType: 'text' })
   githubId: string;
 
+  @Property({ columnType: 'text' })
+  githubUsername: string;
+
   @Property({ columnType: 'text', nullable: true })
   discordId?: string;
 
@@ -49,6 +52,7 @@ export class User extends Node<User> {
   constructor({
     name,
     githubId,
+    githubUsername,
     hireable,
     purpose,
     isAdmin,
@@ -61,6 +65,7 @@ export class User extends Node<User> {
     this.hireable = hireable;
     this.purpose = purpose;
     this.githubId = githubId;
+    this.githubUsername = githubUsername;
     this.isAdmin = isAdmin ?? false;
     this.email = email;
   }
