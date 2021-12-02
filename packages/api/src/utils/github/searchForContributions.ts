@@ -3,7 +3,7 @@ import { Project } from '../../entities/Project';
 import { User } from '../../entities/User';
 import { env } from '../../env';
 import logger from '../../logger';
-import { buildQueryBodyString } from './buildContributionQuery';
+import { buildPullRequestQuery } from './buildPullRequestQuery';
 import { buildProjectsQuery } from './buildProjectsQuery';
 
 interface ContributionResponse {
@@ -55,7 +55,12 @@ export async function searchForContributions(
       // Add throttoling here to prevent this from exeeding the rate limit.
       // Documentation on the limit can be found here: https://docs.github.com/en/graphql/overview/resource-limitations
 
-      const queryBodyString = buildQueryBodyString(projectsString, dateString, usersString, cursor);
+      const queryBodyString = buildPullRequestQuery(
+        projectsString,
+        dateString,
+        usersString,
+        cursor,
+      );
 
       const fetchRes = await fetch('https://api.github.com/graphql', {
         method: 'POST',

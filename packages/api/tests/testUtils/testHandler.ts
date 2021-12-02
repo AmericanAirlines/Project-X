@@ -16,7 +16,7 @@ type MockEntityManager = jest.Mocked<
 
 type SuperTestWithEntityManager = SuperTest<Test> & { entityManager: MockEntityManager };
 
-const createTestApp = (handler: TestRequestHandler, middleware?: Handler) => {
+const createTestApp = (handler?: TestRequestHandler, middleware?: Handler) => {
   // If additional methods are needed, add them here and to the `MockEntityManager` type
   const entityManager: MockEntityManager = {
     find: jest.fn(),
@@ -36,13 +36,16 @@ const createTestApp = (handler: TestRequestHandler, middleware?: Handler) => {
     req.entityManager = entityManager as unknown as EntityManager<PostgreSqlDriver>;
     next();
   });
-  app.use(handler);
+
+  if (handler) {
+    app.use(handler);
+  }
 
   return { app, entityManager };
 };
 
 export const testHandler = (
-  handler: TestRequestHandler,
+  handler?: TestRequestHandler,
   middleware?: Handler,
 ): SuperTestWithEntityManager => {
   const { app, entityManager } = createTestApp(handler, middleware);
