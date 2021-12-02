@@ -1,114 +1,69 @@
 import { EntityManager } from '@mikro-orm/core';
 import { PostgreSqlDriver } from '@mikro-orm/postgresql';
+import { DateTime } from 'luxon';
 import { Contribution } from './entities/Contribution';
 import { Project } from './entities/Project';
 import { User } from './entities/User';
-import { env } from './env';
 import logger from './logger';
-import { buildQueryBodyString } from './utils/github/buildContributionQuery';
-import { buildDateQuery } from './utils/github/buildDateQuery';
-import { buildProjectsQuery } from './utils/github/buildProjectsQuery';
-import { buildUsersQuery } from './utils/github/buildUserQuery';
-
-interface ContributionResponse {
-  data: {
-    search: {
-      pageInfo: {
-        hasNextPage: boolean;
-        endCursor: string | null;
-      };
-      nodes: PullRequestContribution[];
-    };
-  };
-}
-
-export interface PullRequestContribution {
-  id: string;
-  title: string;
-  permalink: string;
-  mergedAt: string;
-  author: {
-    login: string;
-  };
-}
+import { searchForContributions } from './utils/github/searchForContributions';
 
 export const contributionPoll = async (entityManager: EntityManager<PostgreSqlDriver>) => {
   try {
-    const timeRange = new Date();
-    const today = new Date();
-    const yesterday = new Date(today);
-    yesterday.setDate(today.getDate() - 100);
-    timeRange.setHours(timeRange.getHours() - 5);
+    const upperBoundDate = DateTime.now();
+
+    const lastCheckedThreshold = upperBoundDate.minus({ hours: 6 });
 
     const userList = await entityManager.find(User, {
-      $or: [
-        {
-          contributionsLastCheckedAt: {
-            $lt: timeRange,
-          },
-        },
-        {
-          contributionsLastCheckedAt: {
-            $eq: null,
-          },
-        },
-      ],
+      contributionsLastCheckedAt: { $lt: lastCheckedThreshold.toJSDate() },
     });
 
     if (userList.length === 0) {
+      logger.info('No users need to have their contributions updated');
       return;
     }
 
+    const lastCheckedTimes = userList.map((u) => DateTime.fromJSDate(u.contributionsLastCheckedAt));
+
+    const lowerBoundDate = DateTime.min(...lastCheckedTimes).minus({ days: 100 });
+
     const projectList = await entityManager.find(Project, {});
-    const projectsString = await buildProjectsQuery(projectList);
-    const dateString = buildDateQuery(yesterday, today);
-    const usersString = buildUsersQuery(userList);
-    let cursor = null;
-    let hasNextPage = true;
 
-    while (hasNextPage) {
-      const queryBodyString = buildQueryBodyString(projectsString, dateString, usersString, cursor);
+    if (projectList.length === 0) {
+      logger.info('No projects found for contribution polling');
+      return;
+    }
 
-      const fetchRes = await fetch('https://api.github.com/graphql', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `bearer ${env.githubToken}`,
-        },
-        body: queryBodyString,
-      });
+    for (const contribution of await searchForContributions(
+      projectList,
+      lowerBoundDate,
+      upperBoundDate,
+      userList,
+    )) {
+      // Only Add new contributions
 
-      const { data: responseData }: ContributionResponse = await fetchRes.json();
-      for (const pr of responseData.search.nodes.entries()) {
-        // Only Add new contributions
-        if ((await entityManager.find(Contribution, { nodeID: { $eq: pr[1].id } })).length === 0) {
-          const user = await entityManager.findOne(User, {
-            githubUsername: { $eq: pr[1].author.login },
+      if (!(await entityManager.count(Contribution, { nodeID: { $eq: contribution.id } }))) {
+        const user = userList.find((u) => u.githubUsername === contribution.author.login);
+        if (user) {
+          const newContribution = new Contribution({
+            nodeID: contribution.id,
+            authorGithubId: user.githubId,
+            type: 'Pull Request',
+            description: contribution.title,
+            contributedAt: new Date(Date.parse(contribution.mergedAt)),
+            score: 100,
           });
-          if (user) {
-            const newContribution = new Contribution({
-              nodeID: pr[1].id,
-              authorGithubId: user.githubId,
-              type: 'Pull Request',
-              description: pr[1].title,
-              contributedAt: new Date(Date.parse(pr[1].mergedAt)),
-              score: 100,
-            });
-            entityManager.persist(newContribution);
-          }
+          entityManager.persist(newContribution);
         }
       }
-      hasNextPage = responseData.search.pageInfo.hasNextPage;
-      cursor = responseData.search.pageInfo.endCursor;
     }
 
     for (const user of userList) {
-      user.contributionsLastCheckedAt = new Date();
+      user.contributionsLastCheckedAt = upperBoundDate.toJSDate();
       entityManager.persist(user);
     }
 
     // Save new info in the db
-    void entityManager.flush();
+    await entityManager.flush();
     logger.info('Successfully polled and saved new PR contributions');
     return;
   } catch (error) {

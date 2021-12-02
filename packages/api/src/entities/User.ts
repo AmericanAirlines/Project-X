@@ -46,8 +46,8 @@ export class User extends Node<User> {
   @Property({ columnType: 'text' })
   email: string;
 
-  @Property({ columnType: 'timestamp', nullable: true })
-  contributionsLastCheckedAt?: Date;
+  @Property({ columnType: 'timestamp' })
+  contributionsLastCheckedAt: Date;
 
   constructor({
     name,
@@ -57,6 +57,7 @@ export class User extends Node<User> {
     purpose,
     isAdmin,
     email,
+    contributionsLastCheckedAt,
     ...extraValues
   }: UserConstructorValues) {
     super(extraValues);
@@ -68,5 +69,6 @@ export class User extends Node<User> {
     this.githubUsername = githubUsername;
     this.isAdmin = isAdmin ?? false;
     this.email = email;
+    this.contributionsLastCheckedAt = contributionsLastCheckedAt;
   }
 }

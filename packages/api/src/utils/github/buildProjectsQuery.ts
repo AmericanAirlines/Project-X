@@ -14,8 +14,7 @@ interface RepositoryResponse {
 }
 
 export const buildProjectsQuery = async (projects: Project[]) => {
-  const repoNodeIds: String[] = [];
-  projects.map((project) => repoNodeIds.push(project.nodeID));
+  const repoNodeIds = projects.map((project) => project.nodeID);
 
   const findReposQuery = JSON.stringify({
     query: `
@@ -43,6 +42,11 @@ export const buildProjectsQuery = async (projects: Project[]) => {
       body: findReposQuery,
     });
 
+    if (!fetchRes.ok) {
+      logger.error('The repository query to GitHub has failed');
+      throw new Error(await fetchRes.text());
+    }
+
     const { data: responseData }: RepositoryResponse = await fetchRes.json();
 
     const projectsQuery = responseData.nodes.map((repo) => `repo:${repo.nameWithOwner}`).join(' ');
@@ -51,6 +55,6 @@ export const buildProjectsQuery = async (projects: Project[]) => {
   } catch (error) {
     const errorMessage = 'There was an issue getting repository info from graphql';
     logger.error(errorMessage, error);
-    return '';
+    return null;
   }
 };

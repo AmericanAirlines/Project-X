@@ -91,6 +91,7 @@ passport.use(
                 hireable: false,
                 purpose: '',
                 email,
+                contributionsLastCheckedAt: new Date(),
               });
               await authEm?.persistAndFlush(newUser);
               logger.info(`added ${newUser} to the databse`);

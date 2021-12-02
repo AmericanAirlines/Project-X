@@ -66,7 +66,7 @@
 
 ## Setting up the Github Access Token
 
-- Login to github, then at the top right click on the icon and go to settings.
+- Login to GitHub, then at the top right click on the icon and go to settings.
 
 - Find the developer settings, then click on Personal access tokens, and create a new access token.
 
