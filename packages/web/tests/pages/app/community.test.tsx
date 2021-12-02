@@ -1,12 +1,16 @@
 import React from 'react';
-
 import { render, screen, waitFor } from '../../testUtils/testTools';
 import { getMock } from '../../testUtils/getMock';
 import { AppLayout } from '../../../src/components/Layout';
 import Community from '../../../src/pages/app/community';
+import { DiscordButton } from '../../../src/components/DiscordCheck/DiscordButton';
 
 jest.mock('../../../src/components/Layout/AppLayout.tsx');
 getMock(AppLayout).mockImplementation(({ children }) => <>{children}</>);
+
+jest.mock('../../../src/components/DiscordCheck/DiscordButton.tsx');
+const discordText = 'discordButton';
+getMock(DiscordButton).mockImplementation(() => <p>{discordText}</p>);
 
 describe('community page', () => {
   beforeEach(async () => {
@@ -25,8 +29,6 @@ describe('community page', () => {
       screen.queryByText('Remember to follow the Community Guidelines listed above.'),
     ).not.toBeVisible();
     expect(screen.queryByText('Should I change my Discord profile avatar?')).not.toBeVisible();
-    expect(screen.queryByText('Join our Discord')).toBeVisible();
-    expect(screen.queryByText('Join our Discord')).toHaveAttribute('href', 'https://discord.gg');
-    expect(screen.queryByText('here')).toHaveAttribute('href', '/api/auth/discord/login');
+    expect(screen.queryByText(discordText)).toBeVisible();
   });
 });
