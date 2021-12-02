@@ -24,7 +24,7 @@ const sampleUserNoContributionsList: Partial<User> = {
   isAdmin: false,
   githubId: '0987654321',
   id: '2',
-}
+};
 
 const sampleSignedInUser: Express.User = {
   profile: {
@@ -129,7 +129,9 @@ describe('Contributions API GET route', () => {
     });
 
     // Deep copy made because the GET route will delete the author from each Contribution in the array
-    const mockCopyQueriedUserContributions: Partial<Contribution>[] = JSON.parse(JSON.stringify(mockQueriedUserContibutions));
+    const mockCopyQueriedUserContributions: Partial<Contribution>[] = JSON.parse(
+      JSON.stringify(mockQueriedUserContibutions),
+    );
 
     handler.entityManager.findOne.mockResolvedValueOnce(sampleUser);
     mockGetItems.mockReturnValue(mockCopyQueriedUserContributions as Contribution[]);

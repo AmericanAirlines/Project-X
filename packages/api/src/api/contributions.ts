@@ -19,15 +19,18 @@ contributions.get('', async (req, res) => {
   }
 
   try {
-    const queriedUser = await req.entityManager.findOne(User, { id: userId as string }, ['contributionList']);
+    const queriedUser = await req.entityManager.findOne(User, { id: userId as string }, [
+      'contributionList',
+    ]);
 
     if (!queriedUser) {
       res.sendStatus(404);
       return;
     }
-    
-    const userContributions: Partial<Contribution>[] = (queriedUser.contributionList?.getItems() ?? []);
-    
+
+    const userContributions: Partial<Contribution>[] =
+      queriedUser.contributionList?.getItems() ?? [];
+
     userContributions.forEach((contribution) => {
       // eslint-disable-next-line no-param-reassign
       delete contribution.author;
