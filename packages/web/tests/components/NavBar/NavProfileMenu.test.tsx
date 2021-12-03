@@ -1,8 +1,6 @@
 import React from 'react';
-import { fireEvent, render, screen } from '../../testUtils/testTools';
-import { MenuItem } from '@chakra-ui/react';
+import { render, screen } from '../../testUtils/testTools';
 import { NavProfileMenu } from '../../../src/components/NavBar/NavProfileMenu';
-import { click } from '@testing-library/user-event/dist/click';
 
 describe('NavLink Components', () => {
   it('renders correctly', async () => {
