@@ -16,9 +16,8 @@ import {
 } from '@chakra-ui/react';
 import { NextPage } from 'next';
 import React from 'react';
-import { DiscordButton } from '../../components/DiscordCheck';
+import { DiscordButton } from '../../components/DiscordButton';
 import { AppLayout } from '../../components/Layout';
-import { Alert, AlertIcon } from '@chakra-ui/alert';
 
 const Community: NextPage = () => {
   return (

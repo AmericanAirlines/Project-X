@@ -1,17 +1,16 @@
 import React from 'react';
 import fetchMock from 'fetch-mock-jest';
-import { DiscordButton } from '../../../src/components/DiscordCheck';
+import { DiscordButton } from '../../../src/components/DiscordButton';
 import { render, screen, waitFor } from '../../testUtils/testTools';
-
-interface User {
-  discordId?: string;
-}
+import { User } from '../../../src/components/userprofile/UserProfile';
 
 const sampleUser: Partial<User> = {
+  name: 'James',
   discordId: undefined,
 };
 
 const sampleUser2: User = {
+  name: 'James',
   discordId: '34523452345',
 };
 

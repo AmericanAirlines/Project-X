@@ -3,12 +3,12 @@ import { render, screen, waitFor } from '../../testUtils/testTools';
 import { getMock } from '../../testUtils/getMock';
 import { AppLayout } from '../../../src/components/Layout';
 import Community from '../../../src/pages/app/community';
-import { DiscordButton } from '../../../src/components/DiscordCheck/DiscordButton';
+import { DiscordButton } from '../../../src/components/DiscordButton/DiscordButton';
 
 jest.mock('../../../src/components/Layout/AppLayout.tsx');
 getMock(AppLayout).mockImplementation(({ children }) => <>{children}</>);
 
-jest.mock('../../../src/components/DiscordCheck/DiscordButton.tsx');
+jest.mock('../../../src/components/DiscordButton/DiscordButton.tsx');
 const discordText = 'discordButton';
 getMock(DiscordButton).mockImplementation(() => <p>{discordText}</p>);
 
