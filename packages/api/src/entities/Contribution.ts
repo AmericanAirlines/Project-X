@@ -12,7 +12,7 @@ export class Contribution extends Node<Contribution> {
   nodeID: string;
 
   @ManyToOne(() => User)
-  author!: User;
+  author: User;
 
   @Property({ columnType: 'text' })
   description: string;
