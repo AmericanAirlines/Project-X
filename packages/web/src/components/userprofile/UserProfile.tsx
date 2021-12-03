@@ -1,8 +1,8 @@
 import React from 'react';
 import { useRouter } from 'next/router';
-import { Heading, HStack, Spacer, useTheme, VStack, Text, Box, Button } from '@chakra-ui/react';
+import { Text, Box, Button } from '@chakra-ui/react';
 
-interface User {
+export interface User {
   name: string;
   pronouns?: string;
   schoolName?: string;
@@ -29,7 +29,7 @@ export const UserProfile: React.FC<UserProfileProps> = ({ user, setUser }: UserP
         'content-type': 'application/json',
       },
       body: JSON.stringify({
-        discordId: undefined,
+        discordId: null,
       }),
     });
     if (!res.ok) {

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Link, Heading, HStack, Spacer, VStack } from '@chakra-ui/react';
+import { Button, Heading, HStack, Spacer, VStack } from '@chakra-ui/react';
 import { GiCrossFlare } from 'react-icons/gi';
 
 export const MarketingLayout: React.FC = ({ children }) => {

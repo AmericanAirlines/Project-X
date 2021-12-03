@@ -75,7 +75,7 @@
 
   1. Copy the Client ID and update the `DISCORD_CLIENT_ID` value.
 
-  2. Reveal and copy the Client Secret and update the `DISCORD_SECRET` value.
+  2. Reveal and copy the Client Secret and update the `DISCORD_SECRET_ID` value.
 
 ## Setting up Discord Server
 
