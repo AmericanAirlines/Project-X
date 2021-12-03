@@ -10,7 +10,7 @@ type TestRequestHandler = RequestHandler<ParamsDictionary, any, any, ParsedQs, R
 type MockEntityManager = jest.Mocked<
   Pick<
     EntityManager<PostgreSqlDriver>,
-    'find' | 'findOne' | 'persist' | 'flush' | 'persistAndFlush'
+    'find' | 'findOne' | 'persist' | 'flush' | 'persistAndFlush' | 'count'
   >
 >;
 
@@ -24,6 +24,7 @@ const createTestApp = (handler?: TestRequestHandler, middleware?: Handler) => {
     persist: jest.fn(),
     flush: jest.fn(),
     persistAndFlush: jest.fn(),
+    count: jest.fn(),
   };
 
   const app = express();

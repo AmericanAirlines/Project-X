@@ -27,6 +27,7 @@
     "dotenv-flow": "^3.2.0",
     "express": "^4.17.1",
     "express-session": "^1.17.2",
+    "fetch-mock": "^9.11.0",
     "fetch-mock-jest": "^1.5.1",
     "luxon": "^2.1.1",
     "passport": "^0.5.0",

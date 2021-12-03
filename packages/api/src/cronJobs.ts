@@ -22,16 +22,16 @@ export const contributionPoll = async (entityManager: EntityManager<PostgreSqlDr
       return;
     }
 
-    const lastCheckedTimes = userList.map((u) => DateTime.fromJSDate(u.contributionsLastCheckedAt));
-
-    const lowerBoundDate = DateTime.min(...lastCheckedTimes).minus({ days: 100 });
-
     const projectList = await entityManager.find(Project, {});
 
     if (projectList.length === 0) {
       logger.info('No projects found for contribution polling');
       return;
     }
+
+    const lastCheckedTimes = userList.map((u) => DateTime.fromJSDate(u.contributionsLastCheckedAt));
+
+    const lowerBoundDate = DateTime.min(...lastCheckedTimes).minus({ days: 100 });
 
     for (const contribution of await searchForContributions(
       projectList,
@@ -40,9 +40,9 @@ export const contributionPoll = async (entityManager: EntityManager<PostgreSqlDr
       userList,
     )) {
       // Only Add new contributions
-
       if (!(await entityManager.count(Contribution, { nodeID: { $eq: contribution.id } }))) {
         const user = userList.find((u) => u.githubUsername === contribution.author.login);
+
         if (user) {
           const newContribution = new Contribution({
             nodeID: contribution.id,
