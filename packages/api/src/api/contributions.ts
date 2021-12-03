@@ -31,9 +31,8 @@ contributions.get('', async (req, res) => {
     const userContributions: Partial<Contribution>[] =
       queriedUser.contributionList?.getItems() ?? [];
 
-    userContributions.forEach((contribution) => {
-      // eslint-disable-next-line no-param-reassign
-      delete contribution.author;
+    for (let i = 0; i < userContributions.length - 1; i += 1) {
+      delete userContributions[i].author;
     });
 
     res.send(userContributions);
