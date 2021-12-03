@@ -8,8 +8,14 @@ describe('NavLink Components', () => {
 
     expect(screen.getByRole('img')).toBeVisible();
 
-    expect(screen.getByText('Edit Profile')).toHaveAttribute('href', '/app/profile');
-    expect(screen.getByText('View Contributions')).toHaveAttribute('href', '/app/contributions');
-    expect(screen.getByText('Log Out')).toHaveAttribute('href', '/api/auth/github/logout');
+    expect(screen.getByText('Edit Profile').closest('a')).toHaveAttribute('href', '/app/profile');
+    expect(screen.getByText('View Contributions').closest('a')).toHaveAttribute(
+      'href',
+      '/app/contributions',
+    );
+    expect(screen.getByText('Log Out').closest('a')).toHaveAttribute(
+      'href',
+      '/api/auth/github/logout',
+    );
   });
 });

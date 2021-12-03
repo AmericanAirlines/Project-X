@@ -16,22 +16,16 @@ export const NavProfileMenu: React.FC = () => (
       <Avatar size={'sm'} />
     </MenuButton>
     <MenuList>
-      <MenuItem>
-        <Link variant="navbarMenuItem" href="/app/profile">
-          Edit Profile
-        </Link>
-      </MenuItem>
-      <MenuItem>
-        <Link variant="navbarMenuItem" href="/app/contributions">
-          View Contributions
-        </Link>
-      </MenuItem>
+      <Link variant="navbarMenuItem" href="/app/profile">
+        <MenuItem>Edit Profile</MenuItem>
+      </Link>
+      <Link variant="navbarMenuItem" href="/app/contributions">
+        <MenuItem>View Contributions</MenuItem>
+      </Link>
       <MenuDivider />
-      <MenuItem>
-        <Link variant="navbarMenuItem" href="/api/auth/github/logout">
-          Log Out
-        </Link>
-      </MenuItem>
+      <Link variant="navbarMenuItem" href="/api/auth/github/logout">
+        <MenuItem>Log Out</MenuItem>
+      </Link>
     </MenuList>
   </Menu>
 );
