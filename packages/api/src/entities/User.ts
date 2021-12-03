@@ -48,7 +48,7 @@ export class User extends Node<User> {
   contributionsLastCheckedAt?: Date;
 
   @OneToMany({ entity: () => Contribution, mappedBy: 'author' })
-  contributionList? = new Collection<Contribution>(this);
+  contributionList: IdentifiedReference<Contribution>[];
 
   constructor({
     name,
