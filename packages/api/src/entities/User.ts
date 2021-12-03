@@ -4,7 +4,7 @@ import { ConstructorValues } from '../utils/types';
 import { Contribution } from './Contribution';
 import { Node } from './Node';
 
-export type UserConstructorValues = ConstructorValues<User, never, 'isAdmin'>;
+export type UserConstructorValues = ConstructorValues<User, never, 'isAdmin' | 'contributionList'>;
 
 @Entity()
 export class User extends Node<User> {
