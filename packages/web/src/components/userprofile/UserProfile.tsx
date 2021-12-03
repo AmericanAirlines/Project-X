@@ -2,7 +2,7 @@ import React from 'react';
 import { useRouter } from 'next/router';
 import { Text, Box, Button } from '@chakra-ui/react';
 
-interface User {
+export interface User {
   name: string;
   pronouns?: string;
   schoolName?: string;

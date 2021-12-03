@@ -7,7 +7,7 @@ interface User {
   discordId?: string;
 }
 
-const sampleUser: User = {
+const sampleUser: Partial<User> = {
   discordId: undefined,
 };
 

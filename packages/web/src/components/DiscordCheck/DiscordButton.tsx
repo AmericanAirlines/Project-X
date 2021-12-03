@@ -1,10 +1,7 @@
 import React from 'react';
 import { Button, Box, Alert, AlertIcon } from '@chakra-ui/react';
 import { FaDiscord } from 'react-icons/fa';
-
-interface User {
-  discordId?: string;
-}
+import { User } from '../userprofile/UserProfile';
 
 export const DiscordButton: React.FC = () => {
   const [user, setUser] = React.useState<User | undefined>();
@@ -38,29 +35,25 @@ export const DiscordButton: React.FC = () => {
     return (
       <Box>
         {user.discordId ? (
-          <>
-            <Button
-              as="a"
-              href="https://discord.com/"
-              bg="discord.400"
-              textColor="white"
-              leftIcon={<FaDiscord color="white" />}
-            >
-              Go to Discord
-            </Button>
-          </>
+          <Button
+            as="a"
+            href="https://discord.com/"
+            bg="discord.400"
+            textColor="white"
+            leftIcon={<FaDiscord color="white" />}
+          >
+            Go to Discord
+          </Button>
         ) : (
-          <>
-            <Button
-              as="a"
-              href="/api/auth/discord/login"
-              bg="discord.400"
-              textColor="white"
-              leftIcon={<FaDiscord color="white" />}
-            >
-              Join our Discord
-            </Button>
-          </>
+          <Button
+            as="a"
+            href="/api/auth/discord/login"
+            bg="discord.400"
+            textColor="white"
+            leftIcon={<FaDiscord color="white" />}
+          >
+            Join our Discord
+          </Button>
         )}
       </Box>
     );
