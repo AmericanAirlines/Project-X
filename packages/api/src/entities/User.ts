@@ -1,5 +1,5 @@
 /* istanbul ignore file */
-import { Collection, Entity, OneToMany, Property } from '@mikro-orm/core';
+import { Entity, IdentifiedReference, OneToMany, Property } from '@mikro-orm/core';
 import { ConstructorValues } from '../utils/types';
 import { Contribution } from './Contribution';
 import { Node } from './Node';
@@ -67,5 +67,6 @@ export class User extends Node<User> {
     this.githubId = githubId;
     this.isAdmin = isAdmin ?? false;
     this.email = email;
+    this.contributionList = [];
   }
 }
