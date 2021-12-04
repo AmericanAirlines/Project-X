@@ -28,12 +28,11 @@ contributions.get('', async (req, res) => {
       return;
     }
 
-    const userContributions: Partial<Contribution>[] =
-      queriedUser.contributionList?.getItems() ?? [];
+    const userContributions: Partial<Contribution>[] = queriedUser.contributionList;
 
-    for (let i = 0; i < userContributions.length - 1; i += 1) {
+    for (let i = 0; i < userContributions.length; i += 1) {
       delete userContributions[i].author;
-    });
+    };
 
     res.send(userContributions);
   } catch (error) {
