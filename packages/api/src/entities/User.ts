@@ -13,6 +13,9 @@ export class User extends Node<User> {
   @Property({ columnType: 'text' })
   githubId: string;
 
+  @Property({ columnType: 'text' })
+  githubUsername: string;
+
   @Property({ columnType: 'text', nullable: true })
   discordId?: string;
 
@@ -43,16 +46,18 @@ export class User extends Node<User> {
   @Property({ columnType: 'text' })
   email: string;
 
-  @Property({ columnType: 'timestamp', nullable: true })
-  contributionsLastCheckedAt?: Date;
+  @Property({ columnType: 'timestamp' })
+  contributionsLastCheckedAt: Date;
 
   constructor({
     name,
     githubId,
+    githubUsername,
     hireable,
     purpose,
     isAdmin,
     email,
+    contributionsLastCheckedAt,
     ...extraValues
   }: UserConstructorValues) {
     super(extraValues);
@@ -61,7 +66,9 @@ export class User extends Node<User> {
     this.hireable = hireable;
     this.purpose = purpose;
     this.githubId = githubId;
+    this.githubUsername = githubUsername;
     this.isAdmin = isAdmin ?? false;
     this.email = email;
+    this.contributionsLastCheckedAt = contributionsLastCheckedAt;
   }
 }

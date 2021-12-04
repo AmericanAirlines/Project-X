@@ -1,18 +1,21 @@
 /* istanbul ignore file */
 import express, { Handler } from 'express';
 import { web } from '@x/web';
-import { EntityManager } from '@mikro-orm/core';
+import { EntityManager, MikroORM } from '@mikro-orm/core';
 import { PostgreSqlDriver } from '@mikro-orm/postgresql';
 import session from 'express-session';
 import passport from 'passport';
+import { CronJob } from 'cron';
 import { env } from './env';
 import { api } from './api';
 import { initDatabase } from './database';
 import logger from './logger';
 import { User } from './entities/User';
+import { contributionPoll } from './cronJobs';
 
 const app = express();
 const port = Number(env.port ?? '') || 3000;
+let orm: MikroORM<PostgreSqlDriver>;
 const dev = env.nodeEnv === 'development';
 app.use(express.json());
 
@@ -84,9 +87,11 @@ passport.use(
               const newUser = new User({
                 name: profile.username,
                 githubId: profile.id,
+                githubUsername: profile.username,
                 hireable: false,
                 purpose: '',
                 email,
+                contributionsLastCheckedAt: new Date(),
               });
               await authEm?.persistAndFlush(newUser);
               logger.info(`added ${newUser} to the databse`);
@@ -99,6 +104,8 @@ passport.use(
           return done(newUserCreationError, null);
         }
       } else {
+        currentUser.githubUsername = profile.username;
+        await authEm?.flush();
         return done(null, { profile, githubToken: accessToken });
       }
       return done(null, null);
@@ -107,7 +114,7 @@ passport.use(
 );
 
 void (async () => {
-  const orm = await initDatabase();
+  orm = await initDatabase();
   authEm = authEm ?? orm.em.fork();
 
   app.use(
@@ -129,6 +136,14 @@ void (async () => {
   .then(() => {
     app.listen(port, () => {
       logger.info(`🚀 Listening at http://localhost:${port}`);
+
+      const contributionPollCronJob = new CronJob(
+        '0 0,6,12,18 * * *',
+        () => contributionPoll(orm.em.fork()),
+        null,
+        false,
+      ); // every six hours every day
+      contributionPollCronJob.start();
     });
   })
   .catch((err) => {
