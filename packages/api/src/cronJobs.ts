@@ -31,7 +31,7 @@ export const contributionPoll = async (entityManager: EntityManager<PostgreSqlDr
 
     const lastCheckedTimes = userList.map((u) => DateTime.fromJSDate(u.contributionsLastCheckedAt));
 
-    const lowerBoundDate = DateTime.min(...lastCheckedTimes).minus({ days: 100 });
+    const lowerBoundDate = DateTime.min(...lastCheckedTimes);
 
     for (const contribution of await searchForContributions(
       projectList,
