@@ -32,7 +32,7 @@ contributions.get('', async (req, res) => {
 
     for (let i = 0; i < userContributions.length; i += 1) {
       delete userContributions[i].author;
-    };
+    }
 
     res.send(userContributions);
   } catch (error) {
