@@ -21,7 +21,7 @@
     "@emotion/styled": "^11.3.0",
     "cookie-parser": "^1.4.5",
     "framer-motion": "^4.1.17",
-    "next": "^11.1.2",
+    "next": "^12.1.0",
     "passport": "^0.5.0",
     "passport-github2": "^0.1.12",
     "patch-package": "6.4.7",
